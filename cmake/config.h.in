@@ -1,0 +1,3 @@
+#pragma once
+
+#cmakedefine QPMAD_ENABLE_TRACING
