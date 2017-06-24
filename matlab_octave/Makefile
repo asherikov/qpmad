@@ -8,6 +8,7 @@ octave_test: octave_onlineqp
 	octave --no-history --silent test_basic.m
 
 octave_onlineqp:
+	cd onlineqp_collection; ${MAKE} fetch
 	octave --no-history --silent test_onlineqp.m
 
 configure:
