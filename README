@@ -11,6 +11,7 @@ Features
     - Double sided inequality constraints: 'lb <= A*x <= ub'. Such constraints
       can be handled in a more efficient way than 'lb <= A*x' commonly used in
       other implementations of the algorithm.
+    - Simple bounds: 'lb <= x <= ub'.
 
 
 Dependencies
@@ -23,5 +24,6 @@ Differences from other implementations, e.g. QuadProgpp/eiQuadProg:
     - do not compute value of the objective function;
     - do not compute/update Lagrange multipliers for equality constraints;
     - double sided inequalities;
+    - simple bounds;
     - lazy data initialization, e.g., perform inversion of the Cholesky factor
       only if some of the constraints are activated.
