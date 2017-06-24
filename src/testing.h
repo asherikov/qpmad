@@ -42,7 +42,8 @@ namespace qpmad
                                         const Eigen::VectorXd   &primal,
                                         const Eigen::MatrixXd   &A,
                                         const ActiveSet         &active_set,
-                                        const std::vector<ConstraintStatus::Status> & general_constraints_status,
+                                        const MatrixIndex       &num_simple_bounds,
+                                        const std::vector<ConstraintStatus::Status> & constraints_status,
                                         const Eigen::VectorXd                       & dual,
                                         const Eigen::VectorXd                       & dual_direction = Eigen::VectorXd())
         {
@@ -61,17 +62,36 @@ namespace qpmad
             {
                 MatrixIndex ctr_index = active_set.getIndex(i);
 
-                switch(general_constraints_status[ctr_index])
+                if (ctr_index < num_simple_bounds)
                 {
-                    case ConstraintStatus::ACTIVE_LOWER_BOUND:
-                        M.col(i) = -A.row(ctr_index).transpose();
-                        break;
-                    case ConstraintStatus::ACTIVE_UPPER_BOUND:
-                    case ConstraintStatus::EQUALITY:
-                        M.col(i) = A.row(ctr_index).transpose();
-                        break;
-                    default:
-                        break;
+                    M.col(i).setZero();
+                    switch(constraints_status[ctr_index])
+                    {
+                        case ConstraintStatus::ACTIVE_LOWER_BOUND:
+                            M(ctr_index, i) = -1.0;
+                            break;
+                        case ConstraintStatus::ACTIVE_UPPER_BOUND:
+                        case ConstraintStatus::EQUALITY:
+                            M(ctr_index, i) = 1.0;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch(constraints_status[ctr_index])
+                    {
+                        case ConstraintStatus::ACTIVE_LOWER_BOUND:
+                            M.col(i) = -A.row(ctr_index-num_simple_bounds).transpose();
+                            break;
+                        case ConstraintStatus::ACTIVE_UPPER_BOUND:
+                        case ConstraintStatus::EQUALITY:
+                            M.col(i) = A.row(ctr_index-num_simple_bounds).transpose();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             if (M.cols() > 0)
@@ -85,7 +105,7 @@ namespace qpmad
                 {
                     MatrixIndex ctr_index = active_set.getIndex(i);
                     std::cout   << " " << i;
-                    switch(general_constraints_status[ctr_index])
+                    switch(constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
                             std::cout   << "L ";
@@ -104,7 +124,7 @@ namespace qpmad
                                 << "ref " << dual_check(i) << " | ";
 
 
-                    switch(general_constraints_status[ctr_index])
+                    switch(constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
                         case ConstraintStatus::ACTIVE_UPPER_BOUND:
@@ -140,7 +160,7 @@ namespace qpmad
 
 
         void printActiveSet(const ActiveSet                             & active_set,
-                            const std::vector<ConstraintStatus::Status> & general_constraints_status,
+                            const std::vector<ConstraintStatus::Status> & constraints_status,
                             const Eigen::VectorXd                       & dual)
         {
             std::cout << "====================================[Active set]================================" << std::endl;
@@ -150,7 +170,7 @@ namespace qpmad
 
                 std::cout   << " ## " << i
                             << " ## | Index = " << active_ctr_index
-                            << " | Type = " << general_constraints_status[active_ctr_index]
+                            << " | Type = " << constraints_status[active_ctr_index]
                             << " | Dual = " << dual(i)
                             << std::endl;
             }

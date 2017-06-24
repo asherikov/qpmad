@@ -129,7 +129,6 @@ namespace qpmad
 
 
                 num_constraints_ = num_simple_bounds_ + num_general_constraints_;
-                MatrixIndex     num_equalities = 0;
 
                 if (0 == num_constraints_)
                 {
@@ -141,7 +140,8 @@ namespace qpmad
 
                 // check consistency of general constraints and activate
                 // equality constraints
-                general_constraints_status_.resize(num_constraints_);
+                constraints_status_.resize(num_constraints_);
+                MatrixIndex     num_equalities = 0;
                 for (MatrixIndex i = 0; i < num_constraints_; ++i)
                 {
                     double lb_i;
@@ -161,17 +161,17 @@ namespace qpmad
 
                     if (lb_i - param.tolerance_ > ub_i)
                     {
-                        general_constraints_status_[i] = ConstraintStatus::INCONSISTENT;
+                        constraints_status_[i] = ConstraintStatus::INCONSISTENT;
                         return(INCONSISTENT);
                     }
 
                     if (std::abs(lb_i - ub_i) > param.tolerance_)
                     {
-                        general_constraints_status_[i] = ConstraintStatus::INACTIVE;
+                        constraints_status_[i] = ConstraintStatus::INACTIVE;
                     }
                     else
                     {
-                        general_constraints_status_[i] = ConstraintStatus::EQUALITY;
+                        constraints_status_[i] = ConstraintStatus::EQUALITY;
                         ++num_equalities;
 
 
@@ -233,7 +233,7 @@ namespace qpmad
                         if (std::abs(violation) > param.tolerance_)
                         {
                             // nope it is not
-                            general_constraints_status_[i] = ConstraintStatus::INCONSISTENT;
+                            constraints_status_[i] = ConstraintStatus::INCONSISTENT;
                             return (INFEASIBLE_EQUALITY);
                         }
                         // otherwise keep going
@@ -348,7 +348,8 @@ namespace qpmad
                     testing::checkLagrangeMultipliers(
                             H, h, primal, A,
                             active_set_,
-                            general_constraints_status_,
+                            num_simple_bounds_,
+                            constraints_status_,
                             dual_,
                             dual_step_direction_);
 #endif
@@ -401,7 +402,7 @@ namespace qpmad
                         {
                             QPMAD_TRACE("||| PARTIAL STEP");
                             // deactivate blocking constraint
-                            general_constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
+                            constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
 
                             dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
@@ -413,7 +414,7 @@ namespace qpmad
                         {
                             QPMAD_TRACE("||| FULL STEP");
                             // activate constraint
-                            general_constraints_status_[chosen_ctr.index_] = chosen_ctr.upper_or_lower_;
+                            constraints_status_[chosen_ctr.index_] = chosen_ctr.upper_or_lower_;
                             dual_(active_set_.size_) = chosen_ctr.dual_;
                             active_set_.addInequality(chosen_ctr.index_);
 
@@ -439,7 +440,7 @@ namespace qpmad
                                     * dual_step_direction_.segment(active_set_.num_equalities_, active_set_.num_inequalities_);
                             chosen_ctr.dual_ += dual_step_length;
 
-                            general_constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
+                            constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
 
                             dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
@@ -453,12 +454,13 @@ namespace qpmad
 #ifdef QPMAD_ENABLE_TRACING
                 if (machinery_initialized_)
                 {
-                    testing::printActiveSet(active_set_, general_constraints_status_, dual_);
+                    testing::printActiveSet(active_set_, constraints_status_, dual_);
 
                     testing::checkLagrangeMultipliers(
                             H, h, primal, A,
                             active_set_,
-                            general_constraints_status_,
+                            num_simple_bounds_,
+                            constraints_status_,
                             dual_);
                 }
                 else
@@ -502,7 +504,7 @@ namespace qpmad
             QPVector    primal_step_direction_;
             QPVector    dual_step_direction_;
 
-            std::vector<ConstraintStatus::Status>   general_constraints_status_;
+            std::vector<ConstraintStatus::Status>   constraints_status_;
 
 
         private:
@@ -533,8 +535,8 @@ namespace qpmad
 
                 for(MatrixIndex i = 0; i < num_constraints_; ++i)
                 {
-                    if ( (ConstraintStatus::INACTIVE == general_constraints_status_[i])
-                        || (ConstraintStatus::VIOLATED == general_constraints_status_[i]) )
+                    if ( (ConstraintStatus::INACTIVE == constraints_status_[i])
+                        || (ConstraintStatus::VIOLATED == constraints_status_[i]) )
                     {
                         double lb_i;
                         double ub_i;
@@ -556,7 +558,7 @@ namespace qpmad
 
                         if (lb_i - tolerance > ctr_violation_i)
                         {
-                            general_constraints_status_[i] = ConstraintStatus::VIOLATED;
+                            constraints_status_[i] = ConstraintStatus::VIOLATED;
                             ctr_violation_i -= lb_i;
                             if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
                             {
@@ -569,7 +571,7 @@ namespace qpmad
                         {
                             if (ub_i + tolerance < ctr_violation_i)
                             {
-                                general_constraints_status_[i] = ConstraintStatus::VIOLATED;
+                                constraints_status_[i] = ConstraintStatus::VIOLATED;
                                 ctr_violation_i -= ub_i;
                                 if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
                                 {
@@ -580,7 +582,7 @@ namespace qpmad
                             }
                             else
                             {
-                                general_constraints_status_[i] = ConstraintStatus::INACTIVE;
+                                constraints_status_[i] = ConstraintStatus::INACTIVE;
                             }
                         }
                     }
