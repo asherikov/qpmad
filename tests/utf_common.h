@@ -20,6 +20,7 @@
 
 
 const double g_default_tolerance = 1e-12;
+const double g_infinity = 1e+20;
 
 
 struct GlobalFixtureConfig

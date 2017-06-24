@@ -13,6 +13,9 @@
 
 #include "../src/solver.h"
 
+//===========================================================================
+// SolverObjectiveFixture
+//===========================================================================
 
 class SolverObjectiveFixture
 {
@@ -24,6 +27,8 @@ class SolverObjectiveFixture
         Eigen::MatrixXd         A;
         Eigen::VectorXd         Alb;
         Eigen::VectorXd         Aub;
+        Eigen::VectorXd         lb;
+        Eigen::VectorXd         ub;
 
         qpmad::Solver               solver;
 
@@ -99,6 +104,9 @@ BOOST_FIXTURE_TEST_CASE( objective03, SolverObjectiveFixture )
 }
 
 
+//===========================================================================
+// SolverGeneralEqualitiesFixture
+//===========================================================================
 
 class SolverGeneralEqualitiesFixture : public SolverObjectiveFixture
 {
@@ -214,6 +222,9 @@ BOOST_FIXTURE_TEST_CASE( general_equalities04, SolverGeneralEqualitiesFixture )
 }
 
 
+//===========================================================================
+// SolverGeneralInequalitiesFixture
+//===========================================================================
 
 class SolverGeneralInequalitiesFixture : public SolverObjectiveFixture
 {
@@ -407,4 +418,94 @@ BOOST_FIXTURE_TEST_CASE( general_inequalities21, SolverGeneralInequalitiesFixtur
             -0.71875, -0.71875, -0.71875, -0.71875,
             -0.71875, -0.71875;
     checkGeneralInequalities();
+}
+
+
+//===========================================================================
+// SolverSimpleInequalitiesFixture
+//===========================================================================
+
+class SolverSimpleInequalitiesFixture : public SolverObjectiveFixture
+{
+    public:
+        Eigen::VectorXd     x_ref;
+
+    public:
+        void checkSimpleInequalities()
+        {
+            status = solver.solve(x, H, h, lb, ub, A, Alb, Aub);
+
+            BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
+            BOOST_CHECK(x.isApprox(x_ref, g_default_tolerance));
+        }
+};
+
+
+BOOST_FIXTURE_TEST_CASE( simple_inequalities00, SolverSimpleInequalitiesFixture )
+{
+    qpmad::MatrixIndex size = 2;
+
+    H.setIdentity(size, size);
+    h.setOnes(size);
+
+    lb.resize(size);
+    ub.resize(size);
+    lb << -10, -g_infinity;
+    ub << -5, g_infinity;
+
+    x_ref.resize(size);
+    x_ref << -5, -1;
+
+    checkSimpleInequalities();
+}
+
+
+BOOST_FIXTURE_TEST_CASE( simple_inequalities20, SolverSimpleInequalitiesFixture )
+{
+    qpmad::MatrixIndex size = 20;
+
+    H.setIdentity(size, size);
+    h.setOnes(size);
+
+
+    lb.resize(size);
+    ub.resize(size);
+    lb << 1, 2, 3, 4, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5;
+    ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+
+    x_ref.resize(size);
+    x_ref << 1.0, 2.0, 3.0, 4.0, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5;
+
+    checkSimpleInequalities();
+}
+
+
+BOOST_FIXTURE_TEST_CASE( simple_inequalities21, SolverSimpleInequalitiesFixture )
+{
+    qpmad::MatrixIndex size = 20;
+    qpmad::MatrixIndex num_eq_ctr = 1;
+
+    H.setIdentity(size, size);
+    h.setOnes(size);
+
+
+    A.resize(num_eq_ctr, size);
+    A.setOnes();
+    Alb.resize(num_eq_ctr);
+    Aub.resize(num_eq_ctr);
+    Alb << -1.5;
+    Aub << 1.5;
+
+    lb.resize(size);
+    ub.resize(size);
+    lb << 1, 2, 3, 4, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5;
+    ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+
+    x_ref.resize(size);
+    x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875,
+            -0.71875, -0.71875, -0.71875, -0.71875,
+            -0.71875, -0.71875, -0.71875, -0.71875,
+            -0.71875, -0.71875, -0.71875, -0.71875,
+            -0.71875, -0.71875;
+    checkSimpleInequalities();
 }

@@ -173,9 +173,9 @@ function [x, info] = qpmad(varargin)
 
 
 % Solve
-    Ain_tmp = [eye(numel(lb)); A; Ain];
-    lbin_tmp = [lb; b; lbin];
-    ubin_tmp = [ub; b; ubin];
+    Ain_tmp = [A; Ain];
+    lbin_tmp = [b; lbin];
+    ubin_tmp = [b; ubin];
 
-    [x, info] = qpmad_interface(H + eye(size(H))*regularization_factor, g, Ain_tmp, lbin_tmp, ubin_tmp);
+    [x, info] = qpmad_interface(H + eye(size(H))*regularization_factor, g, lb, ub, Ain_tmp, lbin_tmp, ubin_tmp);
 end

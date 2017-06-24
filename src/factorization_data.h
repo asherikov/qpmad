@@ -80,6 +80,18 @@ namespace qpmad
             }
 
 
+            template<class t_VectorType>
+                void computeEqualityPrimalStep( t_VectorType            & step_direction,
+                                                const MatrixIndex       simple_bound_index,
+                                                const MatrixIndex       active_set_size)
+            {
+                // vector 'd'
+                R.col(active_set_size) = QLi_aka_J.row(simple_bound_index).transpose();
+
+                computePrimalStepDirection(step_direction, active_set_size);
+            }
+
+
             template<   class t_VectorType,
                         class t_RowVectorType>
                 void computeEqualityPrimalStep( t_VectorType            & step_direction,
@@ -89,9 +101,7 @@ namespace qpmad
                 // vector 'd'
                 R.col(active_set_size).noalias() = QLi_aka_J.transpose() * ctr.transpose();
 
-                step_direction.noalias() =
-                    - QLi_aka_J.rightCols(primal_size_ - active_set_size)
-                    * R.col(active_set_size).tail(primal_size_ - active_set_size);
+                computePrimalStepDirection(step_direction, active_set_size);
             }
 
 
@@ -115,18 +125,30 @@ namespace qpmad
                         QLi_aka_J.transpose() * ctr.transpose();
                 }
 
-                primal_step_direction.noalias() =
-                    - QLi_aka_J.rightCols(primal_size_ - active_set.size_)
-                    * R.col(active_set.size_).tail(primal_size_ - active_set.size_);
+                computePrimalStepDirection(primal_step_direction, active_set.size_);
+                computeDualStepDirection(dual_step_direction, active_set);
+            }
 
-                dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
-                    - R.block(active_set.num_equalities_,
-                            active_set.num_equalities_,
-                            active_set.num_inequalities_,
-                            active_set.num_inequalities_).triangularView<Eigen::Upper>().solve(
-                                R.col(active_set.size_).segment(
-                                    active_set.num_equalities_,
-                                    active_set.num_inequalities_));
+
+            template<   class t_VectorType0,
+                        class t_VectorType1>
+                void computeInequalitySteps(t_VectorType0           & primal_step_direction,
+                                            t_VectorType1           & dual_step_direction,
+                                            const MatrixIndex       simple_bound_index,
+                                            const ConstraintStatus::Status ctr_type,
+                                            const ActiveSet         &active_set)
+            {
+                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                {
+                    R.col(active_set.size_) = - QLi_aka_J.row(simple_bound_index).transpose();
+                }
+                else
+                {
+                    R.col(active_set.size_) =   QLi_aka_J.row(simple_bound_index).transpose();
+                }
+
+                computePrimalStepDirection(primal_step_direction, active_set.size_);
+                computeDualStepDirection(dual_step_direction, active_set);
             }
 
 
@@ -150,11 +172,65 @@ namespace qpmad
                         * ctr.transpose();
                 }
 
+                computeDualStepDirectionInPlace(dual_step_direction, active_set);
+            }
+
+
+            template<class t_VectorType>
+                void computeInequalityDualStep( t_VectorType            & dual_step_direction,
+                                                const MatrixIndex       & simple_bound_index,
+                                                const ConstraintStatus::Status ctr_type,
+                                                const ActiveSet         & active_set)
+            {
+                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                {
+                    dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
+                        QLi_aka_J.row(simple_bound_index).tail(active_set.num_inequalities_).transpose();
+                }
+                else
+                {
+                    dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
+                        - QLi_aka_J.row(simple_bound_index).tail(active_set.num_inequalities_).transpose();
+                }
+
+                computeDualStepDirectionInPlace(dual_step_direction, active_set);
+            }
+
+        private:
+            template<class t_VectorType>
+                void computePrimalStepDirection(t_VectorType            & step_direction,
+                                                const MatrixIndex       active_set_size)
+            {
+                step_direction.noalias() =
+                    - QLi_aka_J.rightCols(primal_size_ - active_set_size)
+                    * R.col(active_set_size).tail(primal_size_ - active_set_size);
+            }
+
+
+            template<class t_VectorType>
+                void computeDualStepDirection(  t_VectorType            & step_direction,
+                                                const ActiveSet         &active_set)
+            {
+                step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
+                    - R.block(active_set.num_equalities_,
+                            active_set.num_equalities_,
+                            active_set.num_inequalities_,
+                            active_set.num_inequalities_).triangularView<Eigen::Upper>().solve(
+                                R.col(active_set.size_).segment(
+                                    active_set.num_equalities_,
+                                    active_set.num_inequalities_));
+            }
+
+
+            template<class t_VectorType>
+                void computeDualStepDirectionInPlace(   t_VectorType            & step_direction,
+                                                        const ActiveSet         &active_set)
+            {
                 R.block(active_set.num_equalities_,
                         active_set.num_equalities_,
                         active_set.num_inequalities_,
                         active_set.num_inequalities_).triangularView<Eigen::Upper>().solveInPlace(
-                            dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_));
+                            step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_));
             }
     };
 }

@@ -32,9 +32,11 @@ void mexFunction( int num_output, mxArray *output[], int num_input, const mxArra
 {
     const mxArray *H = input[0];
     const mxArray *g = input[1];
-    const mxArray *A = input[2];
-    const mxArray *Alb = input[3];
-    const mxArray *Aub = input[4];
+    const mxArray *lb = input[2];
+    const mxArray *ub = input[3];
+    const mxArray *A = input[4];
+    const mxArray *Alb = input[5];
+    const mxArray *Aub = input[6];
 
 
     mxArray *x = NULL;
@@ -42,11 +44,14 @@ void mexFunction( int num_output, mxArray *output[], int num_input, const mxArra
 
     int num_var = mxGetM(H);
     int num_ctr = mxGetM(A);
+    int num_simple_bounds = mxGetM(lb);
     x = mxCreateDoubleMatrix(num_var, 1, mxREAL);
 
 
     Eigen::MatrixXd eH     = Eigen::Map<Eigen::MatrixXd>  ((double*) mxGetPr(H),   num_var, num_var);
     Eigen::VectorXd eg     = Eigen::Map<Eigen::VectorXd>  ((double*) mxGetPr(g),   num_var);
+    Eigen::VectorXd elb    = Eigen::Map<Eigen::VectorXd>  ((double*) mxGetPr(lb),  num_simple_bounds);
+    Eigen::VectorXd eub    = Eigen::Map<Eigen::VectorXd>  ((double*) mxGetPr(ub),  num_simple_bounds);
     Eigen::MatrixXd eA     = Eigen::Map<Eigen::MatrixXd>  ((double*) mxGetPr(A),   num_ctr, num_var);
     Eigen::VectorXd eAlb   = Eigen::Map<Eigen::VectorXd>  ((double*) mxGetPr(Alb), num_ctr);
     Eigen::VectorXd eAub   = Eigen::Map<Eigen::VectorXd>  ((double*) mxGetPr(Aub), num_ctr);
@@ -54,11 +59,11 @@ void mexFunction( int num_output, mxArray *output[], int num_input, const mxArra
 
 // solve the problem
     qpmad::Solver   solver;
-    qpStatus                qp_status;
+    qpStatus        qp_status;
 
     try
     {
-        qpmad::Solver::ReturnStatus return_value = solver.solve(ex, eH, eg, eA, eAlb, eAub);
+        qpmad::Solver::ReturnStatus return_value = solver.solve(ex, eH, eg, elb, eub, eA, eAlb, eAub);
         if (return_value == qpmad::Solver::OK)
         {
             qp_status = QP_OK;

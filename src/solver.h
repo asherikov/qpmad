@@ -127,7 +127,11 @@ namespace qpmad
                     primal.setZero(primal_size_);
                 }
 
-                if (0 == num_simple_bounds_ + num_general_constraints_)
+
+                num_constraints_ = num_simple_bounds_ + num_general_constraints_;
+                MatrixIndex     num_equalities = 0;
+
+                if (0 == num_constraints_)
                 {
                     // exit early -- avoid unnecessary memory allocations
                     return (OK);
@@ -137,27 +141,49 @@ namespace qpmad
 
                 // check consistency of general constraints and activate
                 // equality constraints
-                general_constraints_status_.resize(num_general_constraints_);
-                MatrixIndex     num_general_equalities = 0;
-                for (MatrixIndex i = 0; i < num_general_constraints_; ++i)
+                general_constraints_status_.resize(num_constraints_);
+                for (MatrixIndex i = 0; i < num_constraints_; ++i)
                 {
-                    if (Alb(i) - param.tolerance_ > Aub(i))
+                    double lb_i;
+                    double ub_i;
+
+                    if (i < num_simple_bounds_)
+                    {
+                        lb_i = lb(i);
+                        ub_i = ub(i);
+                    }
+                    else
+                    {
+                        lb_i = Alb(i-num_simple_bounds_);
+                        ub_i = Aub(i-num_simple_bounds_);
+                    }
+
+
+                    if (lb_i - param.tolerance_ > ub_i)
                     {
                         general_constraints_status_[i] = ConstraintStatus::INCONSISTENT;
                         return(INCONSISTENT);
                     }
 
-                    if (std::abs(Alb(i) - Aub(i)) > param.tolerance_)
+                    if (std::abs(lb_i - ub_i) > param.tolerance_)
                     {
                         general_constraints_status_[i] = ConstraintStatus::INACTIVE;
                     }
                     else
                     {
                         general_constraints_status_[i] = ConstraintStatus::EQUALITY;
-                        ++num_general_equalities;
+                        ++num_equalities;
 
 
-                        double violation = Alb(i) - A.row(i) * primal;
+                        double violation;
+                        if (i < num_simple_bounds_)
+                        {
+                            violation = lb_i - primal(i);
+                        }
+                        else
+                        {
+                            violation = lb_i - A.row(i-num_simple_bounds_) * primal;
+                        }
 
                         initializeMachineryLazy(H);
 
@@ -165,10 +191,23 @@ namespace qpmad
                         // all other constraints are linearly dependent
                         if (active_set_.hasEmptySpace())
                         {
-                            factorization_data_.computeEqualityPrimalStep(
-                                    primal_step_direction_, A.row(i), active_set_.size_);
+                            double ctr_i_dot_primal_step_direction;
 
-                            double ctr_i_dot_primal_step_direction = A.row(i) * primal_step_direction_;
+                            if (i < num_simple_bounds_)
+                            {
+                                factorization_data_.computeEqualityPrimalStep(
+                                        primal_step_direction_, i, active_set_.size_);
+
+                                ctr_i_dot_primal_step_direction = primal_step_direction_(i);
+                            }
+                            else
+                            {
+                                factorization_data_.computeEqualityPrimalStep(
+                                        primal_step_direction_, A.row(i-num_simple_bounds_), active_set_.size_);
+
+                                ctr_i_dot_primal_step_direction = A.row(i-num_simple_bounds_) * primal_step_direction_;
+                            }
+
                             // if step direction is a zero vector, constraint is
                             // linearly dependent with previously added constraints
                             if (ctr_i_dot_primal_step_direction < -param.tolerance_)
@@ -202,7 +241,7 @@ namespace qpmad
                 }
 
 
-                if ((num_general_equalities == num_general_constraints_) && (0 == num_simple_bounds_))
+                if (num_equalities == num_constraints_)
                 {
                     // exit early -- avoid unnecessary memory allocations
                     return (OK);
@@ -214,7 +253,7 @@ namespace qpmad
 
 
                 ChosenConstraint chosen_ctr;
-                chosen_ctr = chooseConstraint(primal, A, Alb, Aub, param.tolerance_);
+                chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
                 ReturnStatus return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
                 for(int iter = 0;
                     (iter < param.max_iter_) || (param.max_iter_ < 0);
@@ -239,25 +278,52 @@ namespace qpmad
 
                     initializeMachineryLazy(H);
 
+                    double chosen_ctr_dot_primal_step_direction = 0.0;
                     if (active_set_.hasEmptySpace())
                     {
                         // compute step direction in primal & dual space
-                        factorization_data_.computeInequalitySteps(
-                                primal_step_direction_,
-                                dual_step_direction_,
-                                A.row(chosen_ctr.index_),
-                                chosen_ctr.type_,
-                                active_set_);
+                        if (chosen_ctr.index_ < num_simple_bounds_)
+                        {
+                            factorization_data_.computeInequalitySteps(
+                                    primal_step_direction_,
+                                    dual_step_direction_,
+                                    chosen_ctr.index_,
+                                    chosen_ctr.upper_or_lower_,
+                                    active_set_);
+                            chosen_ctr_dot_primal_step_direction = primal_step_direction_(chosen_ctr.index_);
+                        }
+                        else
+                        {
+                            factorization_data_.computeInequalitySteps(
+                                    primal_step_direction_,
+                                    dual_step_direction_,
+                                    A.row(chosen_ctr.index_ - num_simple_bounds_),
+                                    chosen_ctr.upper_or_lower_,
+                                    active_set_);
+                            chosen_ctr_dot_primal_step_direction =
+                                A.row(chosen_ctr.index_ - num_simple_bounds_) * primal_step_direction_;
+                        }
                     }
                     else
                     {
                         // compute step direction in dual space only
                         // primal vector cannot change until we deactive something
-                        factorization_data_.computeInequalityDualStep(
-                                dual_step_direction_,
-                                A.row(chosen_ctr.index_),
-                                chosen_ctr.type_,
-                                active_set_);
+                        if (chosen_ctr.index_ < num_simple_bounds_)
+                        {
+                            factorization_data_.computeInequalityDualStep(
+                                    dual_step_direction_,
+                                    chosen_ctr.index_,
+                                    chosen_ctr.upper_or_lower_,
+                                    active_set_);
+                        }
+                        else
+                        {
+                            factorization_data_.computeInequalityDualStep(
+                                    dual_step_direction_,
+                                    A.row(chosen_ctr.index_ - num_simple_bounds_),
+                                    chosen_ctr.upper_or_lower_,
+                                    active_set_);
+                        }
                     }
 
 
@@ -288,7 +354,6 @@ namespace qpmad
 #endif
 
 
-                    double chosen_ctr_dot_primal_step_direction = A.row(chosen_ctr.index_) * primal_step_direction_;
                     if ( active_set_.hasEmptySpace()
                         // if step direction is a zero vector, constraint is
                         // linearly dependent with previously added constraints
@@ -348,11 +413,11 @@ namespace qpmad
                         {
                             QPMAD_TRACE("||| FULL STEP");
                             // activate constraint
-                            general_constraints_status_[chosen_ctr.index_] = chosen_ctr.type_;
+                            general_constraints_status_[chosen_ctr.index_] = chosen_ctr.upper_or_lower_;
                             dual_(active_set_.size_) = chosen_ctr.dual_;
                             active_set_.addInequality(chosen_ctr.index_);
 
-                            chosen_ctr = chooseConstraint(primal, A, Alb, Aub, param.tolerance_);
+                            chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
                         }
                     }
                     else
@@ -412,7 +477,7 @@ namespace qpmad
                     double                      violation_;
                     double                      dual_;
                     MatrixIndex                 index_;
-                    ConstraintStatus::Status    type_;
+                    ConstraintStatus::Status    upper_or_lower_;
 
                 public:
                     ChosenConstraint()
@@ -420,13 +485,14 @@ namespace qpmad
                         dual_ = 0.0;
                         violation_ = 0.0;
                         index_ = 0;
-                        type_ = ConstraintStatus::UNDEFINED;
+                        upper_or_lower_ = ConstraintStatus::UNDEFINED;
                     }
             };
 
 
         private:
-            bool        machinery_initialized_;
+            MatrixIndex     num_constraints_;
+            bool            machinery_initialized_;
 
             ActiveSet           active_set_;
             FactorizationData   factorization_data_;
@@ -456,6 +522,8 @@ namespace qpmad
 
             ChosenConstraint chooseConstraint(
                     const QPVector & primal,
+                    const QPVector & lb,
+                    const QPVector & ub,
                     const QPMatrix & A,
                     const QPVector & Alb,
                     const QPVector & Aub,
@@ -463,33 +531,49 @@ namespace qpmad
             {
                 ChosenConstraint chosen_ctr;
 
-                for(MatrixIndex i = 0; i < num_general_constraints_; ++i)
+                for(MatrixIndex i = 0; i < num_constraints_; ++i)
                 {
                     if ( (ConstraintStatus::INACTIVE == general_constraints_status_[i])
                         || (ConstraintStatus::VIOLATED == general_constraints_status_[i]) )
                     {
-                        double ctr_violation_i = A.row(i) * primal;
+                        double lb_i;
+                        double ub_i;
+                        double ctr_violation_i;
 
-                        if (Alb(i) - tolerance > ctr_violation_i)
+                        if (i < num_simple_bounds_)
+                        {
+                            lb_i = lb(i);
+                            ub_i = ub(i);
+                            ctr_violation_i = primal(i);
+                        }
+                        else
+                        {
+                            lb_i = Alb(i-num_simple_bounds_);
+                            ub_i = Aub(i-num_simple_bounds_);
+                            ctr_violation_i = A.row(i-num_simple_bounds_) * primal;
+                        }
+
+
+                        if (lb_i - tolerance > ctr_violation_i)
                         {
                             general_constraints_status_[i] = ConstraintStatus::VIOLATED;
-                            ctr_violation_i -= Alb(i);
+                            ctr_violation_i -= lb_i;
                             if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
                             {
-                                chosen_ctr.type_ = ConstraintStatus::ACTIVE_LOWER_BOUND;
+                                chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_LOWER_BOUND;
                                 chosen_ctr.violation_ = ctr_violation_i;
                                 chosen_ctr.index_ = i;
                             }
                         }
                         else
                         {
-                            if (Aub(i) + tolerance < ctr_violation_i)
+                            if (ub_i + tolerance < ctr_violation_i)
                             {
                                 general_constraints_status_[i] = ConstraintStatus::VIOLATED;
-                                ctr_violation_i -= Aub(i);
+                                ctr_violation_i -= ub_i;
                                 if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
                                 {
-                                    chosen_ctr.type_ = ConstraintStatus::ACTIVE_UPPER_BOUND;
+                                    chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_UPPER_BOUND;
                                     chosen_ctr.violation_ = ctr_violation_i;
                                     chosen_ctr.index_ = i;
                                 }
