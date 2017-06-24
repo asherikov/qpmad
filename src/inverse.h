@@ -23,7 +23,7 @@ namespace qpmad
             {
                 MatrixIndex size = L.rows();
 
-                for (MatrixIndex i = size-1; i >= 0; --i)
+                for (MatrixIndex i = 0; i < size; ++i)
                 {
                     U_inverse(i,i) = 1.0 / L(i, i);
                     for (MatrixIndex j = i-1; j >= 0; --j)
