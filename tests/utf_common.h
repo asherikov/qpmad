@@ -39,4 +39,10 @@ inline void getRandomPositiveDefinititeMatrix(Eigen::MatrixXd &M, const std::siz
 }
 
 
-BOOST_GLOBAL_FIXTURE( GlobalFixtureConfig )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+// Depending on Boost version a compiler may issue a warning about extra ';',
+// at the same time, compilation may fail on some systems if ';' is omitted.
+BOOST_GLOBAL_FIXTURE( GlobalFixtureConfig ) ;
+#pragma GCC diagnostic pop
+

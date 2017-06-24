@@ -29,9 +29,11 @@ release:
 	${MAKE}	cmake TYPE=Release TRACING=OFF
 
 
+#						-DCMAKE_CXX_COMPILER=g++
 cmake:
 	mkdir -p build;
-	cd build; cmake .. -DCMAKE_BUILD_TYPE=${TYPE} -DQPMAD_ENABLE_TRACING=${TRACING}
+	cd build; cmake .. 	-DCMAKE_BUILD_TYPE=${TYPE} \
+						-DQPMAD_ENABLE_TRACING=${TRACING}
 	cd build; ${MAKE} ${MAKE_FLAGS}
 
 
