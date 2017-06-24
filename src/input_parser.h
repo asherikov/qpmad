@@ -31,10 +31,10 @@ namespace qpmad
             }
 
 
-            template<   class t_DerivedH,
-                        class t_Derivedh>
-                void    parseObjective( const Eigen::PlainObjectBase<t_DerivedH> & H,
-                                        const Eigen::PlainObjectBase<t_Derivedh> & h)
+            template<   class t_MatrixType,
+                        class t_VectorType>
+                void    parseObjective( const t_MatrixType & H,
+                                        const t_VectorType & h)
             {
                 primal_size_ = H.rows();
                 h_size_ = h.rows();
@@ -49,30 +49,31 @@ namespace qpmad
             }
 
 
-            template<class t_Derived>
-                void    parseSimpleBounds(  const Eigen::PlainObjectBase<t_Derived> & lb,
-                                            const Eigen::PlainObjectBase<t_Derived> & ub)
+            template<   class t_VectorTypelb,
+                        class t_VectorTypeub>
+                void    parseSimpleBounds(  const t_VectorTypelb & lb,
+                                            const t_VectorTypeub & ub)
             {
-                num_simple_bounds_ == lb.rows();
+                num_simple_bounds_ = lb.rows();
 
                 QPMAD_ASSERT(   (0 == num_simple_bounds_) || (primal_size_ == num_simple_bounds_),
                                 "Vector of lower simple bounds has wrong size.");
                 QPMAD_ASSERT(   ub.rows() == num_simple_bounds_,
-                                "Vector of upper simple bounds has wrong size.");
+                                "Vector of upper simple bounds has wrong size1.");
 
-                QPMAD_ASSERT(   ((num_simple_bounds_ > 0) && (1 == lb.cols())) || (0 == lb.cols()),
+                QPMAD_ASSERT(   ((num_simple_bounds_ > 0) && (1 == lb.cols())) || (1 == lb.cols()),
                                 "Vector of lower simple bounds has wrong size.");
-                QPMAD_ASSERT(   ((num_simple_bounds_ > 0) && (1 == ub.cols())) || (0 == ub.cols()),
-                                "Vector of upper simple bounds has wrong size.");
+                QPMAD_ASSERT(   ((num_simple_bounds_ > 0) && (1 == ub.cols())) || (1 == ub.cols()),
+                                "Vector of upper simple bounds has wrong size2.");
             }
 
 
-            template<   class t_DerivedA,
-                        class t_Derivedlb,
-                        class t_Derivedub>
-                void    parseGeneralConstraints(const Eigen::PlainObjectBase<t_DerivedA> & A,
-                                                const Eigen::PlainObjectBase<t_Derivedlb> & lb,
-                                                const Eigen::PlainObjectBase<t_Derivedub> & ub)
+            template<   class t_MatrixTypeA,
+                        class t_VectorTypelb,
+                        class t_VectorTypeub>
+                void    parseGeneralConstraints(const t_MatrixTypeA  & A,
+                                                const t_VectorTypelb & lb,
+                                                const t_VectorTypeub & ub)
             {
                 num_general_constraints_ = A.rows();
 

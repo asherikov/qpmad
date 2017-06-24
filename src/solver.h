@@ -35,9 +35,10 @@ namespace qpmad
             enum ReturnStatus
             {
                 OK = 0,
-                INFEASIBLE_EQUALITY = 1,
-                INFEASIBLE_INEQUALITY = 2,
-                MAXIMAL_NUMBER_OF_ITERATIONS = 3
+                INCONSISTENT = 1,
+                INFEASIBLE_EQUALITY = 2,
+                INFEASIBLE_INEQUALITY = 3,
+                MAXIMAL_NUMBER_OF_ITERATIONS = 4
             };
 
 
@@ -49,13 +50,45 @@ namespace qpmad
                                     const QPVector & Alb,
                                     const QPVector & Aub)
             {
-                return (solve(primal, H, h, A, Alb, Aub, SolverParameters()));
+                return (solve(  primal, H, h,
+                                Eigen::VectorXd(), Eigen::VectorXd(),
+                                A, Alb, Aub, SolverParameters()));
             }
 
 
             ReturnStatus    solve(  QPVector     & primal,
                                     QPMatrix     & H,
                                     const QPVector & h,
+                                    const QPVector & lb,
+                                    const QPVector & ub,
+                                    const QPMatrix & A,
+                                    const QPVector & Alb,
+                                    const QPVector & Aub)
+            {
+                return (solve(  primal, H, h,
+                                lb, ub,
+                                A, Alb, Aub, SolverParameters()));
+            }
+
+
+            ReturnStatus    solve(  QPVector     & primal,
+                                    QPMatrix     & H,
+                                    const QPVector & h,
+                                    const QPVector & lb,
+                                    const QPVector & ub)
+            {
+                return (solve(  primal, H, h,
+                                lb, ub,
+                                Eigen::MatrixXd(), Eigen::VectorXd(), Eigen::VectorXd(), SolverParameters()));
+            }
+
+
+
+            ReturnStatus    solve(  QPVector     & primal,
+                                    QPMatrix     & H,
+                                    const QPVector & h,
+                                    const QPVector & lb,
+                                    const QPVector & ub,
                                     const QPMatrix & A,
                                     const QPVector & Alb,
                                     const QPVector & Aub,
@@ -66,6 +99,7 @@ namespace qpmad
                 machinery_initialized_ = false;
 
                 parseObjective(H, h);
+                parseSimpleBounds(lb, ub);
                 parseGeneralConstraints(A, Alb, Aub);
 
 
@@ -110,7 +144,7 @@ namespace qpmad
                     if (Alb(i) - param.tolerance_ > Aub(i))
                     {
                         general_constraints_status_[i] = ConstraintStatus::INCONSISTENT;
-                        QPMAD_THROW("Inconsistent bounds of general constraints!");
+                        return(INCONSISTENT);
                     }
 
                     if (std::abs(Alb(i) - Aub(i)) > param.tolerance_)
@@ -160,6 +194,7 @@ namespace qpmad
                         if (std::abs(violation) > param.tolerance_)
                         {
                             // nope it is not
+                            general_constraints_status_[i] = ConstraintStatus::INCONSISTENT;
                             return (INFEASIBLE_EQUALITY);
                         }
                         // otherwise keep going
@@ -226,6 +261,7 @@ namespace qpmad
                     }
 
 
+                    // check dual feasibility
                     MatrixIndex dual_blocking_index = primal_size_;
                     double dual_step_length = std::numeric_limits<double>::infinity();
                     for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
