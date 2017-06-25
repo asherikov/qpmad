@@ -12,7 +12,7 @@
 
 #include <stdexcept>
 #include <cmath>
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
 #include "config.h"
 

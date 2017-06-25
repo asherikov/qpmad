@@ -1,3 +1,4 @@
 #pragma once
 
 #cmakedefine QPMAD_ENABLE_TRACING
+#cmakedefine QPMAD_USE_HOUSEHOLDER

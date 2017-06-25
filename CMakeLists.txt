@@ -6,8 +6,9 @@ set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 set (CMAKE_VERBOSE_MAKEFILE     ON)
 
 
-option(QPMAD_BUILD_TESTS        "Build tests"       ON)
-option(QPMAD_ENABLE_TRACING     "Enable tracing"    OFF)
+option(QPMAD_BUILD_TESTS        "Build tests"                                           ON)
+option(QPMAD_ENABLE_TRACING     "Enable tracing"                                        OFF)
+option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"   ON)
 
 
 if(NOT CMAKE_BUILD_TYPE)

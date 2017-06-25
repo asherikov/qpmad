@@ -19,6 +19,9 @@ namespace qpmad
             QPMatrix    QLi_aka_J;
             QPMatrix    R;
             MatrixIndex primal_size_;
+#ifdef QPMAD_USE_HOUSEHOLDER
+            QPMatrix    householder_workspace_;
+#endif
 
 
         public:
@@ -33,18 +36,33 @@ namespace qpmad
                 TriangularInversion::compute(QLi_aka_J, H);
 
                 R.resize(primal_size_, primal_size_);
+
+#ifdef QPMAD_USE_HOUSEHOLDER
+                householder_workspace_.resize(primal_size_, primal_size_);
+#endif
             }
 
 
             bool update(const MatrixIndex R_col,
                         const double tolerance)
             {
+#ifdef QPMAD_USE_HOUSEHOLDER
+                double tau;
+                double beta;
+
+                R.col(R_col).tail(primal_size_ - R_col).makeHouseholderInPlace(tau, beta);
+                QLi_aka_J.rightCols(primal_size_ - R_col).transpose().applyHouseholderOnTheLeft(
+                        R.col(R_col).tail(primal_size_ - R_col - 1), tau, householder_workspace_.data());
+                R(R_col, R_col) = beta;
+#else
                 GivensReflection    givens;
                 for (MatrixIndex i = primal_size_-1; i > R_col; --i)
                 {
                     givens.computeAndApply(R(i-1, R_col), R(i, R_col), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
                 }
+#endif
+
 
                 if (std::abs(R(R_col, R_col)) < tolerance)
                 {
@@ -68,8 +86,6 @@ namespace qpmad
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
                     givens.applyRowWise(R, i+1, R_cols, i-1, i);
 
-                    /// @todo no need to copy the part corresponding to equalities
-                    /// @todo block copy?
                     R.col(i-1).segment(0, i) = R.col(i).segment(0, i);
                 }
             }
