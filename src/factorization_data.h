@@ -64,11 +64,6 @@ namespace qpmad
                 GivensReflection    givens;
                 for (MatrixIndex i = R_col_index + 1; i < R_cols; ++i)
                 {
-                    Eigen::MatrixXd tmp = R.block(0,
-                                0,
-                                R_cols,
-                                R_cols).triangularView<Eigen::Upper>();
-
                     givens.computeAndApply(R(i-1, i), R(i, i), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
                     givens.applyRowWise(R, i+1, R_cols, i-1, i);
