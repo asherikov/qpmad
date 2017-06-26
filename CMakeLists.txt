@@ -36,3 +36,7 @@ if (QPMAD_BUILD_TESTS)
     include(qpmad_add_test)
     add_subdirectory("${PROJECT_SOURCE_DIR}/tests")
 endif(QPMAD_BUILD_TESTS)
+
+
+install (DIRECTORY "${QPMAD_SOURCE_DIR}/"
+         DESTINATION "${CMAKE_INSTALL_PREFIX}/include/qpmad/")
