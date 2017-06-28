@@ -22,8 +22,7 @@ namespace qpmad
                 EQUALITY            = 2,
                 INACTIVE            = 3,
                 ACTIVE_LOWER_BOUND  = 4,
-                ACTIVE_UPPER_BOUND  = 5,
-                VIOLATED            = 6
+                ACTIVE_UPPER_BOUND  = 5
             };
     };
 }
