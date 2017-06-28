@@ -504,6 +504,8 @@ namespace qpmad
             QPVector    primal_step_direction_;
             QPVector    dual_step_direction_;
 
+            QPVector    general_ctr_dot_primal_;
+
             std::vector<ConstraintStatus::Status>   constraints_status_;
 
 
@@ -516,6 +518,7 @@ namespace qpmad
                     active_set_.initialize(primal_size_);
                     factorization_data_.initialize(H, primal_size_);
                     primal_step_direction_.resize(primal_size_);
+                    general_ctr_dot_primal_.resize(num_general_constraints_);
 
                     machinery_initialized_ = true;
                 }
@@ -533,61 +536,85 @@ namespace qpmad
             {
                 ChosenConstraint chosen_ctr;
 
-                for(MatrixIndex i = 0; i < num_constraints_; ++i)
+
+                for(MatrixIndex i = 0; i < num_simple_bounds_; ++i)
                 {
-                    if ( (ConstraintStatus::INACTIVE == constraints_status_[i])
-                        || (ConstraintStatus::VIOLATED == constraints_status_[i]) )
+                    switch(constraints_status_[i])
                     {
-                        double lb_i;
-                        double ub_i;
-                        double ctr_violation_i;
+                        case ConstraintStatus::INACTIVE:
+                        case ConstraintStatus::VIOLATED:
+                            constraints_status_[i] = checkConstraintViolation(
+                                    chosen_ctr, i, lb(i), ub(i), primal(i), tolerance);
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
-                        if (i < num_simple_bounds_)
+                if (num_general_constraints_ > 0)
+                {
+                    general_ctr_dot_primal_.noalias() = A * primal;
+                    for(MatrixIndex i = num_simple_bounds_; i < num_constraints_; ++i)
+                    {
+                        switch(constraints_status_[i])
                         {
-                            lb_i = lb(i);
-                            ub_i = ub(i);
-                            ctr_violation_i = primal(i);
-                        }
-                        else
-                        {
-                            lb_i = Alb(i-num_simple_bounds_);
-                            ub_i = Aub(i-num_simple_bounds_);
-                            ctr_violation_i = A.row(i-num_simple_bounds_) * primal;
-                        }
-
-
-                        if (lb_i - tolerance > ctr_violation_i)
-                        {
-                            constraints_status_[i] = ConstraintStatus::VIOLATED;
-                            ctr_violation_i -= lb_i;
-                            if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
-                            {
-                                chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_LOWER_BOUND;
-                                chosen_ctr.violation_ = ctr_violation_i;
-                                chosen_ctr.index_ = i;
-                            }
-                        }
-                        else
-                        {
-                            if (ub_i + tolerance < ctr_violation_i)
-                            {
-                                constraints_status_[i] = ConstraintStatus::VIOLATED;
-                                ctr_violation_i -= ub_i;
-                                if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
-                                {
-                                    chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_UPPER_BOUND;
-                                    chosen_ctr.violation_ = ctr_violation_i;
-                                    chosen_ctr.index_ = i;
-                                }
-                            }
-                            else
-                            {
-                                constraints_status_[i] = ConstraintStatus::INACTIVE;
-                            }
+                            case ConstraintStatus::INACTIVE:
+                            case ConstraintStatus::VIOLATED:
+                                constraints_status_[i] =
+                                    checkConstraintViolation(
+                                                        chosen_ctr,
+                                                        i,
+                                                        Alb(i - num_simple_bounds_),
+                                                        Aub(i - num_simple_bounds_),
+                                                        general_ctr_dot_primal_(i-num_simple_bounds_),
+                                                        tolerance);
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
                 return (chosen_ctr);
+            }
+
+
+            ConstraintStatus::Status checkConstraintViolation(
+                    ChosenConstraint & chosen_ctr,
+                    const MatrixIndex i,
+                    const double lb_i,
+                    const double ub_i,
+                    const double ctr_i_dot_primal,
+                    const double tolerance)
+            {
+                double ctr_violation_i = ctr_i_dot_primal - lb_i;
+                if (ctr_violation_i < -tolerance)
+                {
+                    if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
+                    {
+                        chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_LOWER_BOUND;
+                        chosen_ctr.violation_ = ctr_violation_i;
+                        chosen_ctr.index_ = i;
+                    }
+                    return(ConstraintStatus::VIOLATED);
+                }
+                else
+                {
+                    ctr_violation_i = ctr_i_dot_primal - ub_i;
+                    if (ctr_violation_i > tolerance)
+                    {
+                        if (std::abs(ctr_violation_i) > std::abs(chosen_ctr.violation_))
+                        {
+                            chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_UPPER_BOUND;
+                            chosen_ctr.violation_ = ctr_violation_i;
+                            chosen_ctr.index_ = i;
+                        }
+                        return(ConstraintStatus::VIOLATED);
+                    }
+                    else
+                    {
+                        return(ConstraintStatus::INACTIVE);
+                    }
+                }
             }
     };
 }
