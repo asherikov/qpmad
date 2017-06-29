@@ -133,10 +133,8 @@ namespace qpmad
                     case COPY:
                         return;
                     case SWAP:
-                        for (int k = start; k < end; k++)
-                        {
-                            swap(M(k, column_1), M(k, column_2));
-                        }
+                        M.col(column_1).segment(start, end-start).swap(
+                                M.col(column_2).segment(start, end-start)   );
                         return;
                     case NONTRIVIAL:
                         for (int k = start; k < end; k++)
@@ -160,10 +158,8 @@ namespace qpmad
                     case COPY:
                         return;
                     case SWAP:
-                        for (int k = start; k < end; k++)
-                        {
-                            swap(M(row_1, k), M(row_2, k));
-                        }
+                        M.row(row_1).segment(start, end-start).swap(
+                                M.row(row_2).segment(start, end-start)   );
                         return;
                     case NONTRIVIAL:
                         for (int k = start; k < end; k++)
