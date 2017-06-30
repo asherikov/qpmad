@@ -6,9 +6,10 @@ EXTRA_CMAKE_PARAM?=
 #EXTRA_CMAKE_PARAM?="-DCMAKE_CXX_COMPILER=g++"
 
 
-test: clean unit_tests_without_tracing unit_tests_with_tracing unit_tests_with_givens
-	cd matlab_octave; ${MAKE} octave octave_test
+test: clean unit_tests_without_tracing unit_tests_with_tracing unit_tests_with_givens test_octave
 
+test_octave:
+	cd matlab_octave; ${MAKE} octave octave_test
 
 build: build_without_tracing
 

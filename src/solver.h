@@ -387,11 +387,6 @@ namespace qpmad
                         chosen_ctr.dual_ += step_length;
                         chosen_ctr.violation_ += step_length * chosen_ctr_dot_primal_step_direction;
 
-                        if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
-                        {
-                            QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
-                        }
-
                         QPMAD_TRACE("||| Chosen ctr dual = " << chosen_ctr.dual_);
                         QPMAD_TRACE("||| Chosen ctr violation = " << chosen_ctr.violation_);
 
@@ -414,6 +409,11 @@ namespace qpmad
                         {
                             QPMAD_TRACE("||| FULL STEP");
                             // activate constraint
+                            if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
+                            {
+                                QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
+                            }
+
                             constraints_status_[chosen_ctr.index_] = chosen_ctr.upper_or_lower_;
                             dual_(active_set_.size_) = chosen_ctr.dual_;
                             active_set_.addInequality(chosen_ctr.index_);
