@@ -253,7 +253,7 @@ namespace qpmad
 
 
                 ChosenConstraint chosen_ctr;
-                chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub);
+                chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
                 ReturnStatus return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
                 for(int iter = 0;
                     (iter < param.max_iter_) || (param.max_iter_ < 0);
@@ -418,7 +418,7 @@ namespace qpmad
                             dual_(active_set_.size_) = chosen_ctr.dual_;
                             active_set_.addInequality(chosen_ctr.index_);
 
-                            chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub);
+                            chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
                         }
                     }
                     else
@@ -531,7 +531,8 @@ namespace qpmad
                     const QPVector & ub,
                     const QPMatrix & A,
                     const QPVector & Alb,
-                    const QPVector & Aub)
+                    const QPVector & Aub,
+                    const double tolerance)
             {
                 ChosenConstraint chosen_ctr;
 
@@ -545,7 +546,7 @@ namespace qpmad
                     }
                 }
 
-                if (num_general_constraints_ > 0)
+                if ((std::abs(chosen_ctr.violation_) < tolerance) && (num_general_constraints_ > 0))
                 {
                     general_ctr_dot_primal_.noalias() = A * primal;
                     for(MatrixIndex i = num_simple_bounds_; i < num_constraints_; ++i)
