@@ -50,10 +50,15 @@ namespace qpmad
                 double tau;
                 double beta;
 
-                R.col(R_col).tail(primal_size_ - R_col).makeHouseholderInPlace(tau, beta);
-                QLi_aka_J.rightCols(primal_size_ - R_col).transpose().applyHouseholderOnTheLeft(
-                        R.col(R_col).tail(primal_size_ - R_col - 1), tau, householder_workspace_.data());
+                MatrixIndex i;
+                for (i = primal_size_-1; (0.0 == R(i,R_col)) && (i > R_col); --i)
+                {}
+                R.col(R_col).segment(R_col, i - R_col + 1).makeHouseholderInPlace(tau, beta);
                 R(R_col, R_col) = beta;
+                QLi_aka_J.middleCols(R_col, i - R_col + 1).transpose().applyHouseholderOnTheLeft(
+                        R.col(R_col).segment(R_col+1, i - R_col), tau, householder_workspace_.data());
+
+                return ( std::abs(beta) > tolerance );
 #else
                 GivensReflection    givens;
                 for (MatrixIndex i = primal_size_-1; i > R_col; --i)
@@ -61,17 +66,9 @@ namespace qpmad
                     givens.computeAndApply(R(i-1, R_col), R(i, R_col), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
                 }
+
+                return ( std::abs(R(R_col, R_col)) > tolerance );
 #endif
-
-
-                if (std::abs(R(R_col, R_col)) < tolerance)
-                {
-                    return (false);
-                }
-                else
-                {
-                    return (true);
-                }
             }
 
 
