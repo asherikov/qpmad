@@ -11,7 +11,15 @@ Features
     - Double sided inequality constraints: 'lb <= A*x <= ub'. Such constraints
       can be handled in a more efficient way than 'lb <= A*x' commonly used in
       other implementations of the algorithm.
+
     - Simple bounds: 'lb <= x <= ub'.
+
+    - Lazy data initialization, e.g., perform inversion of the Cholesky factor
+      only if some of the constraints are activated.
+
+    - Does not compute value of the objective function.
+
+    - Does not compute/update Lagrange multipliers for equality constraints.
 
 
 Dependencies
@@ -20,10 +28,20 @@ Dependencies
     - Boost (for C++ tests)
 
 
-Differences from other implementations, e.g. QuadProgpp/eiQuadProg:
-    - do not compute value of the objective function;
-    - do not compute/update Lagrange multipliers for equality constraints;
-    - double sided inequalities;
-    - simple bounds;
-    - lazy data initialization, e.g., perform inversion of the Cholesky factor
-      only if some of the constraints are activated.
+Notes:
+
+1. Before computing the full step length I check that the dot product of the
+chosen constraint with the step direction is not zero instead of checking the
+norm of the step direction. The former approach makes more sense since the said
+dot product appears later as a divisor and we can avoid computation of a
+useless norm.
+
+2. I am aware that activation of simple bounds zeroes out parts of matrix 'J'.
+Unfortunately, I don't see a way to exploit this on modern hardware -- updating
+the whole 'J' at once is computationally cheaper than doing this line by line
+selectively or permuting 'J' to collect sparse rows in one place.
+
+3. Since the solver may arbitrarily choose violated constraints for activation,
+it always prefers the cheapest ones, i.e., the simple bounds. In particular,
+this allows to avoid computation of violations of general constraints if there
+are violated bounds.
