@@ -283,46 +283,25 @@ namespace qpmad
                     if (active_set_.hasEmptySpace())
                     {
                         // compute step direction in primal & dual space
-                        if (chosen_ctr.is_simple_)
-                        {
+                        chosen_ctr_dot_primal_step_direction =
                             factorization_data_.computeInequalitySteps(
                                     primal_step_direction_,
                                     dual_step_direction_,
                                     chosen_ctr,
-                                    active_set_);
-                            chosen_ctr_dot_primal_step_direction = primal_step_direction_(chosen_ctr.index_);
-                        }
-                        else
-                        {
-                            factorization_data_.computeInequalitySteps(
-                                    primal_step_direction_,
-                                    dual_step_direction_,
-                                    chosen_ctr,
-                                    A.row(chosen_ctr.index_ - num_simple_bounds_),
-                                    active_set_);
-                            chosen_ctr_dot_primal_step_direction =
-                                A.row(chosen_ctr.index_ - num_simple_bounds_) * primal_step_direction_;
-                        }
+                                    A,
+                                    active_set_,
+                                    num_simple_bounds_);
                     }
                     else
                     {
                         // compute step direction in dual space only
                         // primal vector cannot change until we deactive something
-                        if (chosen_ctr.is_simple_)
-                        {
-                            factorization_data_.computeInequalityDualStep(
-                                    dual_step_direction_,
-                                    chosen_ctr,
-                                    active_set_);
-                        }
-                        else
-                        {
-                            factorization_data_.computeInequalityDualStep(
-                                    dual_step_direction_,
-                                    chosen_ctr,
-                                    A.row(chosen_ctr.index_ - num_simple_bounds_),
-                                    active_set_);
-                        }
+                        factorization_data_.computeInequalityDualStep(
+                                dual_step_direction_,
+                                chosen_ctr,
+                                A,
+                                active_set_,
+                                num_simple_bounds_);
                     }
 
 
