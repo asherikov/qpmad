@@ -126,11 +126,11 @@ namespace qpmad
                         class t_RowVectorType>
                 void computeInequalitySteps(t_VectorType0           & primal_step_direction,
                                             t_VectorType1           & dual_step_direction,
+                                            const ChosenConstraint & chosen_ctr,
                                             const t_RowVectorType   & ctr,
-                                            const ConstraintStatus::Status ctr_type,
-                                            const ActiveSet         &active_set)
+                                            const ActiveSet         & active_set)
             {
-                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                if (chosen_ctr.is_lower_)
                 {
                     R.col(active_set.size_).noalias() =
                         - QLi_aka_J.transpose() * ctr.transpose();
@@ -150,17 +150,16 @@ namespace qpmad
                         class t_VectorType1>
                 void computeInequalitySteps(t_VectorType0           & primal_step_direction,
                                             t_VectorType1           & dual_step_direction,
-                                            const MatrixIndex       simple_bound_index,
-                                            const ConstraintStatus::Status ctr_type,
-                                            const ActiveSet         &active_set)
+                                            const ChosenConstraint & chosen_ctr,
+                                            const ActiveSet         & active_set)
             {
-                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                if (chosen_ctr.is_lower_)
                 {
-                    R.col(active_set.size_) = - QLi_aka_J.row(simple_bound_index).transpose();
+                    R.col(active_set.size_) = - QLi_aka_J.row(chosen_ctr.index_).transpose();
                 }
                 else
                 {
-                    R.col(active_set.size_) =   QLi_aka_J.row(simple_bound_index).transpose();
+                    R.col(active_set.size_) =   QLi_aka_J.row(chosen_ctr.index_).transpose();
                 }
 
                 computePrimalStepDirection(primal_step_direction, active_set.size_);
@@ -171,11 +170,11 @@ namespace qpmad
             template<   class t_VectorType,
                         class t_RowVectorType>
                 void computeInequalityDualStep( t_VectorType            & dual_step_direction,
+                                                const ChosenConstraint & chosen_ctr,
                                                 const t_RowVectorType   & ctr,
-                                                const ConstraintStatus::Status ctr_type,
                                                 const ActiveSet         & active_set)
             {
-                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                if (chosen_ctr.is_lower_)
                 {
                     dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
                         QLi_aka_J.transpose().bottomRows(active_set.num_inequalities_)
@@ -194,19 +193,18 @@ namespace qpmad
 
             template<class t_VectorType>
                 void computeInequalityDualStep( t_VectorType            & dual_step_direction,
-                                                const MatrixIndex       & simple_bound_index,
-                                                const ConstraintStatus::Status ctr_type,
+                                                const ChosenConstraint & chosen_ctr,
                                                 const ActiveSet         & active_set)
             {
-                if (ConstraintStatus::ACTIVE_LOWER_BOUND == ctr_type)
+                if (chosen_ctr.is_lower_)
                 {
                     dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
-                        QLi_aka_J.row(simple_bound_index).tail(active_set.num_inequalities_).transpose();
+                        QLi_aka_J.row(chosen_ctr.index_).tail(active_set.num_inequalities_).transpose();
                 }
                 else
                 {
                     dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
-                        - QLi_aka_J.row(simple_bound_index).tail(active_set.num_inequalities_).transpose();
+                        - QLi_aka_J.row(chosen_ctr.index_).tail(active_set.num_inequalities_).transpose();
                 }
 
                 computeDualStepDirectionInPlace(dual_step_direction, active_set);

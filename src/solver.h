@@ -20,6 +20,7 @@
 #include "inverse.h"
 #include "solver_parameters.h"
 #include "constraint_status.h"
+#include "chosen_constraint.h"
 #include "active_set.h"
 #include "factorization_data.h"
 
@@ -282,13 +283,12 @@ namespace qpmad
                     if (active_set_.hasEmptySpace())
                     {
                         // compute step direction in primal & dual space
-                        if (chosen_ctr.index_ < num_simple_bounds_)
+                        if (chosen_ctr.is_simple_)
                         {
                             factorization_data_.computeInequalitySteps(
                                     primal_step_direction_,
                                     dual_step_direction_,
-                                    chosen_ctr.index_,
-                                    chosen_ctr.upper_or_lower_,
+                                    chosen_ctr,
                                     active_set_);
                             chosen_ctr_dot_primal_step_direction = primal_step_direction_(chosen_ctr.index_);
                         }
@@ -297,8 +297,8 @@ namespace qpmad
                             factorization_data_.computeInequalitySteps(
                                     primal_step_direction_,
                                     dual_step_direction_,
+                                    chosen_ctr,
                                     A.row(chosen_ctr.index_ - num_simple_bounds_),
-                                    chosen_ctr.upper_or_lower_,
                                     active_set_);
                             chosen_ctr_dot_primal_step_direction =
                                 A.row(chosen_ctr.index_ - num_simple_bounds_) * primal_step_direction_;
@@ -308,20 +308,19 @@ namespace qpmad
                     {
                         // compute step direction in dual space only
                         // primal vector cannot change until we deactive something
-                        if (chosen_ctr.index_ < num_simple_bounds_)
+                        if (chosen_ctr.is_simple_)
                         {
                             factorization_data_.computeInequalityDualStep(
                                     dual_step_direction_,
-                                    chosen_ctr.index_,
-                                    chosen_ctr.upper_or_lower_,
+                                    chosen_ctr,
                                     active_set_);
                         }
                         else
                         {
                             factorization_data_.computeInequalityDualStep(
                                     dual_step_direction_,
+                                    chosen_ctr,
                                     A.row(chosen_ctr.index_ - num_simple_bounds_),
-                                    chosen_ctr.upper_or_lower_,
                                     active_set_);
                         }
                     }
@@ -414,7 +413,14 @@ namespace qpmad
                                 QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
                             }
 
-                            constraints_status_[chosen_ctr.index_] = chosen_ctr.upper_or_lower_;
+                            if (chosen_ctr.is_lower_)
+                            {
+                                constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_LOWER_BOUND;
+                            }
+                            else
+                            {
+                                constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_UPPER_BOUND;
+                            }
                             dual_(active_set_.size_) = chosen_ctr.dual_;
                             active_set_.addInequality(chosen_ctr.index_);
 
@@ -470,26 +476,6 @@ namespace qpmad
 #endif
                 return(return_status);
             }
-
-
-        private:
-            class ChosenConstraint
-            {
-                public:
-                    double                      violation_;
-                    double                      dual_;
-                    MatrixIndex                 index_;
-                    ConstraintStatus::Status    upper_or_lower_;
-
-                public:
-                    ChosenConstraint()
-                    {
-                        dual_ = 0.0;
-                        violation_ = 0.0;
-                        index_ = 0;
-                        upper_or_lower_ = ConstraintStatus::UNDEFINED;
-                    }
-            };
 
 
         private:
@@ -561,6 +547,9 @@ namespace qpmad
                         }
                     }
                 }
+
+                chosen_ctr.is_lower_ = (chosen_ctr.violation_ < 0.0);
+                chosen_ctr.is_simple_ = (chosen_ctr.index_ < num_simple_bounds_);
                 return (chosen_ctr);
             }
 
@@ -575,7 +564,6 @@ namespace qpmad
                 double ctr_violation_i = ctr_i_dot_primal - lb_i;
                 if (ctr_violation_i < -std::abs(chosen_ctr.violation_))
                 {
-                    chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_LOWER_BOUND;
                     chosen_ctr.violation_ = ctr_violation_i;
                     chosen_ctr.index_ = i;
                 }
@@ -584,7 +572,6 @@ namespace qpmad
                     ctr_violation_i = ctr_i_dot_primal - ub_i;
                     if (ctr_violation_i > std::abs(chosen_ctr.violation_))
                     {
-                        chosen_ctr.upper_or_lower_ = ConstraintStatus::ACTIVE_UPPER_BOUND;
                         chosen_ctr.violation_ = ctr_violation_i;
                         chosen_ctr.index_ = i;
                     }
