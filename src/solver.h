@@ -253,29 +253,19 @@ namespace qpmad
                 dual_step_direction_.resize(primal_size_);
 
 
+                ReturnStatus return_status;
                 ChosenConstraint chosen_ctr;
                 chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
-                ReturnStatus return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
-                for(int iter = 0;
-                    (iter < param.max_iter_) || (param.max_iter_ < 0);
-                    ++iter)
+
+
+                if (std::abs(chosen_ctr.violation_) < param.tolerance_)
                 {
-                    QPMAD_TRACE(">>>>>>>>>"  << iter << "<<<<<<<<<");
-#ifdef QPMAD_ENABLE_TRACING
-                    testing::computeObjective(H, h, primal);
-#endif
-                    QPMAD_TRACE("||| Chosen ctr index = " << chosen_ctr.index_);
-                    QPMAD_TRACE("||| Chosen ctr dual = " << chosen_ctr.dual_);
-                    QPMAD_TRACE("||| Chosen ctr violation = " << chosen_ctr.violation_);
-
-
-                    if (std::abs(chosen_ctr.violation_) < param.tolerance_)
-                    {
-                        // all constraints are satisfied
-                        return_status = OK;
-                        break;
-                    }
-
+                    // all constraints are satisfied
+                    return_status = OK;
+                }
+                else
+                {
+                    return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
 
                     initializeMachineryLazy(H);
 
@@ -305,133 +295,199 @@ namespace qpmad
                     }
 
 
-                    // check dual feasibility
-                    MatrixIndex dual_blocking_index = primal_size_;
-                    double dual_step_length = std::numeric_limits<double>::infinity();
-                    for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+                    for(int iter = 0;
+                        (iter < param.max_iter_) || (param.max_iter_ < 0);
+                        ++iter)
                     {
-                        if (dual_step_direction_(i) < -param.tolerance_)
-                        {
-                            double dual_step_length_i = -dual_(i) / dual_step_direction_(i);
-                            if (dual_step_length_i < dual_step_length)
-                            {
-                                dual_step_length = dual_step_length_i;
-                                dual_blocking_index = i;
-                            }
-                        }
-                    }
-
-
+                        QPMAD_TRACE(">>>>>>>>>"  << iter << "<<<<<<<<<");
 #ifdef QPMAD_ENABLE_TRACING
-                    testing::checkLagrangeMultipliers(
-                            H, h, primal, A,
-                            active_set_,
-                            num_simple_bounds_,
-                            constraints_status_,
-                            dual_,
-                            dual_step_direction_);
+                        testing::computeObjective(H, h, primal);
 #endif
-
-
-                    if ( active_set_.hasEmptySpace()
-                        // if step direction is a zero vector, constraint is
-                        // linearly dependent with previously added constraints
-                        && (std::abs(chosen_ctr_dot_primal_step_direction) > param.tolerance_) )
-                    {
-                        double step_length = - chosen_ctr.violation_ / chosen_ctr_dot_primal_step_direction;
-
-                        QPMAD_TRACE("======================");
-                        QPMAD_TRACE("||| Primal step length = " << step_length);
-                        QPMAD_TRACE("||| Dual step length = " << dual_step_length);
-                        QPMAD_TRACE("======================");
-
-
-                        bool partial_step = false;
-                        QPMAD_ASSERT(   (step_length >= 0.0)
-                                        && (dual_step_length >= 0.0),
-                                        "Non-negative step lengths expected.");
-                        if (dual_step_length <= step_length)
-                        {
-                            step_length = dual_step_length;
-                            partial_step = true;
-                        }
-
-
-                        primal.noalias() += step_length * primal_step_direction_;
-
-                        dual_.segment(active_set_.num_equalities_, active_set_.num_inequalities_).noalias()
-                            += step_length
-                                * dual_step_direction_.segment(active_set_.num_equalities_, active_set_.num_inequalities_);
-                        chosen_ctr.dual_ += step_length;
-                        chosen_ctr.violation_ += step_length * chosen_ctr_dot_primal_step_direction;
-
+                        QPMAD_TRACE("||| Chosen ctr index = " << chosen_ctr.index_);
                         QPMAD_TRACE("||| Chosen ctr dual = " << chosen_ctr.dual_);
                         QPMAD_TRACE("||| Chosen ctr violation = " << chosen_ctr.violation_);
 
 
-                        if ((partial_step)
-                            // if violation is almost zero -- assume that a full step is made
-                            && (std::abs(chosen_ctr.violation_) > param.tolerance_) )
+                        // check dual feasibility
+                        MatrixIndex dual_blocking_index = primal_size_;
+                        double dual_step_length = std::numeric_limits<double>::infinity();
+                        for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
                         {
-                            QPMAD_TRACE("||| PARTIAL STEP");
-                            // deactivate blocking constraint
-                            constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
-
-                            dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
-
-                            factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
-
-                            active_set_.removeInequality(dual_blocking_index);
-                        }
-                        else
-                        {
-                            QPMAD_TRACE("||| FULL STEP");
-                            // activate constraint
-                            if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
+                            if (dual_step_direction_(i) < -param.tolerance_)
                             {
-                                QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
+                                double dual_step_length_i = -dual_(i) / dual_step_direction_(i);
+                                if (dual_step_length_i < dual_step_length)
+                                {
+                                    dual_step_length = dual_step_length_i;
+                                    dual_blocking_index = i;
+                                }
                             }
-
-                            if (chosen_ctr.is_lower_)
-                            {
-                                constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_LOWER_BOUND;
-                            }
-                            else
-                            {
-                                constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_UPPER_BOUND;
-                            }
-                            dual_(active_set_.size_) = chosen_ctr.dual_;
-                            active_set_.addInequality(chosen_ctr.index_);
-
-                            chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
                         }
-                    }
-                    else
-                    {
-                        if (dual_blocking_index == primal_size_)
+
+
+#ifdef QPMAD_ENABLE_TRACING
+                        testing::checkLagrangeMultipliers(
+                                H, h, primal, A,
+                                active_set_,
+                                num_simple_bounds_,
+                                constraints_status_,
+                                dual_,
+                                dual_step_direction_);
+#endif
+
+
+                        if ( active_set_.hasEmptySpace()
+                            // if step direction is a zero vector, constraint is
+                            // linearly dependent with previously added constraints
+                            && (std::abs(chosen_ctr_dot_primal_step_direction) > param.tolerance_) )
                         {
-                            return_status = INFEASIBLE_INEQUALITY;
-                            break;
-                        }
-                        else
-                        {
+                            double step_length = - chosen_ctr.violation_ / chosen_ctr_dot_primal_step_direction;
+
                             QPMAD_TRACE("======================");
+                            QPMAD_TRACE("||| Primal step length = " << step_length);
                             QPMAD_TRACE("||| Dual step length = " << dual_step_length);
                             QPMAD_TRACE("======================");
 
-                            // otherwise -- deactivate
+
+                            bool partial_step = false;
+                            QPMAD_ASSERT(   (step_length >= 0.0)
+                                            && (dual_step_length >= 0.0),
+                                            "Non-negative step lengths expected.");
+                            if (dual_step_length <= step_length)
+                            {
+                                step_length = dual_step_length;
+                                partial_step = true;
+                            }
+
+
+                            primal.noalias() += step_length * primal_step_direction_;
+
                             dual_.segment(active_set_.num_equalities_, active_set_.num_inequalities_).noalias()
-                                += dual_step_length
+                                += step_length
                                     * dual_step_direction_.segment(active_set_.num_equalities_, active_set_.num_inequalities_);
-                            chosen_ctr.dual_ += dual_step_length;
+                            chosen_ctr.dual_ += step_length;
+                            chosen_ctr.violation_ += step_length * chosen_ctr_dot_primal_step_direction;
 
-                            constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
+                            QPMAD_TRACE("||| Chosen ctr dual = " << chosen_ctr.dual_);
+                            QPMAD_TRACE("||| Chosen ctr violation = " << chosen_ctr.violation_);
 
-                            dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
-                            factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
+                            if ((partial_step)
+                                // if violation is almost zero -- assume that a full step is made
+                                && (std::abs(chosen_ctr.violation_) > param.tolerance_) )
+                            {
+                                QPMAD_TRACE("||| PARTIAL STEP");
+                                // deactivate blocking constraint
+                                constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
 
-                            active_set_.removeInequality(dual_blocking_index);
+                                dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
+
+                                factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
+
+                                active_set_.removeInequality(dual_blocking_index);
+
+                                // compute step direction in primal & dual space
+                                chosen_ctr_dot_primal_step_direction =
+                                    factorization_data_.computeInequalitySteps(
+                                            primal_step_direction_,
+                                            dual_step_direction_,
+                                            chosen_ctr,
+                                            A,
+                                            active_set_,
+                                            num_simple_bounds_);
+                            }
+                            else
+                            {
+                                QPMAD_TRACE("||| FULL STEP");
+                                // activate constraint
+                                if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
+                                {
+                                    QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
+                                }
+
+                                if (chosen_ctr.is_lower_)
+                                {
+                                    constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_LOWER_BOUND;
+                                }
+                                else
+                                {
+                                    constraints_status_[chosen_ctr.index_] = ConstraintStatus::ACTIVE_UPPER_BOUND;
+                                }
+                                dual_(active_set_.size_) = chosen_ctr.dual_;
+                                active_set_.addInequality(chosen_ctr.index_);
+
+                                chosen_ctr = chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
+
+                                if (std::abs(chosen_ctr.violation_) < param.tolerance_)
+                                {
+                                    // all constraints are satisfied
+                                    return_status = OK;
+                                    break;
+                                }
+
+                                chosen_ctr_dot_primal_step_direction = 0.0;
+                                if (active_set_.hasEmptySpace())
+                                {
+                                    // compute step direction in primal & dual space
+                                    chosen_ctr_dot_primal_step_direction =
+                                        factorization_data_.computeInequalitySteps(
+                                                primal_step_direction_,
+                                                dual_step_direction_,
+                                                chosen_ctr,
+                                                A,
+                                                active_set_,
+                                                num_simple_bounds_);
+                                }
+                                else
+                                {
+                                    // compute step direction in dual space only
+                                    // primal vector cannot change until we deactive something
+                                    factorization_data_.computeInequalityDualStep(
+                                            dual_step_direction_,
+                                            chosen_ctr,
+                                            A,
+                                            active_set_,
+                                            num_simple_bounds_);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (dual_blocking_index == primal_size_)
+                            {
+                                return_status = INFEASIBLE_INEQUALITY;
+                                break;
+                            }
+                            else
+                            {
+                                QPMAD_TRACE("======================");
+                                QPMAD_TRACE("||| Dual step length = " << dual_step_length);
+                                QPMAD_TRACE("======================");
+
+                                // otherwise -- deactivate
+                                dual_.segment(active_set_.num_equalities_, active_set_.num_inequalities_).noalias()
+                                    += dual_step_length
+                                        * dual_step_direction_.segment(active_set_.num_equalities_, active_set_.num_inequalities_);
+                                chosen_ctr.dual_ += dual_step_length;
+
+                                constraints_status_[ active_set_.getIndex(dual_blocking_index) ] = ConstraintStatus::INACTIVE;
+
+                                dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
+
+                                factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
+
+                                active_set_.removeInequality(dual_blocking_index);
+
+                                // compute step direction in primal & dual space
+                                chosen_ctr_dot_primal_step_direction =
+                                    factorization_data_.computeInequalitySteps(
+                                            primal_step_direction_,
+                                            dual_step_direction_,
+                                            chosen_ctr,
+                                            A,
+                                            active_set_,
+                                            num_simple_bounds_);
+                            }
                         }
                     }
                 }
