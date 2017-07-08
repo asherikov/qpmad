@@ -35,7 +35,7 @@ namespace qpmad
                 QLi_aka_J.triangularView<Eigen::Lower>().setZero();
                 TriangularInversion::compute(QLi_aka_J, H);
 
-                R.resize(primal_size_, primal_size_);
+                R.resize(primal_size_, primal_size_ + 1);
 
 #ifdef QPMAD_USE_HOUSEHOLDER
                 householder_workspace_.resize(primal_size_, primal_size_);
@@ -88,20 +88,6 @@ namespace qpmad
                 {
                     givens.computeAndApply(R(i-1, i), R(i, i), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
-                    givens.applyRowWise(R, i+1, R_cols, i-1, i);
-
-                    R.col(i-1).segment(0, i) = R.col(i).segment(0, i);
-                }
-            }
-
-            void downdate2(  const MatrixIndex R_col_index,
-                            const MatrixIndex R_cols)
-            {
-                GivensReflection    givens;
-                for (MatrixIndex i = R_col_index + 1; i < R_cols; ++i)
-                {
-                    givens.computeAndApply(R(i-1, i), R(i, i), 0.0);
-                    givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
                     // 'R_cols+1' -- update 'd' as well
                     givens.applyRowWise(R, i+1, R_cols+1, i-1, i);
 
@@ -144,8 +130,33 @@ namespace qpmad
                                                 t_VectorType1           & dual_step_direction,
                                                 const ChosenConstraint  & chosen_ctr,
                                                 const t_MatrixType      & A,
-                                                const ActiveSet         & active_set,
-                                                const MatrixIndex       num_simple_bounds)
+                                                const ActiveSet         & active_set)
+            {
+                computeInequalityDualStep(  dual_step_direction,
+                                            chosen_ctr,
+                                            A,
+                                            active_set);
+
+                computePrimalStepDirection(primal_step_direction, active_set.size_);
+
+                if (chosen_ctr.is_simple_)
+                {
+                    return(primal_step_direction(chosen_ctr.index_));
+                }
+                else
+                {
+                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
+                }
+            }
+
+
+
+            template<   class t_VectorType,
+                        class t_MatrixType>
+                void computeInequalityDualStep( t_VectorType            & dual_step_direction,
+                                                const ChosenConstraint  & chosen_ctr,
+                                                const t_MatrixType      & A,
+                                                const ActiveSet         & active_set)
             {
                 if (chosen_ctr.is_simple_)
                 {
@@ -163,73 +174,16 @@ namespace qpmad
                     if (chosen_ctr.is_lower_)
                     {
                         R.col(active_set.size_).noalias() =
-                            - QLi_aka_J.transpose() * A.row(chosen_ctr.index_ - num_simple_bounds).transpose();
+                            - QLi_aka_J.transpose() * A.row(chosen_ctr.general_constraint_index_).transpose();
                     }
                     else
                     {
                         R.col(active_set.size_).noalias() =
-                            QLi_aka_J.transpose() * A.row(chosen_ctr.index_ - num_simple_bounds).transpose();
+                            QLi_aka_J.transpose() * A.row(chosen_ctr.general_constraint_index_).transpose();
                     }
                 }
 
-                computePrimalStepDirection(primal_step_direction, active_set.size_);
                 computeDualStepDirection(dual_step_direction, active_set);
-
-                if (chosen_ctr.is_simple_)
-                {
-                    return(primal_step_direction(chosen_ctr.index_));
-                }
-                else
-                {
-                    return(A.row(chosen_ctr.index_ - num_simple_bounds) * primal_step_direction);
-                }
-            }
-
-
-
-            template<   class t_VectorType,
-                        class t_MatrixType>
-                void computeInequalityDualStep( t_VectorType            & dual_step_direction,
-                                                const ChosenConstraint  & chosen_ctr,
-                                                const t_MatrixType      & A,
-                                                const ActiveSet         & active_set,
-                                                const MatrixIndex       num_simple_bounds)
-            {
-                if (chosen_ctr.is_simple_)
-                {
-                    if (chosen_ctr.is_lower_)
-                    {
-                        dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
-                            QLi_aka_J.row(chosen_ctr.index_).tail(active_set.num_inequalities_).transpose();
-                    }
-                    else
-                    {
-                        dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
-                            - QLi_aka_J.row(chosen_ctr.index_).tail(active_set.num_inequalities_).transpose();
-                    }
-                }
-                else
-                {
-                    if (chosen_ctr.is_lower_)
-                    {
-                        dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
-                            QLi_aka_J.transpose().bottomRows(active_set.num_inequalities_)
-                            * A.row(chosen_ctr.index_ - num_simple_bounds).transpose();
-                    }
-                    else
-                    {
-                        dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
-                            - QLi_aka_J.transpose().bottomRows(active_set.num_inequalities_)
-                            * A.row(chosen_ctr.index_ - num_simple_bounds).transpose();
-                    }
-                }
-
-                // computeDualStepDirectionInPlace
-                R.block(active_set.num_equalities_,
-                        active_set.num_equalities_,
-                        active_set.num_inequalities_,
-                        active_set.num_inequalities_).triangularView<Eigen::Upper>().solveInPlace(
-                            dual_step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_));
             }
 
 
@@ -240,9 +194,7 @@ namespace qpmad
                                                 t_VectorType1           & dual_step_direction,
                                                 const ChosenConstraint  & chosen_ctr,
                                                 const t_MatrixType      & A,
-                                                const ActiveSet         & active_set,
-                                                const MatrixIndex       num_simple_bounds,
-                                                const MatrixIndex       R_col_index)
+                                                const ActiveSet         & active_set)
             {
                 primal_step_direction.noalias() -= QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
                 computeDualStepDirection(dual_step_direction, active_set);
@@ -253,10 +205,31 @@ namespace qpmad
                 }
                 else
                 {
-                    return(A.row(chosen_ctr.index_ - num_simple_bounds) * primal_step_direction);
+                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
                 }
             }
 
+            template<   class t_VectorType0,
+                        class t_VectorType1,
+                        class t_MatrixType>
+                double computeInequalitySteps3( t_VectorType0           & primal_step_direction,
+                                                t_VectorType1           & dual_step_direction,
+                                                const ChosenConstraint  & chosen_ctr,
+                                                const t_MatrixType      & A,
+                                                const ActiveSet         & active_set)
+            {
+                primal_step_direction.noalias() = -QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
+                computeDualStepDirection(dual_step_direction, active_set);
+
+                if (chosen_ctr.is_simple_)
+                {
+                    return(primal_step_direction(chosen_ctr.index_));
+                }
+                else
+                {
+                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
+                }
+            }
 
         private:
             template<class t_VectorType>

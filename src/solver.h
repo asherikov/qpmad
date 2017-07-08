@@ -279,8 +279,7 @@ namespace qpmad
                                     dual_step_direction_,
                                     chosen_ctr,
                                     A,
-                                    active_set_,
-                                    num_simple_bounds_);
+                                    active_set_);
                     }
                     else
                     {
@@ -290,8 +289,7 @@ namespace qpmad
                                 dual_step_direction_,
                                 chosen_ctr,
                                 A,
-                                active_set_,
-                                num_simple_bounds_);
+                                active_set_);
                     }
 
 
@@ -382,7 +380,7 @@ namespace qpmad
 
                                 dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
-                                factorization_data_.downdate2(dual_blocking_index, active_set_.size_);
+                                factorization_data_.downdate(dual_blocking_index, active_set_.size_);
 
                                 active_set_.removeInequality(dual_blocking_index);
 
@@ -393,9 +391,7 @@ namespace qpmad
                                             dual_step_direction_,
                                             chosen_ctr,
                                             A,
-                                            active_set_,
-                                            num_simple_bounds_,
-                                            dual_blocking_index);
+                                            active_set_);
                             }
                             else
                             {
@@ -435,8 +431,7 @@ namespace qpmad
                                                 dual_step_direction_,
                                                 chosen_ctr,
                                                 A,
-                                                active_set_,
-                                                num_simple_bounds_);
+                                                active_set_);
                                 }
                                 else
                                 {
@@ -447,8 +442,7 @@ namespace qpmad
                                             dual_step_direction_,
                                             chosen_ctr,
                                             A,
-                                            active_set_,
-                                            num_simple_bounds_);
+                                            active_set_);
                                 }
                             }
                         }
@@ -481,13 +475,12 @@ namespace qpmad
 
                                 // compute step direction in primal & dual space
                                 chosen_ctr_dot_primal_step_direction =
-                                    factorization_data_.computeInequalitySteps(
+                                    factorization_data_.computeInequalitySteps3(
                                             primal_step_direction_,
                                             dual_step_direction_,
                                             chosen_ctr,
                                             A,
-                                            active_set_,
-                                            num_simple_bounds_);
+                                            active_set_);
                             }
                         }
                     }
@@ -581,6 +574,10 @@ namespace qpmad
                                                         Aub(i - num_simple_bounds_),
                                                         general_ctr_dot_primal_(i-num_simple_bounds_));
                         }
+                    }
+                    if (chosen_ctr.index_ > num_simple_bounds_)
+                    {
+                        chosen_ctr.general_constraint_index_ = chosen_ctr.index_ - num_simple_bounds_;
                     }
                 }
 
