@@ -382,19 +382,20 @@ namespace qpmad
 
                                 dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
-                                factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
+                                factorization_data_.downdate2(dual_blocking_index, active_set_.size_);
 
                                 active_set_.removeInequality(dual_blocking_index);
 
                                 // compute step direction in primal & dual space
                                 chosen_ctr_dot_primal_step_direction =
-                                    factorization_data_.computeInequalitySteps(
+                                    factorization_data_.computeInequalitySteps2(
                                             primal_step_direction_,
                                             dual_step_direction_,
                                             chosen_ctr,
                                             A,
                                             active_set_,
-                                            num_simple_bounds_);
+                                            num_simple_bounds_,
+                                            dual_blocking_index);
                             }
                             else
                             {
@@ -425,7 +426,6 @@ namespace qpmad
                                     break;
                                 }
 
-                                chosen_ctr_dot_primal_step_direction = 0.0;
                                 if (active_set_.hasEmptySpace())
                                 {
                                     // compute step direction in primal & dual space
@@ -442,6 +442,7 @@ namespace qpmad
                                 {
                                     // compute step direction in dual space only
                                     // primal vector cannot change until we deactive something
+                                    chosen_ctr_dot_primal_step_direction = 0.0;
                                     factorization_data_.computeInequalityDualStep(
                                             dual_step_direction_,
                                             chosen_ctr,
@@ -474,7 +475,7 @@ namespace qpmad
 
                                 dropElementWithoutResize(dual_, dual_blocking_index, active_set_.size_);
 
-                                factorization_data_.downdate(dual_blocking_index, active_set_.size_, param.tolerance_);
+                                factorization_data_.downdate(dual_blocking_index, active_set_.size_);
 
                                 active_set_.removeInequality(dual_blocking_index);
 
