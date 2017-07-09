@@ -45,3 +45,7 @@ selectively or permuting 'J' to collect sparse rows in one place.
 it always prefers the cheapest ones, i.e., the simple bounds. In particular,
 this allows to avoid computation of violations of general constraints if there
 are violated bounds.
+
+4. Vector 'd' and primal step direction are updated during partial steps
+instead of being computed from scratch. (This, however, does not result in a
+significant performance improvement.)
