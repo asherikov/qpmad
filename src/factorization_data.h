@@ -123,30 +123,11 @@ namespace qpmad
             }
 
 
-            template<   class t_VectorType0,
-                        class t_VectorType1,
-                        class t_MatrixType>
-                double computeInequalitySteps(  t_VectorType0           & primal_step_direction,
-                                                t_VectorType1           & dual_step_direction,
-                                                const ChosenConstraint  & chosen_ctr,
-                                                const t_MatrixType      & A,
-                                                const ActiveSet         & active_set)
+            template<class t_VectorType0>
+                void   computeInequalityPrimalStep( t_VectorType0           & primal_step_direction,
+                                                    const ActiveSet         & active_set)
             {
-                computeInequalityDualStep(  dual_step_direction,
-                                            chosen_ctr,
-                                            A,
-                                            active_set);
-
                 computePrimalStepDirection(primal_step_direction, active_set.size_);
-
-                if (chosen_ctr.is_simple_)
-                {
-                    return(primal_step_direction(chosen_ctr.index_));
-                }
-                else
-                {
-                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
-                }
             }
 
 
@@ -188,48 +169,26 @@ namespace qpmad
 
 
             template<   class t_VectorType0,
-                        class t_VectorType1,
-                        class t_MatrixType>
-                double computeInequalitySteps2( t_VectorType0           & primal_step_direction,
-                                                t_VectorType1           & dual_step_direction,
-                                                const ChosenConstraint  & chosen_ctr,
-                                                const t_MatrixType      & A,
-                                                const ActiveSet         & active_set)
+                        class t_VectorType1>
+                void   updateStepsAfterPartialStep( t_VectorType0           & primal_step_direction,
+                                                    t_VectorType1           & dual_step_direction,
+                                                    const ActiveSet         & active_set)
             {
                 primal_step_direction.noalias() -= QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
                 computeDualStepDirection(dual_step_direction, active_set);
-
-                if (chosen_ctr.is_simple_)
-                {
-                    return(primal_step_direction(chosen_ctr.index_));
-                }
-                else
-                {
-                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
-                }
             }
 
+
             template<   class t_VectorType0,
-                        class t_VectorType1,
-                        class t_MatrixType>
-                double computeInequalitySteps3( t_VectorType0           & primal_step_direction,
-                                                t_VectorType1           & dual_step_direction,
-                                                const ChosenConstraint  & chosen_ctr,
-                                                const t_MatrixType      & A,
-                                                const ActiveSet         & active_set)
+                        class t_VectorType1>
+                void updateStepsAfterPureDualStep(  t_VectorType0           & primal_step_direction,
+                                                    t_VectorType1           & dual_step_direction,
+                                                    const ActiveSet         & active_set)
             {
                 primal_step_direction.noalias() = -QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
                 computeDualStepDirection(dual_step_direction, active_set);
-
-                if (chosen_ctr.is_simple_)
-                {
-                    return(primal_step_direction(chosen_ctr.index_));
-                }
-                else
-                {
-                    return(A.row(chosen_ctr.general_constraint_index_) * primal_step_direction);
-                }
             }
+
 
         private:
             template<class t_VectorType>

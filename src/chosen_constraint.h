@@ -24,7 +24,7 @@ namespace qpmad
             bool                        is_simple_;
 
         public:
-            ChosenConstraint()
+            void reset()
             {
                 dual_ = 0.0;
                 violation_ = 0.0;
