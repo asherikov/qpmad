@@ -22,6 +22,7 @@ namespace qpmad
 #ifdef QPMAD_USE_HOUSEHOLDER
             QPMatrix    householder_workspace_;
 #endif
+            MatrixIndex length_nonzero_head_d_;
 
 
         public:
@@ -36,7 +37,7 @@ namespace qpmad
                 TriangularInversion::compute(QLi_aka_J, H);
 
                 R.resize(primal_size_, primal_size_ + 1);
-
+length_nonzero_head_d_ = primal_size_;
 #ifdef QPMAD_USE_HOUSEHOLDER
                 householder_workspace_.resize(primal_size_, primal_size_);
 #endif
@@ -51,13 +52,10 @@ namespace qpmad
                 double beta;
 
 
-                MatrixIndex i;
-                for (i = primal_size_-1; (0.0 == R(i,R_col)) && (i > R_col); --i)
-                {}
-                R.col(R_col).segment(R_col, i - R_col + 1).makeHouseholderInPlace(tau, beta);
+                R.col(R_col).segment(R_col, length_nonzero_head_d_ - R_col).makeHouseholderInPlace(tau, beta);
                 R(R_col, R_col) = beta;
-                QLi_aka_J.middleCols(R_col, i - R_col + 1).transpose().applyHouseholderOnTheLeft(
-                        R.col(R_col).segment(R_col+1, i - R_col), tau, householder_workspace_.data());
+                QLi_aka_J.middleCols(R_col, length_nonzero_head_d_ - R_col).transpose().applyHouseholderOnTheLeft(
+                        R.col(R_col).segment(R_col+1, length_nonzero_head_d_ - R_col - 1), tau, householder_workspace_.data());
                 /*
                 R.col(R_col).tail(primal_size_ - R_col).makeHouseholderInPlace(tau, beta);
                 QLi_aka_J.rightCols(primal_size_ - R_col).transpose().applyHouseholderOnTheLeft(
@@ -69,7 +67,7 @@ namespace qpmad
                 return ( std::abs(beta) > tolerance );
 #else
                 GivensReflection    givens;
-                for (MatrixIndex i = primal_size_-1; i > R_col; --i)
+                for (MatrixIndex i = length_nonzero_head_d_-1; i > R_col; --i)
                 {
                     givens.computeAndApply(R(i-1, R_col), R(i, R_col), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
@@ -149,6 +147,11 @@ namespace qpmad
                     {
                         R.col(active_set.size_) =   QLi_aka_J.row(chosen_ctr.index_).transpose();
                     }
+                    for (   length_nonzero_head_d_ = primal_size_-1;
+                            (0.0 == R(length_nonzero_head_d_,active_set.size_)) && (length_nonzero_head_d_ > active_set.size_);
+                            --length_nonzero_head_d_)
+                    {}
+                    ++length_nonzero_head_d_;
                 }
                 else
                 {
@@ -162,6 +165,7 @@ namespace qpmad
                         R.col(active_set.size_).noalias() =
                             QLi_aka_J.transpose() * A.row(chosen_ctr.general_constraint_index_).transpose();
                     }
+                    length_nonzero_head_d_ = primal_size_;
                 }
 
                 computeDualStepDirection(dual_step_direction, active_set);
@@ -196,8 +200,8 @@ namespace qpmad
                                                 const MatrixIndex       active_set_size)
             {
                 step_direction.noalias() =
-                    - QLi_aka_J.rightCols(primal_size_ - active_set_size)
-                    * R.col(active_set_size).tail(primal_size_ - active_set_size);
+                    - QLi_aka_J.middleCols(active_set_size, length_nonzero_head_d_ - active_set_size)
+                    * R.col(active_set_size).segment(active_set_size, length_nonzero_head_d_ - active_set_size);
             }
 
 
