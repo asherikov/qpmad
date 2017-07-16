@@ -37,7 +37,7 @@ namespace qpmad
                 TriangularInversion::compute(QLi_aka_J, H);
 
                 R.resize(primal_size_, primal_size_ + 1);
-length_nonzero_head_d_ = primal_size_;
+                length_nonzero_head_d_ = primal_size_;
 #ifdef QPMAD_USE_HOUSEHOLDER
                 householder_workspace_.resize(primal_size_, primal_size_);
 #endif
@@ -66,7 +66,7 @@ length_nonzero_head_d_ = primal_size_;
 
                 return ( std::abs(beta) > tolerance );
 #else
-                GivensReflection    givens;
+                GivensRotation<double>    givens;
                 for (MatrixIndex i = length_nonzero_head_d_-1; i > R_col; --i)
                 {
                     givens.computeAndApply(R(i-1, R_col), R(i, R_col), 0.0);
@@ -81,7 +81,7 @@ length_nonzero_head_d_ = primal_size_;
             void downdate(  const MatrixIndex R_col_index,
                             const MatrixIndex R_cols)
             {
-                GivensReflection    givens;
+                GivensRotation<double>    givens;
                 for (MatrixIndex i = R_col_index + 1; i < R_cols; ++i)
                 {
                     givens.computeAndApply(R(i-1, i), R(i, i), 0.0);

@@ -16,17 +16,17 @@ namespace qpmad
     /**
      * @brief
      *
-     * Represents Givens reflection
+     * Represents Givens rotation
      *
-     *  [ cos,  sin ]
+     *  [  cos, sin ]
      *  [           ]
-     *  [ sin, -cos ]
+     *  [ -sin, cos ]
      *
      * for a given vector (a, b) is defined with
      *
-     *  [ cos,  sin ]       [ a ]       [ d ]
+     *  [  cos, sin ]       [ a ]       [ d ]
      *  [           ]   *   [   ]   =   [   ]
-     *  [ sin, -cos ]       [ b ]       [ 0 ]
+     *  [ -sin, cos ]       [ b ]       [ 0 ]
      *
      *  sin^2 + cos^2 = 1
      *
@@ -34,7 +34,8 @@ namespace qpmad
      *  COPY        b == 0: cos = 1, sin = 0
      *  SWAP    (b != 0) && (a == 0): cos = 0, sin = 1
      */
-    class GivensReflection
+    template <typename t_Scalar>
+        class GivensRotation
     {
         public:
             enum Type
@@ -46,17 +47,17 @@ namespace qpmad
 
 
         public:
-            Type computeAndApply(double & a, double & b, const double eps)
+            Type computeAndApply(t_Scalar & a, t_Scalar & b, const t_Scalar eps)
             {
-                double abs_b = std::fabs(b);
+                t_Scalar abs_b = std::fabs(b);
 
                 if (abs_b > eps)
                 {
-                    double abs_a = std::fabs(a);
+                    t_Scalar abs_a = std::fabs(a);
 
                     if (abs_a > eps)
                     {
-                        double t;
+                        t_Scalar t;
                         if (abs_a > abs_b)
                         {
                             t = (abs_b / abs_a);
@@ -64,21 +65,13 @@ namespace qpmad
                         }
                         else
                         {
-                            if (abs_a < abs_b)
-                            {
-                                t = (abs_a / abs_b);
-                                t = abs_b * std::sqrt(1.0 + t * t);
-                            }
-                            else
-                            {
-                                t = abs_a * std::sqrt(2.0);
-                            }
+                            t = (abs_a / abs_b);
+                            t = abs_b * std::sqrt(1.0 + t * t);
                         }
                         t = copysign(t, a);
 
                         cos = a / t;
                         sin = b / t;
-                        xny = sin / (1.0 + cos);
 
                         a = t;
                         b = 0.0;
@@ -89,7 +82,6 @@ namespace qpmad
                     {
                         //cos = 0.0;
                         //sin = 1.0;
-                        //xny = 1.0;
                         swap(a,b);
                         type = SWAP;
                     }
@@ -98,7 +90,6 @@ namespace qpmad
                 {
                     //cos = 1.0;
                     //sin = 0.0;
-                    //xny = 0;
                     type = COPY;
                 }
 
@@ -106,7 +97,7 @@ namespace qpmad
             }
 
 
-            void apply(double & a, double & b) const
+            void apply(t_Scalar & a, t_Scalar & b) const
             {
                 switch (type)
                 {
@@ -137,10 +128,9 @@ namespace qpmad
                                 M.col(column_2).segment(start, end-start)   );
                         return;
                     case NONTRIVIAL:
-                        for (int k = start; k < end; k++)
-                        {
-                            applyNonTrivial(M(k, column_1), M(k, column_2));
-                        }
+                        M.middleRows(start, end - start).transpose().applyOnTheLeft(
+                                column_1, column_2,
+                                Eigen::JacobiRotation<t_Scalar> (cos, sin));
                         return;
                 }
             }
@@ -162,33 +152,31 @@ namespace qpmad
                                 M.row(row_2).segment(start, end-start)   );
                         return;
                     case NONTRIVIAL:
-                        for (int k = start; k < end; k++)
-                        {
-                            applyNonTrivial(M(row_1, k), M(row_2, k));
-                        }
+                        M.middleCols(start, end - start).applyOnTheLeft(
+                                row_1, row_2,
+                                Eigen::JacobiRotation<t_Scalar> (cos, sin));
                         return;
                 }
             }
 
         private:
             Type    type;
-            double  cos;
-            double  sin;
-            double  xny;
+            t_Scalar  cos;
+            t_Scalar  sin;
 
 
         private:
-            inline void swap(double & a, double & b) const
+            inline void swap(t_Scalar & a, t_Scalar & b) const
             {
                 std::swap(a,b);
             }
 
-            inline void applyNonTrivial(double & a, double & b) const
+            inline void applyNonTrivial(t_Scalar & a, t_Scalar & b) const
             {
-                double t1 = a;
-                double t2 = b;
+                t_Scalar t1 = a;
+                t_Scalar t2 = b;
                 a = t1 * cos + t2 * sin;
-                b = xny * (t1 + a) - t2;
+                b = - sin * t1 + cos * t2;
             }
     };
 }

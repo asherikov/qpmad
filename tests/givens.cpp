@@ -17,10 +17,10 @@
 class GivensFixture
 {
     public:
-        qpmad::GivensReflection givens;
+        qpmad::GivensRotation<double> givens;
         double a;
         double b;
-        qpmad::GivensReflection::Type type;
+        qpmad::GivensRotation<double>::Type type;
         double tolerance;
 
     public:
@@ -41,7 +41,7 @@ BOOST_FIXTURE_TEST_CASE( test_case00, GivensFixture )
 
     BOOST_CHECK_EQUAL(a, 0.0);
     BOOST_CHECK_EQUAL(b, 0.0);
-    BOOST_CHECK_EQUAL(type, qpmad::GivensReflection::COPY);
+    BOOST_CHECK_EQUAL(type, qpmad::GivensRotation<double>::COPY);
 }
 
 
@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( test_case01, GivensFixture )
 
     BOOST_CHECK_EQUAL(a, 1.0);
     BOOST_CHECK_EQUAL(b, 0.0);
-    BOOST_CHECK_EQUAL(type, qpmad::GivensReflection::COPY);
+    BOOST_CHECK_EQUAL(type, qpmad::GivensRotation<double>::COPY);
 }
 
 
@@ -65,7 +65,7 @@ BOOST_FIXTURE_TEST_CASE( test_case02, GivensFixture )
 
     BOOST_CHECK_EQUAL(a, 1.0);
     BOOST_CHECK_EQUAL(b, 0.0);
-    BOOST_CHECK_EQUAL(type, qpmad::GivensReflection::SWAP);
+    BOOST_CHECK_EQUAL(type, qpmad::GivensRotation<double>::SWAP);
 }
 
 
@@ -75,5 +75,5 @@ BOOST_FIXTURE_TEST_CASE( test_case03, GivensFixture )
     b = 1.0;
     type = givens.computeAndApply(a, b, tolerance);
 
-    BOOST_CHECK_EQUAL(type, qpmad::GivensReflection::NONTRIVIAL);
+    BOOST_CHECK_EQUAL(type, qpmad::GivensRotation<double>::NONTRIVIAL);
 }
