@@ -17,7 +17,7 @@ build: build_without_tracing
 build_with_householder:
 	${MAKE} cmake TYPE=Debug TRACING=OFF EXTRA_CMAKE_PARAM="-DQPMAD_USE_HOUSEHOLDER=ON"
 
-unit_tests_with_householder: build_with_givens
+unit_tests_with_householder: build_with_householder
 	cd build; ${MAKE} test
 
 

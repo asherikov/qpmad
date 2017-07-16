@@ -217,7 +217,7 @@ namespace qpmad
 
                                 primal.noalias() += primal_step_length_ * primal_step_direction_;
 
-                                if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
+                                if (false == factorization_data_.update(active_set_.size_, chosen_ctr_.is_simple_, param.tolerance_))
                                 {
                                     QPMAD_THROW("Failed to add an equality constraint -- is this possible?");
                                 }
@@ -391,7 +391,7 @@ namespace qpmad
                             {
                                 QPMAD_TRACE("||| FULL STEP");
                                 // activate constraint
-                                if (false == factorization_data_.update(active_set_.size_, param.tolerance_))
+                                if (false == factorization_data_.update(active_set_.size_, chosen_ctr_.is_simple_, param.tolerance_))
                                 {
                                     QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
                                 }
