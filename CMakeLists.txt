@@ -8,7 +8,7 @@ set (CMAKE_VERBOSE_MAKEFILE     ON)
 
 option(QPMAD_BUILD_TESTS        "Build tests"                                           ON)
 option(QPMAD_ENABLE_TRACING     "Enable tracing"                                        OFF)
-option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"   ON)
+option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"   OFF)
 
 
 if(NOT CMAKE_BUILD_TYPE)

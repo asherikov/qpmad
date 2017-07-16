@@ -67,10 +67,14 @@ namespace qpmad
                 return ( std::abs(beta) > tolerance );
 #else
                 GivensRotation<double>    givens;
-                for (MatrixIndex i = length_nonzero_head_d_-1; i > R_col; --i)
+                for (MatrixIndex i = length_nonzero_head_d_-1; i > R_col;)
                 {
-                    givens.computeAndApply(R(i-1, R_col), R(i, R_col), 0.0);
-                    givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i-1, i);
+                    MatrixIndex j;
+                    for (j = i-1; (0.0 == R(j, R_col)) && (j > R_col); --j)
+                    {}
+                    givens.computeAndApply(R(j, R_col), R(i, R_col), 0.0);
+                    givens.applyColumnWise(QLi_aka_J, 0, primal_size_, j, i);
+                    i = j;
                 }
 
                 return ( std::abs(R(R_col, R_col)) > tolerance );

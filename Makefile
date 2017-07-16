@@ -6,7 +6,7 @@ EXTRA_CMAKE_PARAM?=
 #EXTRA_CMAKE_PARAM?="-DCMAKE_CXX_COMPILER=g++"
 
 
-test: clean unit_tests_without_tracing unit_tests_with_tracing unit_tests_with_givens test_octave
+test: clean unit_tests_without_tracing unit_tests_with_tracing unit_tests_with_householder test_octave
 
 test_octave:
 	cd matlab_octave; ${MAKE} octave octave_test
@@ -14,10 +14,10 @@ test_octave:
 build: build_without_tracing
 
 
-build_with_givens:
-	${MAKE} cmake TYPE=Debug TRACING=OFF EXTRA_CMAKE_PARAM="-DQPMAD_USE_HOUSEHOLDER=OFF"
+build_with_householder:
+	${MAKE} cmake TYPE=Debug TRACING=OFF EXTRA_CMAKE_PARAM="-DQPMAD_USE_HOUSEHOLDER=ON"
 
-unit_tests_with_givens: build_with_givens
+unit_tests_with_householder: build_with_givens
 	cd build; ${MAKE} test
 
 
