@@ -11,6 +11,7 @@ octave_basic:
 	octave --no-history --silent test_basic.m
 
 octave_onlineqp:
+	git submodule update --init
 	cd onlineqp_collection; ${MAKE} fetch
 	octave --no-history --silent test_onlineqp.m
 

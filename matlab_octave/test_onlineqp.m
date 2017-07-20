@@ -1,10 +1,12 @@
 oqp_list = readdir('onlineqp_collection/oqp');
 problems_list = readdir('onlineqp_collection/problems');
+pepper_list = readdir('qp-collection/inverse_kinematics_pepper');
 tolerance = 1e-09;
 
 dir_list = {
     strcat('onlineqp_collection/oqp/', oqp_list(!(strcmp(oqp_list, '..') | strcmp(oqp_list, '.')))){:}, ...
-    strcat('onlineqp_collection/problems/', problems_list(!(strcmp(problems_list, '..') | strcmp(problems_list, '.')))){:}  };
+    strcat('onlineqp_collection/problems/', problems_list(!(strcmp(problems_list, '..') | strcmp(problems_list, '.')))){:}, ...
+    strcat('qp-collection/inverse_kinematics_pepper/', pepper_list(!(strcmp(pepper_list, '..') | strcmp(pepper_list, '.')))){:}  };
 
 
 for i = 1:numel(dir_list)
@@ -16,7 +18,7 @@ for i = 1:numel(dir_list)
     g  = load([dir_list{i}, '/g.oqp']);
 
 
-    if (min(eig(H)) < 1e-12)
+    if (min(eig(H)) < 1e-13)
         printf('SKIP    Problem [%s] (%d) // SKIPPED: Hessian is not positive definite\n', dir_list{i}, i);
         continue;
     end
@@ -39,7 +41,11 @@ for i = 1:numel(dir_list)
 
     % solutions
     x_ref = load([dir_list{i}, '/x_opt.oqp']);
-    obj_ref = load([dir_list{i}, '/obj_opt.oqp']);
+    if (exist([dir_list{i}, '/obj_opt.oqp'], 'file'))
+        obj_ref = load([dir_list{i}, '/obj_opt.oqp']);
+    else
+        obj_ref = NaN;
+    end
 
     for j = 1:number_qp
         if (number_general_ctr > 0)

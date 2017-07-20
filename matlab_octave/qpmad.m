@@ -116,7 +116,7 @@ function [x, info] = qpmad(varargin)
         error('Hessian is not initialized.');
     end
 
-    if (~issquare(H))
+    if (size(H, 1) ~= size(H, 2))
         error('Hessian is not square.');
     end
 
@@ -134,13 +134,13 @@ function [x, info] = qpmad(varargin)
 
     % bounds
     if (~isempty(lb))
-        if ((size(lb, 1) != num_var) || (size(lb, 2) != 1))
+        if ((size(lb, 1) ~= num_var) || (size(lb, 2) ~= 1))
             error('Incorrect size of the vector of lower bounds.');
         end
     end
 
     if (~isempty(ub))
-        if ((size(ub, 1) != num_var) || (size(ub, 2) != 1))
+        if ((size(ub, 1) ~= num_var) || (size(ub, 2) ~= 1))
             error('Incorrect size of the vector of upper bounds.');
         end
     end
