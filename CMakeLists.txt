@@ -38,5 +38,10 @@ if (QPMAD_BUILD_TESTS)
 endif(QPMAD_BUILD_TESTS)
 
 
+configure_file("cmake/qpmadConfig.cmake.in"    "${PROJECT_BINARY_DIR}/qpmadConfig.cmake")
+
 install (DIRECTORY "${QPMAD_SOURCE_DIR}/"
          DESTINATION "${CMAKE_INSTALL_PREFIX}/include/qpmad/")
+
+install (FILES "${PROJECT_BINARY_DIR}/qpmadConfig.cmake"
+         DESTINATION "${CMAKE_INSTALL_PREFIX}/share/qpmad/")
