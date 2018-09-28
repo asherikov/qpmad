@@ -145,18 +145,21 @@ namespace qpmad
                 MatrixIndex     num_equalities = 0;
                 for (MatrixIndex i = 0; i < num_constraints_; ++i)
                 {
+                    chosen_ctr_.is_simple_ = i < num_simple_bounds_;
+
                     double lb_i;
                     double ub_i;
 
-                    if (i < num_simple_bounds_)
+                    if (true == chosen_ctr_.is_simple_)
                     {
                         lb_i = lb(i);
                         ub_i = ub(i);
                     }
                     else
                     {
-                        lb_i = Alb(i-num_simple_bounds_);
-                        ub_i = Aub(i-num_simple_bounds_);
+                        chosen_ctr_.general_constraint_index_ = i-num_simple_bounds_;
+                        lb_i = Alb(chosen_ctr_.general_constraint_index_);
+                        ub_i = Aub(chosen_ctr_.general_constraint_index_);
                     }
 
 
@@ -176,14 +179,13 @@ namespace qpmad
                         ++num_equalities;
 
 
-                        double violation;
-                        if (i < num_simple_bounds_)
+                        if (true == chosen_ctr_.is_simple_)
                         {
-                            violation = lb_i - primal(i);
+                            chosen_ctr_.violation_ = lb_i - primal(i);
                         }
                         else
                         {
-                            violation = lb_i - A.row(i-num_simple_bounds_) * primal;
+                            chosen_ctr_.violation_ = lb_i - A.row(chosen_ctr_.general_constraint_index_) * primal;
                         }
 
                         initializeMachineryLazy(H);
@@ -194,7 +196,7 @@ namespace qpmad
                         {
                             double ctr_i_dot_primal_step_direction;
 
-                            if (i < num_simple_bounds_)
+                            if (true == chosen_ctr_.is_simple_)
                             {
                                 factorization_data_.computeEqualityPrimalStep(
                                         primal_step_direction_, i, active_set_.size_);
@@ -204,16 +206,16 @@ namespace qpmad
                             else
                             {
                                 factorization_data_.computeEqualityPrimalStep(
-                                        primal_step_direction_, A.row(i-num_simple_bounds_), active_set_.size_);
+                                        primal_step_direction_, A.row(chosen_ctr_.general_constraint_index_), active_set_.size_);
 
-                                ctr_i_dot_primal_step_direction = A.row(i-num_simple_bounds_) * primal_step_direction_;
+                                ctr_i_dot_primal_step_direction = A.row(chosen_ctr_.general_constraint_index_) * primal_step_direction_;
                             }
 
                             // if step direction is a zero vector, constraint is
                             // linearly dependent with previously added constraints
                             if (ctr_i_dot_primal_step_direction < -param.tolerance_)
                             {
-                                double primal_step_length_ = violation / ctr_i_dot_primal_step_direction;
+                                double primal_step_length_ = chosen_ctr_.violation_ / ctr_i_dot_primal_step_direction;
 
                                 primal.noalias() += primal_step_length_ * primal_step_direction_;
 
@@ -231,7 +233,7 @@ namespace qpmad
                         // this point is reached if constraint is linearly dependent
 
                         // check if this constraint is actually satisfied
-                        if (std::abs(violation) > param.tolerance_)
+                        if (std::abs(chosen_ctr_.violation_) > param.tolerance_)
                         {
                             // nope it is not
                             constraints_status_[i] = ConstraintStatus::INCONSISTENT;
