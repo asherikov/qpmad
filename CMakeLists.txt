@@ -124,6 +124,15 @@ include_directories("${QPMAD_SOURCE_DIR}")
 
 configure_file( "${QPMAD_SOURCE_DIR}/qpmad/config.h.in"
                 "${QPMAD_SOURCE_DIR}/qpmad/config.h")
+
+
+get_property(QPMAD_OCTAVE_INCLUDES DIRECTORY "${PROJECT_SOURCE_DIR}" PROPERTY INCLUDE_DIRECTORIES)
+list(REMOVE_DUPLICATES QPMAD_OCTAVE_INCLUDES)
+string(REPLACE ";" " -I" QPMAD_OCTAVE_INCLUDES "${QPMAD_OCTAVE_INCLUDES}")
+set(QPMAD_OCTAVE_INCLUDES "-I${QPMAD_OCTAVE_INCLUDES}")
+
+configure_file( "${PROJECT_SOURCE_DIR}/matlab_octave/make.m.in"
+                "${PROJECT_SOURCE_DIR}/matlab_octave/make.m")
 # --------------
 
 
