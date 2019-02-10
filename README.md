@@ -1,3 +1,5 @@
+Travis CI: https://travis-ci.org/asherikov/qpmad [![Build Status](https://travis-ci.org/asherikov/qpmad.svg?branch=master)](https://travis-ci.org/asherikov/qpmad)
+
 Implementation of Goldfarb-Idnani dual active set algorithm for quadratic
 programming.
 
