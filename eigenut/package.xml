@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>eigenut</name>
+  <version>0.0.0</version>
+  <description>Eigen utilities</description>
+
+  <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>
+  <license>Apache 2.0</license>
+
+  <url type="website">https://github.com/asherikov/cmakeut</url>
+
+  <!-- <build_depend>cmakeut</build_depend> -->
+  <!-- <build_depend>cpput</build_depend> -->
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

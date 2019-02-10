@@ -11,7 +11,7 @@
 #include "utf_common.h"
 
 
-#include "../src/solver.h"
+#include <qpmad/solver.h>
 
 //===========================================================================
 // SolverObjectiveFixture
@@ -61,7 +61,7 @@ BOOST_FIXTURE_TEST_CASE( objective00, SolverObjectiveFixture )
 {
     qpmad::MatrixIndex size = 50;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 
@@ -73,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE( objective01, SolverObjectiveFixture )
 {
     qpmad::MatrixIndex size = 50;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setZero(size);
 
@@ -85,7 +85,7 @@ BOOST_FIXTURE_TEST_CASE( objective02, SolverObjectiveFixture )
 {
     qpmad::MatrixIndex size = 50;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
 
     checkObjective();
@@ -96,7 +96,7 @@ BOOST_FIXTURE_TEST_CASE( objective03, SolverObjectiveFixture )
 {
     qpmad::MatrixIndex size = 1;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 
@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE( general_equalities00, SolverGeneralEqualitiesFixture )
     qpmad::MatrixIndex size = 50;
     qpmad::MatrixIndex num_ctr = 20;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 
@@ -153,7 +153,7 @@ BOOST_FIXTURE_TEST_CASE( general_equalities01, SolverGeneralEqualitiesFixture )
     qpmad::MatrixIndex size = 50;
     qpmad::MatrixIndex num_ctr = 20;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
 
     A = Eigen::MatrixXd::Identity(size,size).topRows(num_ctr);
@@ -168,7 +168,7 @@ BOOST_FIXTURE_TEST_CASE( general_equalities02, SolverGeneralEqualitiesFixture )
     qpmad::MatrixIndex size = 50;
     qpmad::MatrixIndex num_ctr = 50;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 
@@ -184,7 +184,7 @@ BOOST_FIXTURE_TEST_CASE( general_equalities03, SolverGeneralEqualitiesFixture )
     qpmad::MatrixIndex size = 50;
     qpmad::MatrixIndex num_ctr = 51;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 
@@ -204,7 +204,7 @@ BOOST_FIXTURE_TEST_CASE( general_equalities04, SolverGeneralEqualitiesFixture )
     qpmad::MatrixIndex size = 50;
     qpmad::MatrixIndex num_ctr = 51;
 
-    getRandomPositiveDefinititeMatrix(H, size);
+    qpmad::getRandomPositiveDefinititeMatrix(H, size);
     H_copy = H;
     h.setRandom(size);
 

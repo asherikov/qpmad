@@ -1,0 +1,43 @@
+/**
+    @file
+    @author  Alexander Sherikov
+
+    @copyright 2019 Alexander Sherikov, Licensed under the Apache License, Version 2.0.
+    (see @ref LICENSE or http://www.apache.org/licenses/LICENSE-2.0)
+
+    @brief Throw & assert macro
+*/
+
+#ifndef H_@CPPUT_ID@_EXCEPTION
+#define H_@CPPUT_ID@_EXCEPTION
+
+#include <string>
+#include <stdexcept>
+
+#define @CPPUT_ID@_THROW_EXCEPTION(exception_type, message) throw exception_type((message))
+
+#ifdef CMAKEUT_COMPILER_SUPPORTS_FUNC_
+#    define @CPPUT_ID@_THROW(s) @CPPUT_ID@_THROW_EXCEPTION(std::runtime_error, (std::string("In ") + __func__ + "() // " + (s)))
+#else  //
+#    ifdef CMAKEUT_COMPILER_SUPPORTS_FUNCTION_
+#        define @CPPUT_ID@_THROW(s)                                                                                         \
+            @CPPUT_ID@_THROW_EXCEPTION(std::runtime_error, (std::string("In ") + __FUNCTION__ + "() // " + (s)))
+#    else  //
+#        define @CPPUT_ID@_THROW(s) @CPPUT_ID@_THROW_EXCEPTION(std::runtime_error, (s))
+#    endif  //
+#endif      //
+
+
+#define @CPPUT_ID@_PERSISTENT_ASSERT(condition, message)                                                                    \
+    if (!(condition))                                                                                                  \
+    {                                                                                                                  \
+        @CPPUT_ID@_THROW(message);                                                                                          \
+    };
+
+#ifdef DNDEBUG
+#    define @CPPUT_ID@_ASSERT(condition, message)
+#else
+#    define @CPPUT_ID@_ASSERT(condition, message) @CPPUT_ID@_PERSISTENT_ASSERT(condition, message)
+#endif
+
+#endif

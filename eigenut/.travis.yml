@@ -1,0 +1,26 @@
+language: cpp
+
+notifications:
+    email:
+        recipients:
+            - asherikov@yandex.com
+        on_success: always
+        on_failure: always
+
+os: linux
+
+dist: trusty
+
+compiler:
+    - clang
+    - gcc
+
+addons:
+    apt:
+        update: true
+        packages:
+          - libboost-all-dev
+          - libeigen3-dev
+
+script:
+  - make test

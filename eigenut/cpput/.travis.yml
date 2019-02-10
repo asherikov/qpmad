@@ -1,0 +1,26 @@
+language: cpp
+
+notifications:
+    email:
+        recipients:
+            - asherikov@yandex.com
+        on_success: always
+        on_failure: always
+
+compiler:
+    - clang
+    - gcc
+
+os: linux
+dist: trusty
+
+addons:
+    apt:
+        update: true
+        packages:
+          - libboost-all-dev
+          - libeigen3-dev
+
+script:
+  - git submodule update --init
+  - make test

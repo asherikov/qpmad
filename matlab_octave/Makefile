@@ -17,7 +17,7 @@ octave_onlineqp:
 
 
 configure:
-	cp config.h ../src/
+	cp config.h ../include/qpmad/
 
 
 clean:

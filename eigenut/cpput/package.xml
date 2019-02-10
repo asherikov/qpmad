@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>cpput</name>
+  <version>0.0.0</version>
+  <description>C++ utilities</description>
+
+  <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>
+  <license>mixed</license>
+
+  <url type="website">https://github.com/asherikov/cmakeut</url>
+
+  <!-- <build_depend>cmakeut</build_depend> -->
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

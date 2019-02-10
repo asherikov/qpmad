@@ -17,7 +17,9 @@
 
 #include <iostream>
 
-#include <Eigen/Dense>
+#include "eigenut_config.h"
+#include "eigenut_types.h"
+#include "eigenut_misc.h"
 
 
 const double g_default_tolerance = 1e-12;
@@ -33,13 +35,6 @@ struct GlobalFixtureConfig
     }
     ~GlobalFixtureConfig() {}
 };
-
-
-inline void getRandomPositiveDefinititeMatrix(Eigen::MatrixXd &M, const std::size_t size)
-{
-    M.setRandom(size, size);
-    M = M.transpose()*M + Eigen::MatrixXd::Identity(size, size);
-}
 
 
 #pragma GCC diagnostic push

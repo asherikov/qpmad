@@ -1,0 +1,22 @@
+/**
+    @file
+    @author  Alexander Sherikov
+    @copyright 2019 Alexander Sherikov. Licensed under the Apache License, Version 2.0.
+
+    @brief
+*/
+
+#ifndef H_@EIGENUT_ID@_EIGENUT_CONFIG
+#define H_@EIGENUT_ID@_EIGENUT_CONFIG
+
+#include <Eigen/Dense>
+
+#include "cpput_config.h"
+#include "cpput_exception.h"
+#include "cpput_visibility.h"
+
+//#define EIGENUT_ASSERT(condition, message)
+#define @EIGENUT_ID@_VISIBILITY_ATTRIBUTE            @EIGENUT_ID@_LOCAL
+//#define EIGENUT_ENABLE_EIGENTYPE_DETECTION
+
+#endif

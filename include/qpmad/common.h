@@ -16,10 +16,8 @@
 
 #include "config.h"
 
-
-#define QPMAD_ASSERT(condition, message)    if (!(condition)) \
-                                            {throw std::runtime_error(std::string("In ") + __func__ + "() // " + (message));}
-#define QPMAD_THROW(message)                throw std::runtime_error(std::string("In ") + __func__ + "() // " + (message));
+#include "cpput_config.h"
+#include "cpput_exception.h"
 
 
 #ifdef QPMAD_ENABLE_TRACING

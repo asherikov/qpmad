@@ -14,7 +14,7 @@
 #include <math.h>
 #include <limits>
 
-#include "solver.h"
+#include <qpmad/solver.h>
 #include "mex.h"
 
 using namespace std;

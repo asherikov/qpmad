@@ -1,4 +1,4 @@
 build
-src/config.h
+include/qpmad/config.h
 *.mex*
 *.o

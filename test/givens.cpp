@@ -10,8 +10,8 @@
 
 #include "utf_common.h"
 
-#include "../src/common.h"
-#include "../src/givens.h"
+#include <qpmad/common.h>
+#include <qpmad/givens.h>
 
 
 class GivensFixture

@@ -11,8 +11,8 @@
 #include "utf_common.h"
 
 
-#include "../src/common.h"
-#include "../src/cholesky.h"
+#include <qpmad/common.h>
+#include <qpmad/cholesky.h>
 
 
 template<int t_size>
@@ -26,7 +26,7 @@ template<int t_size>
     public:
         CholeskyResultFixture()
         {
-            getRandomPositiveDefinititeMatrix(M, t_size);
+            qpmad::getRandomPositiveDefinititeMatrix(M, t_size);
             v.setRandom(t_size);
         }
 

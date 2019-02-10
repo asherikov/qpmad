@@ -1,0 +1,162 @@
+/**
+    @file
+    @author  Alexander Sherikov
+    @author  Jan Michalczyk
+    @copyright 2019 Alexander Sherikov. Licensed under the Apache License, Version 2.0.
+    @copyright 2014-2017 INRIA. Licensed under the Apache License, Version 2.0.
+    (see @ref LICENSE or http://www.apache.org/licenses/LICENSE-2.0)
+
+    @brief
+*/
+
+
+#ifndef H_@EIGENUT_ID@_TYPES
+#define H_@EIGENUT_ID@_TYPES
+
+
+/// @ingroup eigenut
+namespace @EIGENUT_ID_LOWER_CASE@
+{
+    typedef Eigen::Matrix<unsigned int, Eigen::Dynamic, 1> IndexVector;
+
+    /**
+     * Index type used by Eigen. We should not use Eigen::DenseIndex since it
+     * is going to be deprecated in new versions of Eigen. May be EigenIndex
+     * should be defined depending on the version of Eigen.
+     */
+    typedef EIGEN_DEFAULT_DENSE_INDEX_TYPE EigenIndex;
+
+
+    typedef double DefaultScalar;
+
+
+    typedef Eigen::Matrix<DefaultScalar, Eigen::Dynamic, Eigen::Dynamic> DefaultDynamicMatrix;
+
+
+/// @attention Won't work if 'Scalar' contains commas.
+#define @EIGENUT_ID@_DYNAMIC_MATRIX(Scalar) Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic>
+
+/// @attention Won't work if 'Scalar' contains commas.
+#define @EIGENUT_ID@_DYNAMIC_VECTOR(Scalar) Eigen::Matrix<Scalar, Eigen::Dynamic, 1>
+
+
+#ifdef @EIGENUT_ID@_DISABLE_ALIGNMENT_OF_STATIC_MATRICES
+#    define @EIGENUT_ID@_CONSTANT_SIZE_ALIGN_TYPE Eigen::DontAlign
+#else
+#    define @EIGENUT_ID@_CONSTANT_SIZE_ALIGN_TYPE Eigen::AutoAlign
+#endif
+
+#define @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(rows) Eigen::Matrix<DefaultScalar, rows, 1, @EIGENUT_ID@_CONSTANT_SIZE_ALIGN_TYPE>
+#ifdef EIGEN_DEFAULT_TO_ROW_MAJOR
+// This may not work
+#    define @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(rows, cols)                                                                   \
+        Eigen::Matrix<DefaultScalar, rows, cols, @EIGENUT_ID@_CONSTANT_SIZE_ALIGN_TYPE>
+#else
+#    define @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(rows, cols)                                                                   \
+        Eigen::Matrix<DefaultScalar, rows, cols, @EIGENUT_ID@_CONSTANT_SIZE_ALIGN_TYPE | ((rows == 1) ? (Eigen::RowMajor) : (Eigen::ColMajor))>
+#endif
+
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(2) Vector2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(3) Vector3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(4) Vector4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(5) Vector5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(6) Vector6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(7) Vector7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(8) Vector8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(9) Vector9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_VECTOR(10) Vector10;
+
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 2) Matrix2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 3) Matrix3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 4) Matrix4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 5) Matrix5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 6) Matrix6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 7) Matrix7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 8) Matrix8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 9) Matrix9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 10) Matrix10;
+
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 2) Matrix1x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 3) Matrix1x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 4) Matrix1x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 5) Matrix1x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 6) Matrix1x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 7) Matrix1x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 8) Matrix1x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 9) Matrix1x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(1, 10) Matrix1x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 3) Matrix2x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 4) Matrix2x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 5) Matrix2x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 6) Matrix2x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 7) Matrix2x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 8) Matrix2x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 9) Matrix2x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(2, 10) Matrix2x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 2) Matrix3x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 4) Matrix3x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 5) Matrix3x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 6) Matrix3x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 7) Matrix3x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 8) Matrix3x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 9) Matrix3x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(3, 10) Matrix3x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 2) Matrix4x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 3) Matrix4x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 5) Matrix4x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 6) Matrix4x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 7) Matrix4x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 8) Matrix4x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 9) Matrix4x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(4, 10) Matrix4x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 2) Matrix5x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 3) Matrix5x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 4) Matrix5x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 6) Matrix5x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 7) Matrix5x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 8) Matrix5x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 9) Matrix5x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(5, 10) Matrix5x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 2) Matrix6x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 3) Matrix6x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 4) Matrix6x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 5) Matrix6x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 7) Matrix6x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 8) Matrix6x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 9) Matrix6x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(6, 10) Matrix6x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 2) Matrix7x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 3) Matrix7x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 4) Matrix7x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 5) Matrix7x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 6) Matrix7x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 8) Matrix7x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 9) Matrix7x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(7, 10) Matrix7x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 2) Matrix8x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 3) Matrix8x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 4) Matrix8x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 5) Matrix8x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 6) Matrix8x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 7) Matrix8x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 9) Matrix8x9;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(8, 10) Matrix8x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 2) Matrix9x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 3) Matrix9x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 4) Matrix9x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 5) Matrix9x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 6) Matrix9x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 7) Matrix9x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 8) Matrix9x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(9, 10) Matrix9x10;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 2) Matrix10x2;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 3) Matrix10x3;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 4) Matrix10x4;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 5) Matrix10x5;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 6) Matrix10x6;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 7) Matrix10x7;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 8) Matrix10x8;
+    typedef @EIGENUT_ID@_CONSTANT_SIZE_MATRIX(10, 9) Matrix10x9;
+}  // namespace @EIGENUT_ID_LOWER_CASE@
+
+#endif

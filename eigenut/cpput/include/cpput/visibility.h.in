@@ -1,0 +1,49 @@
+/**
+    @file
+    @author  Alexander Sherikov
+
+    @copyright 2019 Alexander Sherikov, Licensed under the Apache License, Version 2.0.
+    (see @ref LICENSE or http://www.apache.org/licenses/LICENSE-2.0)
+
+    @brief Visibility defines, e.g., https://gcc.gnu.org/wiki/Visibility
+*/
+
+#pragma once
+
+#ifndef H_@CPPUT_ID@_VISIBILITY
+#    define H_@CPPUT_ID@_VISIBILITY
+
+#    if defined _WIN32 || defined __CYGWIN__
+#        define @CPPUT_ID@_LIB_IMPORT __declspec(dllimport)
+#        define @CPPUT_ID@_LIB_EXPORT __declspec(dllexport)
+#        define @CPPUT_ID@_LIB_LOCAL
+#    else
+#        if __GNUC__ >= 4
+#            define @CPPUT_ID@_LIB_IMPORT __attribute__((visibility("default")))
+#            define @CPPUT_ID@_LIB_EXPORT __attribute__((visibility("default")))
+#            define @CPPUT_ID@_LIB_LOCAL __attribute__((visibility("hidden")))
+#        else
+#            define @CPPUT_ID@_LIB_IMPORT
+#            define @CPPUT_ID@_LIB_EXPORT
+#            define @CPPUT_ID@_LIB_LOCAL
+#        endif
+#    endif
+
+
+#    ifdef @CPPUT_ID@_COMPILE_SHARED_LIB
+// compiled as a shared library (the default)
+#        define @CPPUT_ID@_LOCAL @CPPUT_ID@_LIB_LOCAL
+
+#        ifdef @CPPUT_ID@_IMPORT_LIB
+// this apparently makes sense only in WIN
+#            define @CPPUT_ID@_API @CPPUT_ID@_LIB_IMPORT
+#        else
+#            define @CPPUT_ID@_API @CPPUT_ID@_LIB_EXPORT
+#        endif
+#    else
+// compiled as a static library
+#        define @CPPUT_ID@_API
+#        define @CPPUT_ID@_LOCAL
+#    endif
+
+#endif
