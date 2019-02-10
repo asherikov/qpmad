@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>eigenut</name>
+  <name>qpmad</name>
   <version>0.0.0</version>
-  <description>Eigen utilities</description>
+  <description>qpmad QP solver</description>
 
   <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>
   <license>Apache 2.0</license>
 
-  <url type="website">https://github.com/asherikov/eigenut</url>
+  <url type="website">https://github.com/asherikov/qpmad</url>
 
   <depend>eigen</depend>
 

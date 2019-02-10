@@ -36,11 +36,29 @@ endif()
 
 
 # --------------
+# Load cmake modules
+# --------------
+include(CMakeParseArguments)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
+# --------------
+
+
+# --------------
+# Dependencies
+# --------------
+# Eigen
+find_package(Eigen3 REQUIRED)
+include_directories (SYSTEM "${EIGEN3_INCLUDE_DIR}")
+set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
+# --------------
+
+
+# --------------
 # Packaging
 # --------------
 if (QPMAD_CATKIN_BUILD)
     find_package(catkin REQUIRED)
-    catkin_package()
+    catkin_package(DEPENDS Eigen)
 else()
     set(PROJECT_VERSION_MAJOR 1)
     set(PROJECT_VERSION_MINOR 0)
@@ -87,10 +105,6 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 # --------------
 # Dependencies
 # --------------
-# Eigen
-find_package(Eigen3 REQUIRED)
-include_directories (SYSTEM "${EIGEN3_INCLUDE_DIR}")
-
 # eigenut
 option(EIGENUT_EMBEDDED "" ON)
 set(EIGENUT_EMBEDDED_ID "QPMAD"  CACHE STRING "")
@@ -134,7 +148,7 @@ if (NOT QPMAD_CATKIN_BUILD)
              DESTINATION "${QPMAD_INSTALL_PATH}/")
 endif()
 
-install (DIRECTORY "${QPMAD_SOURCE_DIR}/qpmad"
-         DESTINATION "${CMAKE_INSTALL_PREFIX}/include/qpmad/"
+install (DIRECTORY "${QPMAD_SOURCE_DIR}/qpmad/"
+         DESTINATION "${QPMAD_INCLUDE_INSTALL_DESTINATION}"
          FILES_MATCHING PATTERN "*.h")
 # --------------
