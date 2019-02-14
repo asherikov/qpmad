@@ -124,8 +124,6 @@ else()
 endif()
 set(CPPUT_SELECT_HEADERS "config.h;exception.h;visibility.h"  CACHE STRING "")
 add_subdirectory(cpput)
-get_property(CPPUT_INCLUDE_DIRECTORIES DIRECTORY "cpput" PROPERTY INCLUDE_DIRECTORIES)
-include_directories(${CPPUT_INCLUDE_DIRECTORIES})
 # --------------
 
 

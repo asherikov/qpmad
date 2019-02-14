@@ -12,8 +12,6 @@
 #ifndef H_@CPPUT_ID@_FLAGS
 #define H_@CPPUT_ID@_FLAGS
 
-#include "exception.h"
-
 namespace @CPPUT_ID_LOWER_CASE@
 {
     template <class t_Derived>
