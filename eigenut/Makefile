@@ -10,6 +10,7 @@ clean:
 	rm -Rf ${BUILD_DIR}
 	ls ${INCLUDE_DIR}/*.in | sed 's/\.in$$//g' | xargs rm -f
 	ls ${INCLUDE_DIR}/*.in | sed 's/\.in$$//g' | sed 's=${INCLUDE_DIR}/=${INCLUDE_DIR}/eigenut_=' | xargs rm -f
+	rm -Rf ${INCLUDE_DIR}/cpput*.h
 	cd cpput; ${MAKE} clean
 
 build:

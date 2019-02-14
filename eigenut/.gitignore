@@ -6,10 +6,5 @@ include/eigenut/config.h
 include/eigenut/cross_product.h
 include/eigenut/misc.h
 include/eigenut/types.h
-include/eigenut/eigenut_blockmatrix.h
-include/eigenut/eigenut_blockmatrix_base.h
-include/eigenut/eigenut_blockmatrix_kronecker.h
-include/eigenut/eigenut_config.h
-include/eigenut/eigenut_cross_product.h
-include/eigenut/eigenut_misc.h
-include/eigenut/eigenut_types.h
+include/eigenut/eigenut_*.h
+include/eigenut/cpput_*.h

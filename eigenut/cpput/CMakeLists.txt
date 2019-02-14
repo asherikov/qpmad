@@ -10,7 +10,7 @@ set(CMAKE_VERBOSE_MAKEFILE      ON)
 option(CPPUT_EMBEDDED           "Embedded in another project" OFF)
 option(CPPUT_BUILD_TESTS        "Build tests" ON)
 set(CPPUT_EMBEDDED_ID           "" CACHE STRING "Overrides header guards, namespace (does not apply to 3rdparty headers).")
-set(CPPUT_EMBEDDED_INSTALL_DIR  "" CACHE STRING "Installation destination.")
+set(CPPUT_EMBEDDED_COPY_TO_DIR  "" CACHE STRING "Installation destination.")
 set(CPPUT_SELECT_HEADERS        "" CACHE STRING "Selection a subset of headers for installation.")
 # --------------
 
@@ -24,12 +24,12 @@ if (CPPUT_EMBEDDED)
     if(CPPUT_EMBEDDED_ID)
         set(CPPUT_ID "${CPPUT_EMBEDDED_ID}")
     endif()
-    if(NOT CPPUT_EMBEDDED_INSTALL_DIR)
-        message(FATAL_ERROR "CPPUT_EMBEDDED_INSTALL_DIR must be set with CPPUT_EMBEDDED=ON")
+    if(NOT CPPUT_EMBEDDED_COPY_TO_DIR)
+        message(FATAL_ERROR "CPPUT_EMBEDDED_COPY_TO_DIR must be set with CPPUT_EMBEDDED=ON")
     endif()
 else()
-    if (CPPUT_EMBEDDED_ID OR CPPUT_EMBEDDED_INSTALL_DIR)
-        message(WARNING "CPPUT_EMBEDDED_ID and CPPUT_EMBEDDED_INSTALL_DIR ignored since CPPUT_EMBEDDED=OFF")
+    if (CPPUT_EMBEDDED_ID OR CPPUT_EMBEDDED_COPY_TO_DIR)
+        message(WARNING "CPPUT_EMBEDDED_ID and CPPUT_EMBEDDED_COPY_TO_DIR ignored since CPPUT_EMBEDDED=OFF")
     endif()
 
     # Detect catkin
@@ -46,6 +46,8 @@ else()
 endif()
 
 string(TOLOWER "${CPPUT_ID}" CPPUT_ID_LOWER_CASE)
+
+set(CPPUT_HEADER_DIR "${PROJECT_SOURCE_DIR}/include/cpput")
 # --------------
 
 
@@ -54,7 +56,7 @@ string(TOLOWER "${CPPUT_ID}" CPPUT_ID_LOWER_CASE)
 # --------------
 if (CPPUT_CATKIN_BUILD)
     find_package(catkin REQUIRED)
-    catkin_package()
+    catkin_package(INCLUDE_DIRS include)
 else()
     set(PROJECT_VERSION_MAJOR 1)
     set(PROJECT_VERSION_MINOR 0)
@@ -82,9 +84,7 @@ endif()
 if (CPPUT_CATKIN_BUILD)
     set(CPPUT_INCLUDE_INSTALL_DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 else()
-    if (CPPUT_EMBEDDED)
-        set(CPPUT_INCLUDE_INSTALL_DESTINATION ${CPPUT_EMBEDDED_INSTALL_DIR})
-    else()
+    if (NOT CPPUT_EMBEDDED)
         set(CPPUT_INCLUDE_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${CPPUT_ID_LOWER_CASE})
     endif()
 endif()
@@ -106,23 +106,17 @@ include(cmakeut_list_filenames)
 include(cmakeut_detect_func_macro)
 cmakeut_detect_func_macro()
 
-cmakeut_list_filenames("${PROJECT_SOURCE_DIR}/include/cpput/" "CPPUT_HEADERS")
+cmakeut_list_filenames("${CPPUT_HEADER_DIR}/" "CPPUT_HEADERS")
 foreach (CPPUT_HEADER ${CPPUT_HEADERS})
     if (${CPPUT_HEADER} MATCHES ".h.in\$")
         string(REPLACE ".h.in" ".h" CPPUT_HEADER_NO_SUFFIX "${CPPUT_HEADER}")
-        if (CPPUT_EMBEDDED)
-            set(CPPUT_HEADER_NO_SUFFIX "cpput_${CPPUT_HEADER_NO_SUFFIX}")
-        endif()
         message("Configuring header ${CPPUT_HEADER} -> ${CPPUT_HEADER_NO_SUFFIX}")
-        configure_file( "${PROJECT_SOURCE_DIR}/include/cpput/${CPPUT_HEADER}"
-                        "${PROJECT_SOURCE_DIR}/include/cpput/${CPPUT_HEADER_NO_SUFFIX}")
+        configure_file( "${CPPUT_HEADER_DIR}/${CPPUT_HEADER}"
+                        "${CPPUT_HEADER_DIR}/${CPPUT_HEADER_NO_SUFFIX}")
     endif()
 endforeach()
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
-if (CPPUT_EMBEDDED)
-    include_directories ("${PROJECT_SOURCE_DIR}/include/cpput")
-endif()
 # --------------
 
 
@@ -139,26 +133,46 @@ endif()
 # --------------
 # Install
 # --------------
-if (NOT CPPUT_CATKIN_BUILD)
-    if (NOT CPPUT_EMBEDDED)
+if (CPPUT_EMBEDDED)
+    if (NOT CPPUT_SELECT_HEADERS)
+        cmakeut_list_filenames("${CPPUT_HEADER_DIR}/" "CPPUT_HEADERS")
+        foreach (CPPUT_HEADER ${CPPUT_HEADERS})
+            if (NOT ${CPPUT_HEADER} MATCHES ".h.in\$" AND NOT ${CPPUT_HEADER} MATCHES "all.h")
+                list(APPEND CPPUT_SELECT_HEADERS "${CPPUT_HEADER}")
+            endif()
+        endforeach()
+    endif()
+
+    if (CPPUT_SELECT_HEADERS)
+        foreach (CPPUT_HEADER ${CPPUT_SELECT_HEADERS})
+            if (CPPUT_HEADER)
+                file(   COPY        "${CPPUT_HEADER_DIR}/${CPPUT_HEADER}"
+                        DESTINATION "${PROJECT_BINARY_DIR}/")
+                file(   RENAME      "${PROJECT_BINARY_DIR}/${CPPUT_HEADER}"
+                                    "${CPPUT_EMBEDDED_COPY_TO_DIR}/cpput_${CPPUT_HEADER}")
+            endif()
+        endforeach()
+    endif()
+else()
+    if (NOT CPPUT_CATKIN_BUILD)
         install (FILES "${PROJECT_BINARY_DIR}/cpputConfig.cmake"
                  DESTINATION "${CPPUT_INSTALL_PATH}/")
 
         install (FILES "${PROJECT_BINARY_DIR}/cpputConfigVersion.cmake"
                  DESTINATION "${CPPUT_INSTALL_PATH}/")
     endif()
-endif()
 
-if (CPPUT_SELECT_HEADERS)
-    foreach (CPPUT_HEADER ${CPPUT_SELECT_HEADERS})
-        if (CPPUT_HEADER)
-            install (FILES "${PROJECT_SOURCE_DIR}/include/cpput/${CPPUT_HEADER}"
-                     DESTINATION "${CPPUT_INCLUDE_INSTALL_DESTINATION}/")
-        endif()
-    endforeach()
-else()
-    install (DIRECTORY "${PROJECT_SOURCE_DIR}/include/cpput/"
-             DESTINATION "${CPPUT_INCLUDE_INSTALL_DESTINATION}"
-             FILES_MATCHING PATTERN "*.h")
+    if (CPPUT_SELECT_HEADERS)
+        foreach (CPPUT_HEADER ${CPPUT_SELECT_HEADERS})
+            if (CPPUT_HEADER)
+                install (FILES "${CPPUT_HEADER_DIR}/${CPPUT_HEADER}"
+                         DESTINATION "${CPPUT_INCLUDE_INSTALL_DESTINATION}/")
+            endif()
+        endforeach()
+    else()
+        install (DIRECTORY "${CPPUT_HEADER_DIR}/"
+                 DESTINATION "${CPPUT_INCLUDE_INSTALL_DESTINATION}"
+                 FILES_MATCHING PATTERN "*.h")
+    endif()
 endif()
 # --------------

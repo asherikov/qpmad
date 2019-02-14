@@ -1,5 +1,7 @@
 build
 include/qpmad/config.h
+include/qpmad/cpput*.h
+include/qpmad/eigenut*.h
 matlab_octave/make.m
 *.mex*
 *.o

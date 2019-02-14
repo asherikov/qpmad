@@ -32,6 +32,8 @@ if(CATKIN_DEVEL_PREFIX)
         set(QPMAD_BUILD_TESTS   OFF)
     endif()
 endif()
+
+set(QPMAD_SOURCE_DIR   "${PROJECT_SOURCE_DIR}/include/")
 # --------------
 
 
@@ -108,8 +110,8 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 # eigenut
 option(EIGENUT_EMBEDDED "" ON)
 set(EIGENUT_EMBEDDED_ID "QPMAD"  CACHE STRING "")
-set(EIGENUT_EMBEDDED_INSTALL_DIR "${QPMAD_INCLUDE_INSTALL_DESTINATION}"  CACHE STRING "")
-set(EIGENUT_SELECT_HEADERS "eigenut_config.h;eigenut_types.h;eigenut_misc.h"  CACHE STRING "")
+set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/qpmad"  CACHE STRING "")
+set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "")
 add_subdirectory(eigenut)
 get_property(EIGENUT_INCLUDE_DIRECTORIES DIRECTORY "eigenut" PROPERTY INCLUDE_DIRECTORIES)
 include_directories(${EIGENUT_INCLUDE_DIRECTORIES})
@@ -119,7 +121,6 @@ include_directories(${EIGENUT_INCLUDE_DIRECTORIES})
 # --------------
 # Configure headers
 # --------------
-set(QPMAD_SOURCE_DIR   "${PROJECT_SOURCE_DIR}/include/")
 include_directories("${QPMAD_SOURCE_DIR}")
 
 configure_file( "${QPMAD_SOURCE_DIR}/qpmad/config.h.in"

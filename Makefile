@@ -55,6 +55,8 @@ cmake:
 clean:
 	rm -Rf ${BUILD_DIR}
 	rm -Rf include/qpmad/config.h
+	rm -Rf include/qpmad/cpput*.h
+	rm -Rf include/qpmad/eigenut*.h
 	cd matlab_octave; ${MAKE} clean
 	cd eigenut; ${MAKE} clean
 
