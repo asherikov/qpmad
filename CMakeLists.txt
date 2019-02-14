@@ -113,8 +113,6 @@ set(EIGENUT_EMBEDDED_ID "QPMAD"  CACHE STRING "")
 set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/qpmad"  CACHE STRING "")
 set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "")
 add_subdirectory(eigenut)
-get_property(EIGENUT_INCLUDE_DIRECTORIES DIRECTORY "eigenut" PROPERTY INCLUDE_DIRECTORIES)
-include_directories(${EIGENUT_INCLUDE_DIRECTORIES})
 # --------------
 
 
