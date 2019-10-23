@@ -4,30 +4,26 @@ Implementation of Goldfarb-Idnani dual active set algorithm for quadratic
 programming.
 
 
-!!!!! WARNING !!!!!!!!!!!!!!!!!!
-!This is still an alpha version!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Features:
+- Double sided inequality constraints: `lb <= A*x <= ub`. Such constraints
+  can be handled in a more efficient way than `lb <= A*x` commonly used in
+  other implementations of the algorithm.
+
+- Simple bounds: `lb <= x <= ub`.
+
+- Lazy data initialization, e.g., perform inversion of the Cholesky factor
+  only if some of the constraints are activated.
+
+- Does not compute value of the objective function.
+
+- Does not compute/update Lagrange multipliers for equality constraints.
 
 
-Features
-    - Double sided inequality constraints: 'lb <= A*x <= ub'. Such constraints
-      can be handled in a more efficient way than 'lb <= A*x' commonly used in
-      other implementations of the algorithm.
+Dependencies:
 
-    - Simple bounds: 'lb <= x <= ub'.
-
-    - Lazy data initialization, e.g., perform inversion of the Cholesky factor
-      only if some of the constraints are activated.
-
-    - Does not compute value of the objective function.
-
-    - Does not compute/update Lagrange multipliers for equality constraints.
-
-
-Dependencies
-    - cmake
-    - Eigen
-    - Boost (for C++ tests)
+- cmake
+- Eigen
+- Boost (for C++ tests)
 
 
 Notes:
