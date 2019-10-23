@@ -1,12 +1,10 @@
 oqp_list = readdir('onlineqp_collection/oqp');
 problems_list = readdir('onlineqp_collection/problems');
-pepper_list = readdir('qp-collection/inverse_kinematics_pepper');
 tolerance = 1e-09;
 
 dir_list = {
     strcat('onlineqp_collection/oqp/', oqp_list(!(strcmp(oqp_list, '..') | strcmp(oqp_list, '.')))){:}, ...
-    strcat('onlineqp_collection/problems/', problems_list(!(strcmp(problems_list, '..') | strcmp(problems_list, '.')))){:}, ...
-    strcat('qp-collection/inverse_kinematics_pepper/', pepper_list(!(strcmp(pepper_list, '..') | strcmp(pepper_list, '.')))){:}  };
+    strcat('onlineqp_collection/problems/', problems_list(!(strcmp(problems_list, '..') | strcmp(problems_list, '.')))){:}  };
 
 
 for i = 1:numel(dir_list)
