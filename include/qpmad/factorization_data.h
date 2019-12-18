@@ -45,7 +45,11 @@ namespace qpmad
 
 
             bool update(const MatrixIndex R_col,
+#ifdef QPMAD_USE_HOUSEHOLDER
+                        const bool /*is_simple*/,
+#else
                         const bool is_simple,
+#endif
                         const double tolerance)
             {
 #ifdef QPMAD_USE_HOUSEHOLDER

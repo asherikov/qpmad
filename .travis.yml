@@ -7,22 +7,43 @@ notifications:
         on_success: always
         on_failure: always
 
-compiler:
-    - clang
-    - gcc
-
 os: linux
 dist: trusty
 
-addons:
-    apt:
-        update: true
-        packages:
-          - libboost-all-dev
-          - libeigen3-dev
-          - octave
-          - liboctave-dev
+services:
+  - docker
 
-script:
-  - git submodule update --init
-  - make test
+jobs:
+    include:
+      - script:
+          - make test
+        addons:
+            apt:
+                update: true
+                packages:
+                  - libboost-all-dev
+                  - libeigen3-dev
+                  - octave
+                  - liboctave-dev
+        compiler:
+            - clang
+            - gcc
+
+
+      - sudo: required
+        script:
+          - make build
+          - sudo make install
+          - make test_dependency
+        addons:
+            apt:
+                update: true
+                packages:
+                  - libeigen3-dev
+
+    # melodic / 18.04
+      - script:
+          - make make-docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin-test-old
+
+      - script:
+          - make make-docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin-test-new

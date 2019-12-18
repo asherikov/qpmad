@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>qpmad_catkin_dependency_test</name>
+  <version>0.0.0</version>
+  <description>qpmad test package</description>
+
+  <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>
+
+  <license>Apache 2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>qpmad</depend>
+
+  <export>
+  </export>
+</package>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>qpmad</name>
-  <version>0.0.0</version>
+  <version>1.0.1</version>
   <description>qpmad QP solver</description>
 
   <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>
@@ -11,5 +11,7 @@
 
   <depend>eigen</depend>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+    <build_type>cmake</build_type>
+  </export>
 </package>

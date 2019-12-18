@@ -1,5 +1,5 @@
 # General parameters
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.0.0)
 project (eigenut CXX)
 
 
@@ -81,7 +81,7 @@ if (EIGENUT_CATKIN_BUILD)
 else()
     set(PROJECT_VERSION_MAJOR 1)
     set(PROJECT_VERSION_MINOR 0)
-    set(PROJECT_VERSION_PATCH 0)
+    set(PROJECT_VERSION_PATCH 1)
 
     if (NOT EIGENUT_EMBEDDED)
         include(CMakePackageConfigHelpers)
