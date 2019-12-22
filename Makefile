@@ -68,8 +68,8 @@ cmake:
 #----------------------------------------------
 
 addutils:
-	git remote add cmakeut https://github.com/asherikov/cmakeut
-	git remote add eigenut https://github.com/asherikov/eigenut
+	git remote add cmakeut https://github.com/asherikov/cmakeut --no-tags
+	git remote add eigenut https://github.com/asherikov/eigenut --no-tags
 
 updateutils:
 	git fetch --all
