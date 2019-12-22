@@ -89,12 +89,12 @@ update_version:
 	sed -i -e "s=\(project([ a-zA-Z0-9_-]* VERSION\) [0-9]*\.[0-9]*\.[0-9]*)=\1 ${VERSION})=" CMakeLists.txt
 
 ros_release:
-	# 0. update_version
-	#${MAKE} update_version VERSION=${VERSION}
-	# 1. Add Forthcoming section to the changelog
-	# 2. Commit changelog
-	catkin_prepare_release --version "${VERSION}" -y
-	# 4. bloom-release --rosdistro melodic --track melodic qpmad
+	# 0. Add Forthcoming section to the changelog
+	${MAKE} update_version VERSION=${VERSION}
+	git commit -a
+	catkin_prepare_release -t 'ros-' --version "${VERSION}" -y
+	# initial release -> https://wiki.ros.org/bloom/Tutorials/FirstTimeRelease
+	# subsequent releases -> bloom-release --rosdistro melodic --track melodic qpmad
 
 
 # catkin
