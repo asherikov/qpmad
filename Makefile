@@ -196,6 +196,7 @@ make-docker:
 #----------------------------------------------
 
 doxclean:
+	cd doc/dox; git fetch --all; git checkout gh-pages; git pull
 	find ./doc/dox/ -mindepth 1 -not -name "\.git" | xargs rm -Rf
 
 dox: doxclean clean

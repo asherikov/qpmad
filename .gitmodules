@@ -1,0 +1,4 @@
+[submodule "doc/dox"]
+	path = doc/dox
+	url = ../qpmad.git
+	branch = gh-pages
