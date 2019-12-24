@@ -149,7 +149,7 @@ namespace qpmad
                             break;
 
                         default:
-                            QPMAD_THROW("This should not happen!");
+                            QPMAD_UTILS_THROW("This should not happen!");
                             break;
                     }
                 }

@@ -113,7 +113,7 @@ namespace qpmad
                         break;
 
                     default:
-                        QPMAD_THROW("Malformed solver parameters!");
+                        QPMAD_UTILS_THROW("Malformed solver parameters!");
                         break;
                 }
 
@@ -221,7 +221,7 @@ namespace qpmad
 
                                 if (false == factorization_data_.update(active_set_.size_, chosen_ctr_.is_simple_, param.tolerance_))
                                 {
-                                    QPMAD_THROW("Failed to add an equality constraint -- is this possible?");
+                                    QPMAD_UTILS_THROW("Failed to add an equality constraint -- is this possible?");
                                 }
                                 active_set_.addEquality(i);
 
@@ -345,9 +345,9 @@ namespace qpmad
 
 
                             bool partial_step = false;
-                            QPMAD_ASSERT(   (step_length >= 0.0)
-                                            && (dual_step_length >= 0.0),
-                                            "Non-negative step lengths expected.");
+                            QPMAD_UTILS_ASSERT( (step_length >= 0.0)
+                                                && (dual_step_length >= 0.0),
+                                                "Non-negative step lengths expected.");
                             if (dual_step_length <= step_length)
                             {
                                 step_length = dual_step_length;
@@ -395,7 +395,7 @@ namespace qpmad
                                 // activate constraint
                                 if (false == factorization_data_.update(active_set_.size_, chosen_ctr_.is_simple_, param.tolerance_))
                                 {
-                                    QPMAD_THROW("Failed to add an inequality constraint -- is this possible?");
+                                    QPMAD_UTILS_THROW("Failed to add an inequality constraint -- is this possible?");
                                 }
 
                                 if (chosen_ctr_.is_lower_)

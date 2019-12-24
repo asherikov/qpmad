@@ -67,7 +67,7 @@ write_basic_package_version_file(
 # --------------
 # eigenut
 option(EIGENUT_EMBEDDED "" ON)
-set(EIGENUT_EMBEDDED_ID "QPMAD"  CACHE STRING "")
+set(EIGENUT_EMBEDDED_ID "QPMAD_UTILS"  CACHE STRING "")
 set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${CMAKE_PROJECT_NAME}"  CACHE STRING "")
 set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "")
 add_subdirectory(eigenut)

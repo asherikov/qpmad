@@ -26,7 +26,7 @@ template<int t_size>
     public:
         CholeskyResultFixture()
         {
-            qpmad::getRandomPositiveDefinititeMatrix(M, t_size);
+            qpmad_utils::getRandomPositiveDefinititeMatrix(M, t_size);
             v.setRandom(t_size);
         }
 

@@ -1,3 +1,5 @@
+qpmad
+=====
 Travis CI: https://travis-ci.org/asherikov/qpmad [![Build Status](https://travis-ci.org/asherikov/qpmad.svg?branch=master)](https://travis-ci.org/asherikov/qpmad)
 
 Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set
@@ -5,8 +7,26 @@ algorithm for quadratic programming. The intended purpose of this solver is
 embedded optimization for robot control, for this reason some of the
 computations are omitted as described below. The package is ROS compatible.
 
+Contents
+--------
+* [Links](#links)
+* [Features](#features)
+* [Dependencies](#dependencies)
+* [Notes](#notes)
+* [Documentation](#docs)
 
+
+<a name="links"></a>
+Links
+=====
+* Doxygen: https://asherikov.github.io/qpmad/
+* GitHub: https://github.com/asherikov/qpmad
+* CI: https://travis-ci.org/asherikov/qpmad
+
+
+<a name="features"></a>
 Features:
+=========
 - Double sided inequality constraints: `lb <= A*x <= ub`. Such constraints
   can be handled in a more efficient way than `lb <= A*x` commonly used in
   other implementations of the algorithm.
@@ -21,13 +41,17 @@ Features:
 - Does not compute/update Lagrange multipliers for equality constraints.
 
 
+<a name="dependencies"></a>
 Dependencies:
+=============
 - cmake
 - Eigen
 - Boost (for C++ tests)
 
 
+<a name="notes"></a>
 Notes:
+======
 
 1. Before computing the full step length I check that the dot product of the
    chosen constraint with the step direction is not zero instead of checking
@@ -49,3 +73,12 @@ Notes:
 4. Vector 'd' and primal step direction are updated during partial steps
    instead of being computed from scratch. This, however, does not result in a
    significant performance improvement.
+
+
+<a name="docs"></a>
+Documentation and examples
+==========================
+
+* Precompiled Doxygen documentation: https://asherikov.github.io/qpmad/
+* Introductory demo: https://asherikov.github.io/qpmad/DEMO.html [`./test/dependency/demo.cpp`]
+

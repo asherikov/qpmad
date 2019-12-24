@@ -26,7 +26,7 @@ template<int t_size>
     public:
         InverseFixture()
         {
-            qpmad::getRandomPositiveDefinititeMatrix(M, t_size);
+            qpmad_utils::getRandomPositiveDefinititeMatrix(M, t_size);
             qpmad::CholeskyFactorization::compute(M);
         }
 

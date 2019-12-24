@@ -192,6 +192,16 @@ make-docker:
 		&& cd qpmad \
 		&& make ${TARGET} ROS_DISTRO=${ROS_DISTRO} UBUNTU_DISTRO=${UBUNTU_DISTRO}"
 
+# clean
+#----------------------------------------------
+
+doxclean:
+	find ./doc/dox/ -mindepth 1 -not -name "\.git" | xargs rm -Rf
+
+dox: doxclean clean
+	${MAKE} build
+	cd doc; doxygen
+
 
 # clean
 #----------------------------------------------
