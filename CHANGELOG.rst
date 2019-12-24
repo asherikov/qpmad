@@ -2,7 +2,7 @@
 Changelog for package ariles_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2019-12-24)
+------------------
 * Doxygen documentation.
 * Initial ROS release.
