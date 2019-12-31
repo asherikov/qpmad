@@ -47,3 +47,7 @@ jobs:
 
       - script:
           - make make-docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin-test-new
+
+      - sudo: required
+        script:
+          - make ros-prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH}

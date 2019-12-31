@@ -1,3 +1,4 @@
+REPO=https://github.com/asherikov/qpmad.git
 BUILD_DIR?=build
 MAKE_FLAGS?=-j5
 VERSION?="XXX__version_not_set__XXX"
@@ -104,6 +105,19 @@ CATKIN_WORKING_DIR?=./build/catkin_workspace
 PKG_PATH?=${CATKIN_WORKING_DIR}/src/qpmad
 DEPENDENT_PKG_PATH?=${CATKIN_WORKING_DIR}/src/qpmad_catkin_dependency_test
 
+add-ros-repos:
+	sh -c "echo \"deb http://packages.ros.org/ros/ubuntu ${UBUNTU_DISTRO} main\" > /etc/apt/sources.list.d/ros-latest.list"
+	sh -c "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+        || apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+        || apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654"
+	sh -c "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157 \
+        || apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157 \
+        || apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157"
+	apt-get update -qq
+	apt-get install dpkg
+
+
+
 install-deps:
 	apt update
 #	apt upgrade -y
@@ -182,13 +196,29 @@ catkin-test-new: install-deps
 	${MAKE} catkin-new-deb
 
 
+ros-prerelease-deps:
+	sudo ${MAKE} add-ros-repos UBUNTU_DISTRO=${UBUNTU_DISTRO}
+	sudo apt-get install python3-ros-buildfarm
+
+ros-prerelease: ros-prerelease-deps
+	# sudo apt install docker.io
+	# sudo adduser username docker
+	generate_prerelease_script.py \
+		https://raw.githubusercontent.com/ros-infrastructure/ros_buildfarm_config/production/index.yaml \
+		${ROS_DISTRO} default ubuntu ${UBUNTU_DISTRO} amd64 qpmad \
+		--level 0 --custom-repo qpmad:git:${REPO}:${BRANCH} \
+		--output-dir ./build/ros-prerelease
+	cd ./build/ros-prerelease; sed -i -e "/_ls_prerelease_scripts=/d" prerelease.sh
+	cd ./build/ros-prerelease; env ABORT_ON_TEST_FAILURE=1 ./prerelease.sh
+
+
 # docker
 #----------------------------------------------
 make-docker:
 	docker pull ros:${ROS_DISTRO}-ros-base-${UBUNTU_DISTRO}
 	docker run -ti ros:${ROS_DISTRO}-ros-base-${UBUNTU_DISTRO} \
 		/bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash \
-		&& git clone -b ${BRANCH} https://github.com/asherikov/qpmad.git \
+		&& git clone -b ${BRANCH} ${REPO} \
 		&& cd qpmad \
 		&& make ${TARGET} ROS_DISTRO=${ROS_DISTRO} UBUNTU_DISTRO=${UBUNTU_DISTRO}"
 
