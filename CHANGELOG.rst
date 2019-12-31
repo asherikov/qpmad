@@ -2,8 +2,8 @@
 Changelog for package ariles_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.2 (2019-12-31)
+------------------
 
 * Added missing dependency in package.xml.
 
