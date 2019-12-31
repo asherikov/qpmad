@@ -43,11 +43,11 @@ jobs:
 
     # melodic / 18.04
       - script:
-          - make make-docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin-test-old
+          - make ros_make_docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin_test_old
 
       - script:
-          - make make-docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin-test-new
+          - make ros_make_docker ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH} TARGET=catkin_test_new
 
       - sudo: required
         script:
-          - make ros-prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH}
+          - make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=${TRAVIS_BRANCH}

@@ -1,0 +1,142 @@
+CATKIN_WORKING_DIR=./build/catkin_workspace
+CATKIN_PKG_PATH=${CATKIN_WORKING_DIR}/src/${CATKIN_PKG}
+CATKIN_DEPENDENT_PKG_PATH=${CATKIN_WORKING_DIR}/src/${CATKIN_DEPENDENCY_TEST_PKG}
+
+
+# release
+#----------------------------------------------
+
+update_version_ros: update_version_cmake
+	sed -i -e "s=\(project([ a-zA-Z0-9_-]* VERSION\) [0-9]*\.[0-9]*\.[0-9]*)=\1 ${VERSION})=" CMakeLists.txt
+
+ros_release:
+	# 0. Add Forthcoming section to the changelog
+	${MAKE} update_version_ros VERSION=${VERSION}
+	git commit -a
+	catkin_prepare_release -t 'ros-' --version "${VERSION}" -y
+	# initial release -> https://wiki.ros.org/bloom/Tutorials/FirstTimeRelease
+	# subsequent releases -> bloom-release --rosdistro melodic --track melodic ${PKG}
+
+
+# catkin
+#----------------------------------------------
+
+ros_add_repos:
+	sh -c "echo \"deb http://packages.ros.org/ros/ubuntu ${UBUNTU_DISTRO} main\" > /etc/apt/sources.list.d/ros-latest.list"
+	sh -c "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+		|| apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+		|| apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654"
+	sh -c "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157 \
+		|| apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157 \
+		|| apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 6B05F25D762E3157"
+	apt-get update -qq
+	apt-get install dpkg
+	apt update -y
+
+ros_install:
+	apt-get install -y ros-${ROS_DISTRO}-ros-base
+	bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash; rosdep init'
+
+ros_install_deps:
+	apt update
+	#apt upgrade -y
+	apt install -y ${DEBIAN_SYSTEM_DEPENDENCIES}
+	apt install -y \
+		python-bloom \
+		devscripts \
+		debhelper
+	apt install -y python-catkin-tools
+
+
+catkin_build_deb: clean
+	cd ${CATKIN_PKG_PATH}; bloom-generate rosdebian --os-name ubuntu --ros-distro ${ROS_DISTRO} ./
+	# disable installation of catkin stuff: setup scripts, etc.
+	#cd ${CATKIN_PKG_PATH}; sed "s/dh_auto_configure --/dh_auto_configure -- -DCATKIN_BUILD_BINARY_PACKAGE=ON/" -i debian/rules
+	cd ${CATKIN_PKG_PATH}; fakeroot debian/rules binary
+
+
+catkin_test_deb: catkin_build_deb
+	sudo dpkg -i ../ros*`echo "${CATKIN_PKG}" | sed "s/_/-/"`*.deb
+	mkdir -p build/dependency_test
+	bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash; \
+		cd build/dependency_test; \
+		cmake ../../${DEPENDENCY_PATH}/; \
+		${MAKE} ${MAKE_FLAGS}'
+
+
+catkin_prepare_workspace: clean
+	mkdir -p ${CATKIN_PKG_PATH}
+	mkdir -p ${CATKIN_DEPENDENT_PKG_PATH}
+	ls -1 | grep -v build | xargs cp -R -t ${CATKIN_PKG_PATH}
+	cp -R ${CATKIN_DEPENDENCY_PATH}/* ${CATKIN_DEPENDENT_PKG_PATH}/
+
+
+catkin_old_build: catkin_prepare_workspace
+	cd ${CATKIN_WORKING_DIR}/src; catkin_init_workspace
+	cd ${CATKIN_WORKING_DIR}; catkin_make_isolated --pkg ${CATKIN_PKG} ${CATKIN_ARGS} --make-args ${CATKIN_TARGETS} # old
+
+catkin_old_build_with_dependent: catkin_prepare_workspace
+	cd ${CATKIN_WORKING_DIR}/src; catkin_init_workspace
+	cd ${CATKIN_WORKING_DIR}; catkin_make_isolated
+
+catkin_old_deb: catkin_prepare_workspace
+	${MAKE} catkin_test_deb
+	${MAKE} catkin_prepare_workspace
+	rm -Rf ${CATKIN_PKG_PATH}
+	cd ${CATKIN_WORKING_DIR}/src; catkin_init_workspace
+	cd ${CATKIN_WORKING_DIR}; catkin_make_isolated --pkg ${CATKIN_DEPENDENCY_TEST_PKG}
+
+
+catkin_new_build: catkin_prepare_workspace
+	cd ${CATKIN_WORKING_DIR}; catkin init
+	cd ${CATKIN_WORKING_DIR}; catkin build -i --verbose --summary ${CATKIN_PKG} --make-args ${CATKIN_TARGETS} ${CATKIN_ARGS}
+
+catkin_new_build_with_dependent: catkin_prepare_workspace
+	cd ${CATKIN_WORKING_DIR}; catkin init
+	cd ${CATKIN_WORKING_DIR}; catkin build -i --verbose --summary ${CATKIN_DEPENDENCY_TEST_PKG}
+
+catkin_new_deb:
+	${MAKE} catkin_test_deb
+	${MAKE} catkin_prepare_workspace
+	rm -Rf ${CATKIN_PKG_PATH}
+	cd ${CATKIN_WORKING_DIR}; catkin init
+	cd ${CATKIN_WORKING_DIR}; catkin build -i --verbose --summary ${CATKIN_DEPENDENCY_TEST_PKG}
+
+
+catkin_test_old: ros_install_deps
+	${MAKE} catkin_old_build
+	${MAKE} catkin_old_build_with_dependent
+	${MAKE} catkin_old_deb
+
+catkin_test_new: ros_install_deps
+	${MAKE} catkin_new_build
+	${MAKE} catkin_new_build_with_dependent
+	${MAKE} catkin_new_deb
+
+
+ros_prerelease_deps:
+	sudo ${MAKE} ros_add_repos UBUNTU_DISTRO=${UBUNTU_DISTRO}
+	sudo apt-get install python3-ros-buildfarm
+
+ros_prerelease: ros_prerelease_deps
+	# sudo apt install docker.io
+	# sudo adduser username docker
+	generate_prerelease_script.py \
+		https://raw.githubusercontent.com/ros-infrastructure/ros_buildfarm_config/production/index.yaml \
+		${ROS_DISTRO} default ubuntu ${UBUNTU_DISTRO} amd64 \
+		--level 0 --custom-repo ${CATKIN_PKG}:git:${REPO}:${BRANCH} \
+		--output-dir ./build/ros_prerelease
+	# dirty fix to break interactive part of the script
+	cd ./build/ros_prerelease; sed -i -e "/_ls_prerelease_scripts=/d" prerelease.sh
+	cd ./build/ros_prerelease; env ABORT_ON_TEST_FAILURE=1 ./prerelease.sh
+
+
+# docker
+#----------------------------------------------
+ros_make_docker:
+	docker pull ros:${ROS_DISTRO}-ros-base-${UBUNTU_DISTRO}
+	docker run -ti ros:${ROS_DISTRO}-ros-base-${UBUNTU_DISTRO} \
+		/bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash \
+		&& git clone -b ${BRANCH} ${REPO} ${CATKIN_PKG} \
+		&& cd ${CATKIN_PKG} \
+		&& make ${TARGET} ROS_DISTRO=${ROS_DISTRO} UBUNTU_DISTRO=${UBUNTU_DISTRO}"
