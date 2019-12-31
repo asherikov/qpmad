@@ -14,7 +14,7 @@
 
 namespace @CPPUT_ID_LOWER_CASE@
 {
-    template <class t_Derived>
+    template <typename t_Integer, class t_Derived>
     class Flags
     {
     public:
@@ -28,11 +28,11 @@ namespace @CPPUT_ID_LOWER_CASE@
 
 
     public:
-        unsigned int flags_;
+        t_Integer flags_;
 
 
     public:
-        void initialize(const unsigned int flags, const Action action_type = REPLACE)
+        void initialize(const t_Integer flags, const Action action_type = REPLACE)
         {
             switch (action_type)
             {
@@ -56,29 +56,29 @@ namespace @CPPUT_ID_LOWER_CASE@
         }
 
 
-        void copy(const t_Derived &from, const unsigned int mask)
+        void copy(const t_Derived &from, const t_Integer mask)
         {
             set(from.flags_ & mask);
         }
 
-        bool isSet(const unsigned int flags) const
+        bool isSet(const t_Integer flags) const
         {
             return (flags_ & flags);
         }
 
-        void replace(const unsigned int flags)
+        void replace(const t_Integer flags)
         {
             flags_ = flags;
         }
 
-        void set(const unsigned int flags)
+        void set(const t_Integer flags)
         {
             flags_ |= flags;
         }
 
-        void unset(const unsigned int flags)
+        void unset(const t_Integer flags)
         {
-            flags_ &= !flags;
+            flags_ &= ~flags;
         }
     };
 }  // namespace @CPPUT_ID_LOWER_CASE@

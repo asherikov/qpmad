@@ -1,7 +1,7 @@
 function(cmakeut_add_cpp_test TEST_NAME)
 
     #set(options OPTION0)
-    #set(oneValueArgs OPTION1)
+    set(oneValueArgs WORKING_DIRECTORY)
     set(multiValueArgs LIBS DEPENDS FLAGS)
     cmake_parse_arguments("CMAKEUT" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
@@ -13,6 +13,6 @@ function(cmakeut_add_cpp_test TEST_NAME)
     if (CMAKEUT_DEPENDS)
         add_dependencies(${TGT_NAME} "${CMAKEUT_DEPENDS}")
     endif()
-    add_test(NAME ${TGT_NAME} COMMAND ${TEST_NAME})
+    add_test(NAME ${TGT_NAME} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${TEST_NAME} WORKING_DIRECTORY ${CMAKEUT_WORKING_DIRECTORY})
 
 endfunction(cmakeut_add_cpp_test)

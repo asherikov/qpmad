@@ -9,7 +9,10 @@
 
   <url type="website">https://github.com/asherikov/eigenut</url>
 
+  <buildtool_depend>cmake</buildtool_depend>
   <depend>eigen</depend>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+    <build_type>cmake</build_type>
+  </export>
 </package>

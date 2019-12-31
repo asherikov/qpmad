@@ -9,7 +9,7 @@ function(cmakeut_compiler_flags STANDARD)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 
         # using GCC
-        set(CXX_WARNINGS "${CXX_WARNINGS} -Wsuggest-attribute=const")
+        set(CXX_WARNINGS "${CXX_WARNINGS}")
 
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
 

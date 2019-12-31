@@ -1,6 +1,6 @@
 # General parameters
 cmake_minimum_required (VERSION 3.0.0)
-project (eigenut CXX)
+project(eigenut VERSION 1.0.2)
 
 
 # --------------
@@ -31,18 +31,6 @@ else()
     if (EIGENUT_EMBEDDED_ID OR EIGENUT_EMBEDDED_COPY_TO_DIR)
         message(WARNING "EIGENUT_EMBEDDED_ID and EIGENUT_EMBEDDED_COPY_TO_DIR ignored since EIGENUT_EMBEDDED=OFF")
     endif()
-
-    # Detect catkin
-    if(CATKIN_DEVEL_PREFIX)
-        message(STATUS "Building with catkin.")
-        set(EIGENUT_CATKIN_BUILD ON)
-
-        if(CATKIN_ENABLE_TESTING)
-            set(EIGENUT_BUILD_TESTS ON)
-        else()
-            set(EIGENUT_BUILD_TESTS OFF)
-        endif()
-    endif()
 endif()
 
 string(TOLOWER "${EIGENUT_ID}" EIGENUT_ID_LOWER_CASE)
@@ -72,41 +60,25 @@ set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 # --------------
 # Packaging
 # --------------
-if (EIGENUT_CATKIN_BUILD)
-    find_package(catkin REQUIRED)
-    catkin_package(
-        INCLUDE_DIRS include
-        DEPENDS Eigen
-    )
-else()
-    set(PROJECT_VERSION_MAJOR 1)
-    set(PROJECT_VERSION_MINOR 0)
-    set(PROJECT_VERSION_PATCH 1)
+if (NOT EIGENUT_EMBEDDED)
+    include(CMakePackageConfigHelpers)
+    set(EIGENUT_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/share/eigenut/")
+    set(EIGENUT_INCLUDES "${CMAKE_INSTALL_PREFIX}/include")
 
-    if (NOT EIGENUT_EMBEDDED)
-        include(CMakePackageConfigHelpers)
-        set(EIGENUT_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/share/eigenut/")
-        set(EIGENUT_INCLUDES "${CMAKE_INSTALL_PREFIX}/include")
+    configure_package_config_file(  "cmake/eigenutConfig.cmake.in"
+                                    "${PROJECT_BINARY_DIR}/eigenutConfig.cmake"
+                                    INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}/share/eigenut/"
+                                    NO_SET_AND_CHECK_MACRO
+                                    NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-        configure_package_config_file(  "cmake/eigenutConfig.cmake.in"
-                                        "${PROJECT_BINARY_DIR}/eigenutConfig.cmake"
-                                        INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}/share/eigenut/"
-                                        NO_SET_AND_CHECK_MACRO
-                                        NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-
-        write_basic_package_version_file(
-            ${PROJECT_BINARY_DIR}/eigenutConfigVersion.cmake
-            VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
-            COMPATIBILITY SameMajorVersion)
-    endif()
+    write_basic_package_version_file(
+        ${PROJECT_BINARY_DIR}/eigenutConfigVersion.cmake
+        VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
+        COMPATIBILITY SameMajorVersion)
 endif()
 
-if (EIGENUT_CATKIN_BUILD)
-    set(EIGENUT_INCLUDE_INSTALL_DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
-else()
-    if (NOT EIGENUT_EMBEDDED)
-        set(EIGENUT_INCLUDE_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${EIGENUT_ID_LOWER_CASE})
-    endif()
+if (NOT EIGENUT_EMBEDDED)
+    set(EIGENUT_INCLUDE_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${EIGENUT_ID_LOWER_CASE})
 endif()
 # --------------
 
@@ -180,13 +152,11 @@ if (EIGENUT_EMBEDDED)
         endforeach()
     endif()
 else()
-    if (NOT EIGENUT_CATKIN_BUILD)
-        install (FILES "${PROJECT_BINARY_DIR}/eigenutConfig.cmake"
-                 DESTINATION "${EIGENUT_INSTALL_PATH}/")
+    install (FILES "${PROJECT_BINARY_DIR}/eigenutConfig.cmake"
+             DESTINATION "${EIGENUT_INSTALL_PATH}/")
 
-        install (FILES "${PROJECT_BINARY_DIR}/eigenutConfigVersion.cmake"
-                 DESTINATION "${EIGENUT_INSTALL_PATH}/")
-    endif()
+    install (FILES "${PROJECT_BINARY_DIR}/eigenutConfigVersion.cmake"
+             DESTINATION "${EIGENUT_INSTALL_PATH}/")
 
     if (EIGENUT_SELECT_HEADERS)
         foreach (EIGENUT_HEADER ${EIGENUT_SELECT_HEADERS})

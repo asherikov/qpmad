@@ -26,7 +26,7 @@ addutils:
 	git remote add popl https://github.com/badaix/popl
 	git remote add safe_int https://github.com/dcleblanc/SafeInt
 
-3rdparty:
+updateutils:
 	git fetch --all
 	git show remotes/cmakeut/master:cmake/cmakeut_add_cpp_test.cmake        > cmake/cmakeut_add_cpp_test.cmake
 	git show remotes/cmakeut/master:cmake/cmakeut_compiler_flags.cmake      > cmake/cmakeut_compiler_flags.cmake
