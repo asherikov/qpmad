@@ -18,11 +18,9 @@ namespace qpmad
 {
     namespace testing
     {
-        double computeObjective(const Eigen::MatrixXd   &H,
-                                const Eigen::VectorXd   &h,
-                                const Eigen::VectorXd   &primal)
+        double computeObjective(const Eigen::MatrixXd &H, const Eigen::VectorXd &h, const Eigen::VectorXd &primal)
         {
-            Eigen::MatrixXd     L = H.triangularView<Eigen::Lower>();
+            Eigen::MatrixXd L = H.triangularView<Eigen::Lower>();
 
             double result = 0.5 * primal.transpose() * L * L.transpose() * primal;
 
@@ -33,23 +31,24 @@ namespace qpmad
 
             std::cout << "||| Objective = " << result << std::endl;
 
-            return(result);
+            return (result);
         }
 
 
-        void checkLagrangeMultipliers(  const Eigen::MatrixXd   &H,
-                                        const Eigen::VectorXd   &h,
-                                        const Eigen::VectorXd   &primal,
-                                        const Eigen::MatrixXd   &A,
-                                        const ActiveSet         &active_set,
-                                        const MatrixIndex       &num_simple_bounds,
-                                        const std::vector<ConstraintStatus::Status> & constraints_status,
-                                        const Eigen::VectorXd                       & dual,
-                                        const Eigen::VectorXd                       & dual_direction = Eigen::VectorXd())
+        void checkLagrangeMultipliers(
+                const Eigen::MatrixXd &H,
+                const Eigen::VectorXd &h,
+                const Eigen::VectorXd &primal,
+                const Eigen::MatrixXd &A,
+                const ActiveSet &active_set,
+                const MatrixIndex &num_simple_bounds,
+                const std::vector<ConstraintStatus::Status> &constraints_status,
+                const Eigen::VectorXd &dual,
+                const Eigen::VectorXd &dual_direction = Eigen::VectorXd())
         {
-            Eigen::MatrixXd     L = H.triangularView<Eigen::Lower>();
-            Eigen::VectorXd     v = L * L.transpose() * primal;
-            Eigen::MatrixXd     M;
+            Eigen::MatrixXd L = H.triangularView<Eigen::Lower>();
+            Eigen::VectorXd v = L * L.transpose() * primal;
+            Eigen::MatrixXd M;
 
             if (h.rows() > 0)
             {
@@ -65,7 +64,7 @@ namespace qpmad
                 if (ctr_index < num_simple_bounds)
                 {
                     M.col(i).setZero();
-                    switch(constraints_status[ctr_index])
+                    switch (constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
                             M(ctr_index, i) = -1.0;
@@ -80,14 +79,14 @@ namespace qpmad
                 }
                 else
                 {
-                    switch(constraints_status[ctr_index])
+                    switch (constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
-                            M.col(i) = -A.row(ctr_index-num_simple_bounds).transpose();
+                            M.col(i) = -A.row(ctr_index - num_simple_bounds).transpose();
                             break;
                         case ConstraintStatus::ACTIVE_UPPER_BOUND:
                         case ConstraintStatus::EQUALITY:
-                            M.col(i) = A.row(ctr_index-num_simple_bounds).transpose();
+                            M.col(i) = A.row(ctr_index - num_simple_bounds).transpose();
                             break;
                         default:
                             break;
@@ -100,39 +99,40 @@ namespace qpmad
                 Eigen::VectorXd dual_check = dec.solve(-v);
 
                 double max_diff = 0.0;
-                std::cout << "===============================[Dual variables]=================================" << std::endl;
+                std::cout << "===============================[Dual variables]================================="
+                          << std::endl;
                 for (MatrixIndex i = 0; i < active_set.size_; ++i)
                 {
                     MatrixIndex ctr_index = active_set.getIndex(i);
-                    std::cout   << " " << i;
-                    switch(constraints_status[ctr_index])
+                    std::cout << " " << i;
+                    switch (constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
-                            std::cout   << "L ";
+                            std::cout << "L ";
                             break;
                         case ConstraintStatus::ACTIVE_UPPER_BOUND:
-                            std::cout   << "U ";
+                            std::cout << "U ";
                             break;
                         case ConstraintStatus::EQUALITY:
-                            std::cout   << "E ";
+                            std::cout << "E ";
                             break;
                         default:
                             break;
                     }
 
-                    std::cout   << "dual " << dual(i) << " | "
-                                << "ref " << dual_check(i) << " | ";
+                    std::cout << "dual " << dual(i) << " | "
+                              << "ref " << dual_check(i) << " | ";
 
 
-                    switch(constraints_status[ctr_index])
+                    switch (constraints_status[ctr_index])
                     {
                         case ConstraintStatus::ACTIVE_LOWER_BOUND:
                         case ConstraintStatus::ACTIVE_UPPER_BOUND:
-                            std::cout   << "err " << std::abs(dual(i) - dual_check(i)) << " | " ;
+                            std::cout << "err " << std::abs(dual(i) - dual_check(i)) << " | ";
                             if (dual_direction.rows() > 0)
                             {
-                                std::cout   << "dir " << dual_direction(i) << " | "
-                                            << "len " << dual(i) / dual_direction(i) << std::endl;
+                                std::cout << "dir " << dual_direction(i) << " | "
+                                          << "len " << dual(i) / dual_direction(i) << std::endl;
                             }
                             else
                             {
@@ -154,27 +154,29 @@ namespace qpmad
                     }
                 }
                 std::cout << " MAX DIFF = " << max_diff << std::endl;
-                std::cout << "================================================================================" << std::endl;
+                std::cout << "================================================================================"
+                          << std::endl;
             }
         }
 
 
-        void printActiveSet(const ActiveSet                             & active_set,
-                            const std::vector<ConstraintStatus::Status> & constraints_status,
-                            const Eigen::VectorXd                       & dual)
+        void printActiveSet(
+                const ActiveSet &active_set,
+                const std::vector<ConstraintStatus::Status> &constraints_status,
+                const Eigen::VectorXd &dual)
         {
-            std::cout << "====================================[Active set]================================" << std::endl;
+            std::cout << "====================================[Active set]================================"
+                      << std::endl;
             for (MatrixIndex i = active_set.num_equalities_; i < active_set.size_; ++i)
             {
                 MatrixIndex active_ctr_index = active_set.getIndex(i);
 
-                std::cout   << " ## " << i
-                            << " ## | Index = " << active_ctr_index
-                            << " | Type = " << constraints_status[active_ctr_index]
-                            << " | Dual = " << dual(i)
-                            << std::endl;
+                std::cout << " ## " << i << " ## | Index = " << active_ctr_index
+                          << " | Type = " << constraints_status[active_ctr_index] << " | Dual = " << dual(i)
+                          << std::endl;
             }
-            std::cout << "================================================================================" << std::endl;
+            std::cout << "================================================================================"
+                      << std::endl;
         }
-    }
-}
+    }  // namespace testing
+}  // namespace qpmad

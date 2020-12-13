@@ -21,25 +21,23 @@
 
 
 #ifdef QPMAD_ENABLE_TRACING
-#define QPMAD_TRACE(info)                   std::cout << info << std::endl;
+#    define QPMAD_TRACE(info) std::cout << info << std::endl;
 #else
-#define QPMAD_TRACE(info)
+#    define QPMAD_TRACE(info)
 #endif
 
 
 namespace qpmad
 {
-    typedef     int     MatrixIndex;
+    typedef int MatrixIndex;
 
-    typedef     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>     QPMatrix;
-    typedef     Eigen::Matrix<double, Eigen::Dynamic, 1>                  QPVector;
+    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix;
+    typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector;
 
 
     template <class t_VectorType>
-        inline  void dropElementWithoutResize(  t_VectorType &vector,
-                                                const MatrixIndex index,
-                                                const MatrixIndex size)
+    inline void dropElementWithoutResize(t_VectorType &vector, const MatrixIndex index, const MatrixIndex size)
     {
-        vector.segment(index, size - index - 1) = vector.segment(index+1, size - index - 1);
+        vector.segment(index, size - index - 1) = vector.segment(index + 1, size - index - 1);
     }
-}
+}  // namespace qpmad

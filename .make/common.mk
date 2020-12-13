@@ -1,4 +1,4 @@
-FIND_QPMAD_SOURCES=find ./tests/ ./include/ -iname "*.h" -or -iname "*.cpp"
+FIND_QPMAD_SOURCES=find ./test/ ./include/ -iname "*.h" -or -iname "*.cpp"
 
 help:
 	-@grep --color -Ev "(^	)|(^$$)" Makefile
@@ -42,3 +42,5 @@ spell:
 	${FIND_QPMAD_SOURCES} \
 	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./qa/scspell.dict
 
+format:
+	${FIND_QPMAD_SOURCES} | grep -v "cpput" | grep -v "eigenut" | xargs clang-format80 -verbose -i

@@ -16,24 +16,26 @@
 
 class GivensFixture
 {
-    public:
-        qpmad::GivensRotation<double> givens;
-        double a;
-        double b;
-        qpmad::GivensRotation<double>::Type type;
-        double tolerance;
+public:
+    qpmad::GivensRotation<double> givens;
+    double a;
+    double b;
+    qpmad::GivensRotation<double>::Type type;
+    double tolerance;
 
-    public:
-        GivensFixture()
-        {
-            tolerance = 1e-12;
-        }
+public:
+    GivensFixture()
+    {
+        tolerance = 1e-12;
+    }
 
-        ~GivensFixture(){}
+    ~GivensFixture()
+    {
+    }
 };
 
 
-BOOST_FIXTURE_TEST_CASE( test_case00, GivensFixture )
+BOOST_FIXTURE_TEST_CASE(test_case00, GivensFixture)
 {
     a = 0.0;
     b = 0.0;
@@ -45,7 +47,7 @@ BOOST_FIXTURE_TEST_CASE( test_case00, GivensFixture )
 }
 
 
-BOOST_FIXTURE_TEST_CASE( test_case01, GivensFixture )
+BOOST_FIXTURE_TEST_CASE(test_case01, GivensFixture)
 {
     a = 1.0;
     b = 0.0;
@@ -57,7 +59,7 @@ BOOST_FIXTURE_TEST_CASE( test_case01, GivensFixture )
 }
 
 
-BOOST_FIXTURE_TEST_CASE( test_case02, GivensFixture )
+BOOST_FIXTURE_TEST_CASE(test_case02, GivensFixture)
 {
     a = 0.0;
     b = 1.0;
@@ -69,7 +71,7 @@ BOOST_FIXTURE_TEST_CASE( test_case02, GivensFixture )
 }
 
 
-BOOST_FIXTURE_TEST_CASE( test_case03, GivensFixture )
+BOOST_FIXTURE_TEST_CASE(test_case03, GivensFixture)
 {
     a = 1.0;
     b = 1.0;

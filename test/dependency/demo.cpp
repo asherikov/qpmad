@@ -14,14 +14,14 @@
 
 int main()
 {
-    Eigen::VectorXd         x;
-    Eigen::MatrixXd         H;
-    Eigen::VectorXd         h;
-    Eigen::MatrixXd         A;
-    Eigen::VectorXd         Alb;
-    Eigen::VectorXd         Aub;
-    Eigen::VectorXd         lb;
-    Eigen::VectorXd         ub;
+    Eigen::VectorXd x;
+    Eigen::MatrixXd H;
+    Eigen::VectorXd h;
+    Eigen::MatrixXd A;
+    Eigen::VectorXd Alb;
+    Eigen::VectorXd Aub;
+    Eigen::VectorXd lb;
+    Eigen::VectorXd ub;
 
 
     qpmad::MatrixIndex size = 20;
@@ -44,7 +44,7 @@ int main()
     ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
 
 
-    qpmad::Solver               solver;
+    qpmad::Solver solver;
 
     qpmad::Solver::ReturnStatus status = solver.solve(x, H, h, lb, ub, A, Alb, Aub);
     if (status != qpmad::Solver::OK)

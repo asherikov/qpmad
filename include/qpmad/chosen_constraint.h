@@ -15,23 +15,23 @@ namespace qpmad
 {
     class ChosenConstraint
     {
-        public:
-            double                      violation_;
-            double                      dual_;
-            MatrixIndex                 index_;
-            MatrixIndex                 general_constraint_index_;
-            bool                        is_lower_;
-            bool                        is_simple_;
+    public:
+        double violation_;
+        double dual_;
+        MatrixIndex index_;
+        MatrixIndex general_constraint_index_;
+        bool is_lower_;
+        bool is_simple_;
 
-        public:
-            void reset()
-            {
-                dual_ = 0.0;
-                violation_ = 0.0;
-                index_ = 0;
-                general_constraint_index_ = 0;
-                is_lower_ = true;
-                is_simple_ = false;
-            }
+    public:
+        void reset()
+        {
+            dual_ = 0.0;
+            violation_ = 0.0;
+            index_ = 0;
+            general_constraint_index_ = 0;
+            is_lower_ = true;
+            is_simple_ = false;
+        }
     };
-}
+}  // namespace qpmad

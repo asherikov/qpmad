@@ -14,32 +14,32 @@ namespace qpmad
 {
     class SolverParameters
     {
-        public:
-            enum HessianType
-            {
-                UNDEFINED                   = 0,
-                HESSIAN_LOWER_TRIANGULAR    = 1,
-                HESSIAN_CHOLESKY_FACTOR     = 2
-                //HESSIAN_DIAGONAL         = 1,
-            };
+    public:
+        enum HessianType
+        {
+            UNDEFINED = 0,
+            HESSIAN_LOWER_TRIANGULAR = 1,
+            HESSIAN_CHOLESKY_FACTOR = 2
+            // HESSIAN_DIAGONAL         = 1,
+        };
 
 
-        public:
-            HessianType     hessian_type_;
+    public:
+        HessianType hessian_type_;
 
-            double          tolerance_;
+        double tolerance_;
 
-            int             max_iter_;
+        int max_iter_;
 
 
-        public:
-            SolverParameters()
-            {
-                hessian_type_ = HESSIAN_LOWER_TRIANGULAR;
+    public:
+        SolverParameters()
+        {
+            hessian_type_ = HESSIAN_LOWER_TRIANGULAR;
 
-                tolerance_ = 1e-12;
+            tolerance_ = 1e-12;
 
-                max_iter_ = -1;
-            }
+            max_iter_ = -1;
+        }
     };
-}
+}  // namespace qpmad

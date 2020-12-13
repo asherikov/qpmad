@@ -30,10 +30,12 @@ struct GlobalFixtureConfig
 {
     GlobalFixtureConfig()
     {
-        //boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_successful_tests );
-        boost::unit_test::results_reporter::set_level( boost::unit_test::DETAILED_REPORT );
+        // boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_successful_tests );
+        boost::unit_test::results_reporter::set_level(boost::unit_test::DETAILED_REPORT);
     }
-    ~GlobalFixtureConfig() {}
+    ~GlobalFixtureConfig()
+    {
+    }
 };
 
 
@@ -41,6 +43,5 @@ struct GlobalFixtureConfig
 #pragma GCC diagnostic ignored "-Wpedantic"
 // Depending on Boost version a compiler may issue a warning about extra ';',
 // at the same time, compilation may fail on some systems if ';' is omitted.
-BOOST_GLOBAL_FIXTURE( GlobalFixtureConfig ) ;
+BOOST_GLOBAL_FIXTURE(GlobalFixtureConfig);
 #pragma GCC diagnostic pop
-

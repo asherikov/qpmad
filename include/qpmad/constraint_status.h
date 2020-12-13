@@ -14,15 +14,15 @@ namespace qpmad
 {
     class ConstraintStatus
     {
-        public:
-            enum Status
-            {
-                UNDEFINED           = 0,
-                INCONSISTENT        = 1,
-                EQUALITY            = 2,
-                INACTIVE            = 3,
-                ACTIVE_LOWER_BOUND  = 4,
-                ACTIVE_UPPER_BOUND  = 5
-            };
+    public:
+        enum Status
+        {
+            UNDEFINED = 0,
+            INCONSISTENT = 1,
+            EQUALITY = 2,
+            INACTIVE = 3,
+            ACTIVE_LOWER_BOUND = 4,
+            ACTIVE_UPPER_BOUND = 5
+        };
     };
-}
+}  // namespace qpmad

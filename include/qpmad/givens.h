@@ -35,148 +35,138 @@ namespace qpmad
      *  SWAP    (b != 0) && (a == 0): cos = 0, sin = 1
      */
     template <typename t_Scalar>
-        class GivensRotation
+    class GivensRotation
     {
-        public:
-            enum Type
+    public:
+        enum Type
+        {
+            NONTRIVIAL = 0,
+            COPY = 1,
+            SWAP = 2
+        };
+
+
+    public:
+        Type computeAndApply(t_Scalar &a, t_Scalar &b, const t_Scalar eps)
+        {
+            t_Scalar abs_b = std::fabs(b);
+
+            if (abs_b > eps)
             {
-                NONTRIVIAL = 0,
-                COPY = 1,
-                SWAP = 2
-            };
+                t_Scalar abs_a = std::fabs(a);
 
-
-        public:
-            Type computeAndApply(t_Scalar & a, t_Scalar & b, const t_Scalar eps)
-            {
-                t_Scalar abs_b = std::fabs(b);
-
-                if (abs_b > eps)
+                if (abs_a > eps)
                 {
-                    t_Scalar abs_a = std::fabs(a);
-
-                    if (abs_a > eps)
+                    t_Scalar t;
+                    if (abs_a > abs_b)
                     {
-                        t_Scalar t;
-                        if (abs_a > abs_b)
-                        {
-                            t = (abs_b / abs_a);
-                            t = abs_a * std::sqrt(1.0 + t * t);
-                        }
-                        else
-                        {
-                            t = (abs_a / abs_b);
-                            t = abs_b * std::sqrt(1.0 + t * t);
-                        }
-                        t = copysign(t, a);
-
-                        cos = a / t;
-                        sin = b / t;
-
-                        a = t;
-                        b = 0.0;
-
-                        type = NONTRIVIAL;
+                        t = (abs_b / abs_a);
+                        t = abs_a * std::sqrt(1.0 + t * t);
                     }
                     else
                     {
-                        //cos = 0.0;
-                        //sin = 1.0;
-                        swap(a,b);
-                        type = SWAP;
+                        t = (abs_a / abs_b);
+                        t = abs_b * std::sqrt(1.0 + t * t);
                     }
+                    t = copysign(t, a);
+
+                    cos = a / t;
+                    sin = b / t;
+
+                    a = t;
+                    b = 0.0;
+
+                    type = NONTRIVIAL;
                 }
                 else
                 {
-                    //cos = 1.0;
-                    //sin = 0.0;
-                    type = COPY;
-                }
-
-                return (type);
-            }
-
-
-            void apply(t_Scalar & a, t_Scalar & b) const
-            {
-                switch (type)
-                {
-                    case COPY:
-                        return;
-                    case SWAP:
-                        swap(a,b);
-                        return;
-                    case NONTRIVIAL:
-                        applyNonTrivial(a,b);
-                        return;
+                    // cos = 0.0;
+                    // sin = 1.0;
+                    swap(a, b);
+                    type = SWAP;
                 }
             }
-
-            template<class t_MatrixType>
-                void applyColumnWise(   t_MatrixType &M,
-                                        const int start,
-                                        const int end,
-                                        const int column_1,
-                                        const int column_2) const
+            else
             {
-                switch (type)
-                {
-                    case COPY:
-                        return;
-                    case SWAP:
-                        M.col(column_1).segment(start, end-start).swap(
-                                M.col(column_2).segment(start, end-start)   );
-                        return;
-                    case NONTRIVIAL:
-                        M.middleRows(start, end - start).transpose().applyOnTheLeft(
-                                column_1, column_2,
-                                Eigen::JacobiRotation<t_Scalar> (cos, sin));
-                        return;
-                }
+                // cos = 1.0;
+                // sin = 0.0;
+                type = COPY;
             }
 
+            return (type);
+        }
 
-            template<class t_MatrixType>
-                void applyRowWise(  t_MatrixType &M,
-                                    const int start,
-                                    const int end,
-                                    const int row_1,
-                                    const int row_2) const
+
+        void apply(t_Scalar &a, t_Scalar &b) const
+        {
+            switch (type)
             {
-                switch (type)
-                {
-                    case COPY:
-                        return;
-                    case SWAP:
-                        M.row(row_1).segment(start, end-start).swap(
-                                M.row(row_2).segment(start, end-start)   );
-                        return;
-                    case NONTRIVIAL:
-                        M.middleCols(start, end - start).applyOnTheLeft(
-                                row_1, row_2,
-                                Eigen::JacobiRotation<t_Scalar> (cos, sin));
-                        return;
-                }
+                case COPY:
+                    return;
+                case SWAP:
+                    swap(a, b);
+                    return;
+                case NONTRIVIAL:
+                    applyNonTrivial(a, b);
+                    return;
             }
+        }
 
-        private:
-            Type    type;
-            t_Scalar  cos;
-            t_Scalar  sin;
-
-
-        private:
-            inline void swap(t_Scalar & a, t_Scalar & b) const
+        template <class t_MatrixType>
+        void applyColumnWise(t_MatrixType &M, const int start, const int end, const int column_1, const int column_2)
+                const
+        {
+            switch (type)
             {
-                std::swap(a,b);
+                case COPY:
+                    return;
+                case SWAP:
+                    M.col(column_1).segment(start, end - start).swap(M.col(column_2).segment(start, end - start));
+                    return;
+                case NONTRIVIAL:
+                    M.middleRows(start, end - start)
+                            .transpose()
+                            .applyOnTheLeft(column_1, column_2, Eigen::JacobiRotation<t_Scalar>(cos, sin));
+                    return;
             }
+        }
 
-            inline void applyNonTrivial(t_Scalar & a, t_Scalar & b) const
+
+        template <class t_MatrixType>
+        void applyRowWise(t_MatrixType &M, const int start, const int end, const int row_1, const int row_2) const
+        {
+            switch (type)
             {
-                t_Scalar t1 = a;
-                t_Scalar t2 = b;
-                a = t1 * cos + t2 * sin;
-                b = - sin * t1 + cos * t2;
+                case COPY:
+                    return;
+                case SWAP:
+                    M.row(row_1).segment(start, end - start).swap(M.row(row_2).segment(start, end - start));
+                    return;
+                case NONTRIVIAL:
+                    M.middleCols(start, end - start)
+                            .applyOnTheLeft(row_1, row_2, Eigen::JacobiRotation<t_Scalar>(cos, sin));
+                    return;
             }
+        }
+
+    private:
+        Type type;
+        t_Scalar cos;
+        t_Scalar sin;
+
+
+    private:
+        inline void swap(t_Scalar &a, t_Scalar &b) const
+        {
+            std::swap(a, b);
+        }
+
+        inline void applyNonTrivial(t_Scalar &a, t_Scalar &b) const
+        {
+            t_Scalar t1 = a;
+            t_Scalar t2 = b;
+            a = t1 * cos + t2 * sin;
+            b = -sin * t1 + cos * t2;
+        }
     };
-}
+}  // namespace qpmad
