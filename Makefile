@@ -1,2 +1,2 @@
-.include "make/Makefile.common"
-.include "make/Makefile.qpmad"
+.include ".make/common.mk"
+.include ".make/qpmad.mk"
