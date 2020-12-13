@@ -1,6 +1,10 @@
 qpmad
 =====
-Travis CI: https://travis-ci.org/asherikov/qpmad [![Build Status](https://travis-ci.org/asherikov/qpmad.svg?branch=master)](https://travis-ci.org/asherikov/qpmad)
+CI status:
+<a href="https://github.com/asherikov/qpmad/actions?query=workflow%3A.github%2Fworkflows%2Fmaster.yml+branch%3Amaster">
+<img src="https://github.com/asherikov/qpmad/workflows/.github/workflows/master.yml/badge.svg?branch=master" alt="Build Status">
+</a>
+
 
 Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set
 algorithm for quadratic programming. The intended purpose of this solver is

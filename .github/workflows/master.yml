@@ -1,0 +1,57 @@
+on: [push, pull_request]
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    APT: apt install -y --no-install-recommends
+
+jobs:
+    cpp_octave:
+        runs-on: ubuntu-16.04
+        steps:
+            - uses: actions/checkout@v2
+            - run: sudo $APT libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: make test
+
+    dependency:
+        runs-on: ubuntu-16.04
+        steps:
+            - uses: actions/checkout@v2
+            - run: sudo $APT libeigen3-dev
+            - run: make build
+            - run: sudo make install
+            - run: make test_dependency
+
+    bionic_melodic_catkin_old:
+        container: ros:melodic-ros-base-bionic
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - run: |
+                source /opt/ros/melodic/setup.bash
+                make catkin_test_old ROS_DISTRO=melodic UBUNTU_DISTRO=bionic
+
+    bionic_melodic_catkin_new:
+        container: ros:melodic-ros-base-bionic
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - run: |
+                source /opt/ros/melodic/setup.bash
+                make catkin_test_new ROS_DISTRO=melodic UBUNTU_DISTRO=bionic
+
+    prerelease:
+        runs-on: ubuntu-18.04
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - run: git log --pretty=%H | sed -n '1p' > sha
+            - run: cat sha
+            - run: git branch --contains `cat sha` -a --format "%(refname:short)" | grep origin | sed "s=origin/\([[:alnum:]]\)=\1=" > branch
+            - run: cat branch
+            - run: make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=`cat branch`
+              env:
+                  CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
