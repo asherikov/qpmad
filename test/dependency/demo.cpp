@@ -47,6 +47,10 @@ int main()
     qpmad::Solver               solver;
 
     qpmad::Solver::ReturnStatus status = solver.solve(x, H, h, lb, ub, A, Alb, Aub);
+    if (status != qpmad::Solver::OK)
+    {
+        std::cerr << "Error" << std::endl;
+    }
 
     return (0);
 }
