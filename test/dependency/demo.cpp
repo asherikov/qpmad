@@ -8,6 +8,7 @@
     @brief
 */
 
+#include <iostream>
 
 #include <qpmad/solver.h>
 
