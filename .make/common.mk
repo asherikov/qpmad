@@ -1,4 +1,4 @@
-FIND_QPMAD_SOURCES=find ./test/ ./include/ -iname "*.h" -or -iname "*.cpp"
+FIND_QPMAD_SOURCES=find ./test/ ./include/ -iname "*.h" -or -iname "*.cpp" | grep -v "cpput_" | grep -v "eigenut_"
 
 help:
 	-@grep --color -Ev "(^	)|(^$$)" Makefile

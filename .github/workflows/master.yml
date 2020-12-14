@@ -62,9 +62,8 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - run: sudo apt update
-            - run: sudo apt upgrade
             - run: sudo $APT cppcheck
             - run: sudo $APT python3-pip python3-setuptools
             - run: sudo pip3 install scspell3k
             - run: make cppcheck
-#            - run: make spell
+            - run: make spell

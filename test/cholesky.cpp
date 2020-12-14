@@ -26,7 +26,7 @@ public:
 public:
     CholeskyResultFixture()
     {
-        qpmad_utils::getRandomPositiveDefinititeMatrix(M, t_size);
+        qpmad_utils::getRandomPositiveDefiniteMatrix(M, t_size);
         v.setRandom(t_size);
     }
 
