@@ -1,4 +1,5 @@
 build
+scanbuild_results
 include/qpmad/config.h
 include/qpmad/cpput*.h
 include/qpmad/eigenut*.h

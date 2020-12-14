@@ -67,3 +67,15 @@ jobs:
             - run: sudo pip3 install scspell3k
             - run: make cppcheck
             - run: make spell
+
+
+    bionic_scanbuild:
+        runs-on: ubuntu-18.04
+
+        # Install system dependencies, namely a very barebones ROS setup.
+        steps:
+            - uses: actions/checkout@v2
+            - run: sudo $APT libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: sudo $APT clang-tools-9
+            - run: make clangcheck SCANBUILD=scan-build-9
+              
