@@ -7,8 +7,11 @@ project(qpmad VERSION 1.0.2)
 # Options
 # --------------
 set(CMAKE_VERBOSE_MAKEFILE          ON)
+
 option(QPMAD_BUILD_TESTS        "Build tests"                                           OFF)
 option(QPMAD_ENABLE_TRACING     "Enable tracing"                                        OFF)
+option(QPMAD_CPP_SANITIZERS     "Enable sanitizers"                                     OFF)
+
 option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"   OFF)
 # --------------
 
@@ -29,6 +32,16 @@ set(QPMAD_SOURCE_DIR   "${PROJECT_SOURCE_DIR}/include/")
 # --------------
 include(CMakeParseArguments)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
+# --------------
+
+
+# --------------
+# C++ flags
+# --------------
+include(cmakeut_compiler_flags)
+set (CMAKEUT_CPP_SANITIZERS ${QPMAD_CPP_SANITIZERS})
+cmakeut_compiler_flags("c++11")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
 # --------------
 
 
