@@ -1,0 +1,5 @@
+set(CMAKE_BUILD_TYPE        "Debug" CACHE STRING "")
+
+set(QPMAD_BUILD_TESTS       "ON"    CACHE STRING "")
+set(QPMAD_ENABLE_TRACING    "ON"    CACHE STRING "")
+

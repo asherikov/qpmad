@@ -4,8 +4,7 @@ VERSION?="XXX__version_not_set__XXX"
 
 TYPE?=Debug
 TRACING?=OFF
-EXTRA_CMAKE_PARAM?=
-#EXTRA_CMAKE_PARAM?="-DCMAKE_CXX_COMPILER=g++"
+ROOT_DIR=../
 
 
 PKG=qpmad
@@ -21,13 +20,13 @@ CATKIN_TARGETS=all
 
 
 build:
-	${MAKE}	cmake TYPE=Release TRACING=OFF TESTS=OFF
+	${MAKE}	cmake OPTIONS=default
 
 install:
 	cd ${BUILD_DIR}; ${MAKE} install
 
 
-test: clean unit_tests_without_tracing unit_tests_with_tracing unit_tests_with_householder test_octave
+test: clean unit_tests_debug unit_tests_householder unit_tests_default test_octave
 
 test_octave:
 	cd matlab_octave; ${MAKE} octave octave_test
@@ -41,34 +40,21 @@ test_dependency: clean
 # build targets
 #----------------------------------------------
 
-build_with_householder:
-	${MAKE} cmake TYPE=Debug TRACING=OFF EXTRA_CMAKE_PARAM="-DQPMAD_USE_HOUSEHOLDER=ON"
-
-unit_tests_with_householder: build_with_householder
+unit_tests_householder:
+	${MAKE}	cmake OPTIONS=householder
 	cd ${BUILD_DIR}; ${MAKE} test
 
-
-build_without_tracing:
-	${MAKE}	cmake TYPE=Debug TRACING=OFF TESTS=ON
-
-unit_tests_without_tracing: build_without_tracing
+unit_tests_debug:
+	${MAKE}	cmake OPTIONS=debug
 	cd ${BUILD_DIR}; ${MAKE} test
 
-
-build_with_tracing:
-	${MAKE}	cmake TYPE=Debug TRACING=ON TESTS=ON
-
-unit_tests_with_tracing: build_with_tracing
+unit_tests_default:
+	${MAKE}	cmake OPTIONS=testdefault
 	cd ${BUILD_DIR}; ${MAKE} test
-
 
 cmake:
 	mkdir -p ${BUILD_DIR};
-	cd ${BUILD_DIR}; cmake .. \
-						-DQPMAD_BUILD_TESTS=${TESTS} \
-						-DCMAKE_BUILD_TYPE=${TYPE} \
-						-DQPMAD_ENABLE_TRACING=${TRACING} \
-						${EXTRA_CMAKE_PARAM}
+	cd ${BUILD_DIR}; cmake -C ${ROOT_DIR}/cmake/options_${OPTIONS}.cmake ${ROOT_DIR}
 	cd ${BUILD_DIR}; ${MAKE} ${MAKE_FLAGS}
 
 

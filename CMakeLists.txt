@@ -17,7 +17,7 @@ option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizat
 # Process options
 # --------------
 if(NOT CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE Debug)
+    set (CMAKE_BUILD_TYPE RelWithDebInfo)
 endif (NOT CMAKE_BUILD_TYPE)
 
 set(QPMAD_SOURCE_DIR   "${PROJECT_SOURCE_DIR}/include/")
