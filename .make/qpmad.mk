@@ -1,11 +1,10 @@
+ROOT_DIR=../
 BUILD_DIR?=build
 MAKE_FLAGS?=-j5
 VERSION?="XXX__version_not_set__XXX"
 
 TYPE?=Debug
 TRACING?=OFF
-ROOT_DIR=../
-
 
 PKG=qpmad
 REPO=https://github.com/asherikov/${PKG}.git

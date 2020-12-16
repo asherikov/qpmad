@@ -13,26 +13,24 @@
 #include <qpmad/common.h>
 #include <qpmad/givens.h>
 
-
-class GivensFixture
+namespace
 {
-public:
-    qpmad::GivensRotation<double> givens;
-    double a;
-    double b;
-    qpmad::GivensRotation<double>::Type type;
-    double tolerance;
-
-public:
-    GivensFixture()
+    class GivensFixture
     {
-        tolerance = 1e-12;
-    }
+    public:
+        qpmad::GivensRotation<double> givens;
+        double a;
+        double b;
+        qpmad::GivensRotation<double>::Type type;
+        double tolerance;
 
-    ~GivensFixture()
-    {
-    }
-};
+    public:
+        GivensFixture()
+        {
+            tolerance = 1e-12;
+        }
+    };
+}  // namespace
 
 
 BOOST_FIXTURE_TEST_CASE(test_case00, GivensFixture)

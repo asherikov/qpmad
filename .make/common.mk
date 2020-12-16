@@ -101,5 +101,5 @@ clangcheck:
         -enable-checker valist.CopyToSelf \
         -enable-checker valist.Uninitialized \
         -enable-checker valist.Unterminated \
-        ${MAKE} test
+		${MAKE} cmake OPTIONS=debug
 

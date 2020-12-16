@@ -5,21 +5,23 @@ defaults:
         shell: bash
 
 env:
-    APT: apt install -y --no-install-recommends
+    APT: sudo apt install -y --no-install-recommends
 
 jobs:
     cpp_octave:
         runs-on: ubuntu-16.04
         steps:
             - uses: actions/checkout@v2
-            - run: sudo $APT libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: sudo apt update
+            - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: $APT clang-tidy-8
             - run: make test
 
     dependency:
         runs-on: ubuntu-16.04
         steps:
             - uses: actions/checkout@v2
-            - run: sudo $APT libeigen3-dev
+            - run: $APT libeigen3-dev
             - run: make build
             - run: sudo make install
             - run: make test_dependency
@@ -62,8 +64,8 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - run: sudo apt update
-            - run: sudo $APT cppcheck
-            - run: sudo $APT python3-pip python3-setuptools
+            - run: $APT cppcheck
+            - run: $APT python3-pip python3-setuptools
             - run: sudo pip3 install scspell3k
             - run: make cppcheck
             - run: make spell
@@ -75,7 +77,8 @@ jobs:
         # Install system dependencies, namely a very barebones ROS setup.
         steps:
             - uses: actions/checkout@v2
-            - run: sudo $APT libboost-all-dev libeigen3-dev octave liboctave-dev
-            - run: sudo $APT clang-tools-9
+            - run: sudo apt update
+            - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: $APT clang-tidy-9
             - run: make clangcheck SCANBUILD=scan-build-9
-              
+
