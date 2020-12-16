@@ -50,11 +50,7 @@ jobs:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
-            - run: git log --pretty=%H | sed -n '1p' > sha
-            - run: cat sha
-            - run: git branch --contains `cat sha` -a --format "%(refname:short)" | grep origin | sed "s=origin/\([[:alnum:]]\)=\1=" > branch
-            - run: cat branch
-            - run: make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=`cat branch`
+            - run: make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=`git branch --show-current`
               env:
                   CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
 
