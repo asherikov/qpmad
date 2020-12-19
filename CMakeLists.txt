@@ -64,17 +64,17 @@ set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 # Packaging
 # --------------
 set(QPMAD_INCLUDE_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME})
-set(QPMAD_CMAKE_INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME}/cmake/")
+set(QPMAD_CMAKE_INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/cmake/")
 
 include(CMakePackageConfigHelpers)
-configure_package_config_file(  "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
-                                "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+configure_package_config_file(  "cmake/${PROJECT_NAME}Config.cmake.in"
+                                "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
                                 INSTALL_DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}"
                                 NO_SET_AND_CHECK_MACRO
                                 NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
 write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
     COMPATIBILITY SameMajorVersion)
 # --------------
@@ -85,9 +85,9 @@ write_basic_package_version_file(
 # --------------
 # eigenut
 option(EIGENUT_EMBEDDED "" ON)
-set(EIGENUT_EMBEDDED_ID "QPMAD_UTILS"  CACHE STRING "")
-set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${CMAKE_PROJECT_NAME}"  CACHE STRING "")
-set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "")
+set(EIGENUT_EMBEDDED_ID "QPMAD_UTILS"  CACHE STRING "" FORCE)
+set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}"  CACHE STRING "" FORCE)
+set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "" FORCE)
 add_subdirectory(eigenut)
 # --------------
 
@@ -97,8 +97,8 @@ add_subdirectory(eigenut)
 # --------------
 include_directories("${QPMAD_SOURCE_DIR}")
 
-configure_file( "${QPMAD_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/config.h.in"
-                "${QPMAD_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/config.h")
+configure_file( "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/config.h.in"
+                "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/config.h")
 
 
 get_property(QPMAD_OCTAVE_INCLUDES DIRECTORY "${PROJECT_SOURCE_DIR}" PROPERTY INCLUDE_DIRECTORIES)
@@ -124,13 +124,13 @@ endif(QPMAD_BUILD_TESTS)
 # --------------
 # Install
 # --------------
-install (FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+install (FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
          DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}/")
 
-install (FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
+install (FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
          DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}/")
 
-install (DIRECTORY "${QPMAD_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/"
+install (DIRECTORY "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/"
          DESTINATION "${QPMAD_INCLUDE_INSTALL_DESTINATION}"
          FILES_MATCHING PATTERN "*.h")
 # --------------
