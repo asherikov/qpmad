@@ -112,6 +112,18 @@ configure_file( "${PROJECT_SOURCE_DIR}/matlab_octave/make.m.in"
 
 
 # --------------
+# library
+# --------------
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE
+    "$<BUILD_INTERFACE:${QPMAD_SOURCE_DIR}>"
+    "$<INSTALL_INTERFACE:${QPMAD_INCLUDE_INSTALL_DESTINATION}/..>"
+)
+target_include_directories(${PROJECT_NAME} INTERFACE "${Eigen_INCLUDE_DIRS}")
+# --------------
+
+
+# --------------
 # tests
 # --------------
 if (QPMAD_BUILD_TESTS)
