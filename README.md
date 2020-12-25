@@ -7,9 +7,13 @@ CI status:
 
 
 Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set
-algorithm for quadratic programming. The intended purpose of this solver is
-embedded optimization for robot control, for this reason some of the
-computations are omitted as described below. The package is ROS compatible.
+algorithm for quadratic programming. The package is ROS compatible.
+
+The solver is optimized for performance, for this reason some of the
+computations are omitted as described below. See
+https://github.com/asherikov/qpmad_benchmark for comparison with `qpOASES` and
+`eiQuadProg`.
+
 
 Contents
 --------
@@ -39,6 +43,11 @@ Features:
 
 - Lazy data initialization, e.g., perform inversion of the Cholesky factor
   only if some of the constraints are activated.
+
+- Works with positive-definite problems only (add regularization if necessary).
+
+- Performs in-place factorization of Hessian and can reuse it on subsequent
+  iterations.
 
 - Does not compute value of the objective function.
 
