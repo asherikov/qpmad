@@ -45,6 +45,8 @@ set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
 # false positive (old tidy)
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-unix.Malloc")
+# Eigen issues
+set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
 cmakeut_compiler_flags("c++11")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
 # --------------

@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "common.h"
-#include "cholesky.h"
 #include "givens.h"
 #include "input_parser.h"
 #include "inverse.h"
@@ -101,7 +100,11 @@ namespace qpmad
             switch (param.hessian_type_)
             {
                 case SolverParameters::HESSIAN_LOWER_TRIANGULAR:
-                    CholeskyFactorization::compute(H);
+                {
+                    const Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(H);
+                    QPMAD_UTILS_ASSERT(
+                            Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian.");
+                }
                     // no break here!
                 case SolverParameters::HESSIAN_CHOLESKY_FACTOR:
                     break;
@@ -115,7 +118,8 @@ namespace qpmad
             // Unconstrained optimum
             if (h_size_ > 0)
             {
-                CholeskyFactorization::solve(primal, H, -h);
+                primal = H.template triangularView<Eigen::Lower>().solve(-h);
+                H.transpose().template triangularView<Eigen::Upper>().solveInPlace(primal);
             }
             else
             {

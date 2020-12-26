@@ -12,7 +12,6 @@
 
 
 #include <qpmad/common.h>
-#include <qpmad/cholesky.h>
 #include <qpmad/inverse.h>
 
 
@@ -27,7 +26,8 @@ public:
     InverseFixture()
     {
         qpmad_utils::getRandomPositiveDefiniteMatrix(M, t_size);
-        qpmad::CholeskyFactorization::compute(M);
+        Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(M);
+        (void)llt;
     }
 
 

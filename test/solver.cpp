@@ -104,6 +104,18 @@ BOOST_FIXTURE_TEST_CASE(objective03, SolverObjectiveFixture)
 }
 
 
+BOOST_FIXTURE_TEST_CASE(objective04_semidefinite, SolverObjectiveFixture)
+{
+    qpmad::MatrixIndex size = 10;
+
+    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
+    H(5,5) = 0.0;
+    h.setRandom(size);
+
+    BOOST_CHECK_THROW(status = solver.solve(x, H, h, A, Alb, Aub), std::exception);
+}
+
+
 //===========================================================================
 // SolverGeneralEqualitiesFixture
 //===========================================================================

@@ -57,8 +57,8 @@ Features:
 <a name="dependencies"></a>
 Dependencies:
 =============
-- cmake
-- Eigen
+- cmake >= 3.0
+- Eigen >= 3.3.0
 - Boost (for C++ tests)
 
 
