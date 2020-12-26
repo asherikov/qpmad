@@ -1,10 +1,10 @@
-ROOT_DIR=../
-BUILD_DIR?=build
+OPTIONS?=default
+ROOT_DIR=../../
+BUILD_DIR?=build/${OPTIONS}
 MAKE_FLAGS?=-j5
 VERSION?="XXX__version_not_set__XXX"
 
 TYPE?=Debug
-TRACING?=OFF
 
 PKG=qpmad
 REPO=https://github.com/asherikov/${PKG}.git
@@ -41,20 +41,23 @@ test_dependency: clean
 
 unit_tests_householder:
 	${MAKE}	cmake OPTIONS=householder
-	cd ${BUILD_DIR}; ${MAKE} test
+	${MAKE}	ctest OPTIONS=householder
 
 unit_tests_debug:
 	${MAKE}	cmake OPTIONS=debug
-	cd ${BUILD_DIR}; ${MAKE} test
+	${MAKE}	ctest OPTIONS=debug
 
 unit_tests_default:
 	${MAKE}	cmake OPTIONS=testdefault
-	cd ${BUILD_DIR}; ${MAKE} test
+	${MAKE}	ctest OPTIONS=testdefault
 
 cmake:
 	mkdir -p ${BUILD_DIR};
 	cd ${BUILD_DIR}; cmake -C ${ROOT_DIR}/cmake/options_${OPTIONS}.cmake ${ROOT_DIR}
 	cd ${BUILD_DIR}; ${MAKE} ${MAKE_FLAGS}
+
+ctest:
+	cd ${BUILD_DIR}; ${MAKE} test
 
 
 # utils

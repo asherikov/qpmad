@@ -25,8 +25,8 @@ int main()
     Eigen::VectorXd ub;
 
 
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_ctr = 1;
+    qpmad_utils::EigenIndex size = 20;
+    qpmad_utils::EigenIndex num_ctr = 1;
 
     H.setIdentity(size, size);
     h.setOnes(size);

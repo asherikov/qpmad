@@ -16,14 +16,14 @@ namespace qpmad
     class ActiveSet
     {
     public:
-        std::vector<MatrixIndex> active_constraints_indices_;
-        MatrixIndex size_;
-        MatrixIndex num_equalities_;
-        MatrixIndex num_inequalities_;
+        std::vector<qpmad_utils::EigenIndex> active_constraints_indices_;
+        qpmad_utils::EigenIndex size_;
+        qpmad_utils::EigenIndex num_equalities_;
+        qpmad_utils::EigenIndex num_inequalities_;
 
 
     public:
-        void initialize(const MatrixIndex max_size)
+        void initialize(const qpmad_utils::EigenIndex max_size)
         {
             active_constraints_indices_.resize(max_size);
             size_ = 0;
@@ -32,7 +32,7 @@ namespace qpmad
         }
 
 
-        MatrixIndex getIndex(const MatrixIndex index) const
+        qpmad_utils::EigenIndex getIndex(const qpmad_utils::EigenIndex index) const
         {
             return (active_constraints_indices_[index]);
         }
@@ -44,7 +44,7 @@ namespace qpmad
         }
 
 
-        void addEquality(const MatrixIndex index)
+        void addEquality(const qpmad_utils::EigenIndex index)
         {
             active_constraints_indices_[size_] = index;
             ++size_;
@@ -52,7 +52,7 @@ namespace qpmad
         }
 
 
-        void addInequality(const MatrixIndex index)
+        void addInequality(const qpmad_utils::EigenIndex index)
         {
             active_constraints_indices_[size_] = index;
             ++size_;
@@ -60,7 +60,7 @@ namespace qpmad
         }
 
 
-        void removeInequality(const MatrixIndex index)
+        void removeInequality(const qpmad_utils::EigenIndex index)
         {
             if (size_ - index > 1)
             {

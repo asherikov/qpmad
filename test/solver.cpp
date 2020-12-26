@@ -59,7 +59,7 @@ public:
 
 BOOST_FIXTURE_TEST_CASE(objective00, SolverObjectiveFixture)
 {
-    qpmad::MatrixIndex size = 50;
+    qpmad_utils::EigenIndex size = 50;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -71,7 +71,7 @@ BOOST_FIXTURE_TEST_CASE(objective00, SolverObjectiveFixture)
 
 BOOST_FIXTURE_TEST_CASE(objective01, SolverObjectiveFixture)
 {
-    qpmad::MatrixIndex size = 50;
+    qpmad_utils::EigenIndex size = 50;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -83,7 +83,7 @@ BOOST_FIXTURE_TEST_CASE(objective01, SolverObjectiveFixture)
 
 BOOST_FIXTURE_TEST_CASE(objective02, SolverObjectiveFixture)
 {
-    qpmad::MatrixIndex size = 50;
+    qpmad_utils::EigenIndex size = 50;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -94,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE(objective02, SolverObjectiveFixture)
 
 BOOST_FIXTURE_TEST_CASE(objective03, SolverObjectiveFixture)
 {
-    qpmad::MatrixIndex size = 1;
+    qpmad_utils::EigenIndex size = 1;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -106,7 +106,7 @@ BOOST_FIXTURE_TEST_CASE(objective03, SolverObjectiveFixture)
 
 BOOST_FIXTURE_TEST_CASE(objective04_semidefinite, SolverObjectiveFixture)
 {
-    qpmad::MatrixIndex size = 10;
+    qpmad_utils::EigenIndex size = 10;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H(5,5) = 0.0;
@@ -146,8 +146,8 @@ public:
 
 BOOST_FIXTURE_TEST_CASE(general_equalities00, SolverGeneralEqualitiesFixture)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 20;
+    qpmad_utils::EigenIndex size = 50;
+    qpmad_utils::EigenIndex num_ctr = 20;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -162,8 +162,8 @@ BOOST_FIXTURE_TEST_CASE(general_equalities00, SolverGeneralEqualitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(general_equalities01, SolverGeneralEqualitiesFixture)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 20;
+    qpmad_utils::EigenIndex size = 50;
+    qpmad_utils::EigenIndex num_ctr = 20;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -177,8 +177,8 @@ BOOST_FIXTURE_TEST_CASE(general_equalities01, SolverGeneralEqualitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(general_equalities02, SolverGeneralEqualitiesFixture)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 50;
+    qpmad_utils::EigenIndex size = 50;
+    qpmad_utils::EigenIndex num_ctr = 50;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -193,8 +193,8 @@ BOOST_FIXTURE_TEST_CASE(general_equalities02, SolverGeneralEqualitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(general_equalities03, SolverGeneralEqualitiesFixture)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 51;
+    qpmad_utils::EigenIndex size = 50;
+    qpmad_utils::EigenIndex num_ctr = 51;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -213,8 +213,8 @@ BOOST_FIXTURE_TEST_CASE(general_equalities03, SolverGeneralEqualitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(general_equalities04, SolverGeneralEqualitiesFixture)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 51;
+    qpmad_utils::EigenIndex size = 50;
+    qpmad_utils::EigenIndex num_ctr = 51;
 
     qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
     H_copy = H;
@@ -256,8 +256,8 @@ public:
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities00, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 1;
+    qpmad_utils::EigenIndex size = 2;
+    qpmad_utils::EigenIndex num_ctr = 1;
 
     H.setIdentity(size, size);
     h.setOnes(size);
@@ -277,8 +277,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities00, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities01, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    qpmad_utils::EigenIndex size = 2;
+    qpmad_utils::EigenIndex num_ctr = 3;
 
     H.setIdentity(size, size);
 
@@ -298,8 +298,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities01, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities02, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    qpmad_utils::EigenIndex size = 2;
+    qpmad_utils::EigenIndex num_ctr = 3;
 
     H.setIdentity(size, size);
 
@@ -319,8 +319,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities02, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities03, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    qpmad_utils::EigenIndex size = 2;
+    qpmad_utils::EigenIndex num_ctr = 3;
 
     H.setIdentity(size, size);
 
@@ -340,8 +340,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities03, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities04, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    qpmad_utils::EigenIndex size = 2;
+    qpmad_utils::EigenIndex num_ctr = 3;
 
     H.setIdentity(size, size);
 
@@ -362,8 +362,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities04, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities20, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_ctr = size;
+    qpmad_utils::EigenIndex size = 20;
+    qpmad_utils::EigenIndex num_ctr = size;
 
     H.setIdentity(size, size);
     h.setOnes(size);
@@ -385,8 +385,8 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities20, SolverGeneralInequalitiesFixture
 
 BOOST_FIXTURE_TEST_CASE(general_inequalities21, SolverGeneralInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_ctr = size + 1;
+    qpmad_utils::EigenIndex size = 20;
+    qpmad_utils::EigenIndex num_ctr = size + 1;
 
     H.setIdentity(size, size);
     h.setOnes(size);
@@ -429,7 +429,7 @@ public:
 
 BOOST_FIXTURE_TEST_CASE(simple_inequalities00, SolverSimpleInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 2;
+    qpmad_utils::EigenIndex size = 2;
 
     H.setIdentity(size, size);
     h.setOnes(size);
@@ -448,7 +448,7 @@ BOOST_FIXTURE_TEST_CASE(simple_inequalities00, SolverSimpleInequalitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(simple_inequalities20, SolverSimpleInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 20;
+    qpmad_utils::EigenIndex size = 20;
 
     H.setIdentity(size, size);
     h.setOnes(size);
@@ -469,8 +469,8 @@ BOOST_FIXTURE_TEST_CASE(simple_inequalities20, SolverSimpleInequalitiesFixture)
 
 BOOST_FIXTURE_TEST_CASE(simple_inequalities21, SolverSimpleInequalitiesFixture)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_eq_ctr = 1;
+    qpmad_utils::EigenIndex size = 20;
+    qpmad_utils::EigenIndex num_eq_ctr = 1;
 
     H.setIdentity(size, size);
     h.setOnes(size);

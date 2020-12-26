@@ -18,8 +18,8 @@ namespace qpmad
     public:
         double violation_;
         double dual_;
-        MatrixIndex index_;
-        MatrixIndex general_constraint_index_;
+        qpmad_utils::EigenIndex index_;
+        qpmad_utils::EigenIndex general_constraint_index_;
         bool is_lower_;
         bool is_simple_;
 

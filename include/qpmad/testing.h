@@ -41,7 +41,7 @@ namespace qpmad
                 const Eigen::VectorXd &primal,
                 const Eigen::MatrixXd &A,
                 const ActiveSet &active_set,
-                const MatrixIndex &num_simple_bounds,
+                const qpmad_utils::EigenIndex &num_simple_bounds,
                 const std::vector<ConstraintStatus::Status> &constraints_status,
                 const Eigen::VectorXd &dual,
                 const Eigen::VectorXd &dual_direction = Eigen::VectorXd())
@@ -57,9 +57,9 @@ namespace qpmad
 
             M.resize(primal.rows(), active_set.size_);
 
-            for (MatrixIndex i = 0; i < active_set.size_; ++i)
+            for (qpmad_utils::EigenIndex i = 0; i < active_set.size_; ++i)
             {
-                MatrixIndex ctr_index = active_set.getIndex(i);
+                qpmad_utils::EigenIndex ctr_index = active_set.getIndex(i);
 
                 if (ctr_index < num_simple_bounds)
                 {
@@ -101,9 +101,9 @@ namespace qpmad
                 double max_diff = 0.0;
                 std::cout << "===============================[Dual variables]================================="
                           << std::endl;
-                for (MatrixIndex i = 0; i < active_set.size_; ++i)
+                for (qpmad_utils::EigenIndex i = 0; i < active_set.size_; ++i)
                 {
-                    MatrixIndex ctr_index = active_set.getIndex(i);
+                    qpmad_utils::EigenIndex ctr_index = active_set.getIndex(i);
                     std::cout << " " << i;
                     switch (constraints_status[ctr_index])
                     {
@@ -167,9 +167,9 @@ namespace qpmad
         {
             std::cout << "====================================[Active set]================================"
                       << std::endl;
-            for (MatrixIndex i = active_set.num_equalities_; i < active_set.size_; ++i)
+            for (qpmad_utils::EigenIndex i = active_set.num_equalities_; i < active_set.size_; ++i)
             {
-                MatrixIndex active_ctr_index = active_set.getIndex(i);
+                qpmad_utils::EigenIndex active_ctr_index = active_set.getIndex(i);
 
                 std::cout << " ## " << i << " ## | Index = " << active_ctr_index
                           << " | Type = " << constraints_status[active_ctr_index] << " | Dual = " << dual(i)

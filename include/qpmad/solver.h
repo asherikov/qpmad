@@ -140,8 +140,8 @@ namespace qpmad
             // check consistency of general constraints and activate
             // equality constraints
             constraints_status_.resize(num_constraints_);
-            MatrixIndex num_equalities = 0;
-            for (MatrixIndex i = 0; i < num_constraints_; ++i)
+            qpmad_utils::EigenIndex num_equalities = 0;
+            for (qpmad_utils::EigenIndex i = 0; i < num_constraints_; ++i)
             {
                 chosen_ctr_.is_simple_ = i < num_simple_bounds_;
 
@@ -188,6 +188,7 @@ namespace qpmad
 
                     initializeMachineryLazy(H);
 
+
                     // if 'primal_size_' constraints are already activated
                     // all other constraints are linearly dependent
                     if (active_set_.hasEmptySpace())
@@ -229,8 +230,7 @@ namespace qpmad
 
                             continue;
                         }
-                        // otherwise -- linear dependence
-                    }
+                    } // otherwise -- linear dependence
 
                     // this point is reached if constraint is linearly dependent
 
@@ -253,10 +253,6 @@ namespace qpmad
             }
 
 
-            dual_.resize(primal_size_);
-            dual_step_direction_.resize(primal_size_);
-
-
             ReturnStatus return_status;
             chooseConstraint(primal, lb, ub, A, Alb, Aub, param.tolerance_);
 
@@ -270,7 +266,10 @@ namespace qpmad
             {
                 return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
 
+
                 initializeMachineryLazy(H);
+                dual_.resize(primal_size_);
+                dual_step_direction_.resize(primal_size_);
 
 
                 double chosen_ctr_dot_primal_step_direction = 0.0;
@@ -298,9 +297,9 @@ namespace qpmad
 
 
                     // check dual feasibility
-                    MatrixIndex dual_blocking_index = primal_size_;
+                    qpmad_utils::EigenIndex dual_blocking_index = primal_size_;
                     double dual_step_length = std::numeric_limits<double>::infinity();
-                    for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+                    for (qpmad_utils::EigenIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
                     {
                         if (dual_step_direction_(i) < -param.tolerance_)
                         {
@@ -484,7 +483,7 @@ namespace qpmad
 
 
     private:
-        MatrixIndex num_constraints_;
+        qpmad_utils::EigenIndex num_constraints_;
         bool machinery_initialized_;
 
         ActiveSet active_set_;
@@ -506,7 +505,7 @@ namespace qpmad
         template <class t_MatrixType>
         void initializeMachineryLazy(const t_MatrixType &H)
         {
-            if (false == machinery_initialized_)
+            if (not machinery_initialized_)
             {
                 active_set_.initialize(primal_size_);
                 factorization_data_.initialize(H, primal_size_);
@@ -530,7 +529,7 @@ namespace qpmad
             chosen_ctr_.reset();
 
 
-            for (MatrixIndex i = 0; i < num_simple_bounds_; ++i)
+            for (qpmad_utils::EigenIndex i = 0; i < num_simple_bounds_; ++i)
             {
                 if (ConstraintStatus::INACTIVE == constraints_status_[i])
                 {
@@ -541,7 +540,7 @@ namespace qpmad
             if ((std::abs(chosen_ctr_.violation_) < tolerance) && (num_general_constraints_ > 0))
             {
                 general_ctr_dot_primal_.noalias() = A * primal;
-                for (MatrixIndex i = num_simple_bounds_; i < num_constraints_; ++i)
+                for (qpmad_utils::EigenIndex i = num_simple_bounds_; i < num_constraints_; ++i)
                 {
                     if (ConstraintStatus::INACTIVE == constraints_status_[i])
                     {
@@ -564,7 +563,7 @@ namespace qpmad
 
 
         void checkConstraintViolation(
-                const MatrixIndex i,
+                const qpmad_utils::EigenIndex i,
                 const double lb_i,
                 const double ub_i,
                 const double ctr_i_dot_primal)

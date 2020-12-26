@@ -18,6 +18,7 @@
 
 #include "cpput_config.h"
 #include "cpput_exception.h"
+#include "eigenut_types.h"
 
 
 #ifdef QPMAD_ENABLE_TRACING
@@ -29,14 +30,14 @@
 
 namespace qpmad
 {
-    typedef int MatrixIndex;
+    typedef qpmad_utils::EigenIndex MatrixIndex; // deprecated
 
     typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix;
     typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector;
 
 
     template <class t_VectorType>
-    inline void dropElementWithoutResize(t_VectorType &vector, const MatrixIndex index, const MatrixIndex size)
+    inline void dropElementWithoutResize(t_VectorType &vector, const qpmad_utils::EigenIndex index, const qpmad_utils::EigenIndex size)
     {
         vector.segment(index, size - index - 1) = vector.segment(index + 1, size - index - 1);
     }

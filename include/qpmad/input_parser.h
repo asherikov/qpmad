@@ -15,10 +15,10 @@ namespace qpmad
     class InputParser
     {
     protected:
-        MatrixIndex primal_size_;
-        MatrixIndex h_size_;
-        MatrixIndex num_simple_bounds_;
-        MatrixIndex num_general_constraints_;
+        qpmad_utils::EigenIndex primal_size_;
+        qpmad_utils::EigenIndex h_size_;
+        qpmad_utils::EigenIndex num_simple_bounds_;
+        qpmad_utils::EigenIndex num_general_constraints_;
 
 
     protected:
