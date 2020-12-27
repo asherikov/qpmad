@@ -13,10 +13,11 @@
 
 namespace qpmad
 {
+    template<int t_primal_size>
     class ActiveSet
     {
     public:
-        std::vector<qpmad_utils::EigenIndex> active_constraints_indices_;
+        Eigen::Array<qpmad_utils::EigenIndex, t_primal_size, 1> active_constraints_indices_;
         qpmad_utils::EigenIndex size_;
         qpmad_utils::EigenIndex num_equalities_;
         qpmad_utils::EigenIndex num_inequalities_;
@@ -40,7 +41,7 @@ namespace qpmad
 
         bool hasEmptySpace() const
         {
-            return (static_cast<std::size_t>(size_) < active_constraints_indices_.size());
+            return (size_ < active_constraints_indices_.size());
         }
 
 
@@ -62,14 +63,7 @@ namespace qpmad
 
         void removeInequality(const qpmad_utils::EigenIndex index)
         {
-            if (size_ - index > 1)
-            {
-                // deactivated constraint is not the last one added
-                std::copy(
-                        active_constraints_indices_.begin() + index + 1,
-                        active_constraints_indices_.begin() + size_,
-                        active_constraints_indices_.begin() + index);
-            }
+            dropElementWithoutResize(active_constraints_indices_, index, size_);
             --size_;
             --num_inequalities_;
         }

@@ -9,7 +9,7 @@
 */
 
 #include "utf_common.h"
-
+#include <boost/mpl/vector.hpp>
 
 #include <qpmad/solver.h>
 
@@ -17,6 +17,22 @@
 // SolverObjectiveFixture
 //===========================================================================
 
+#define QPMAD_USING_PARENT_FIXTURE(Parent)                                                                             \
+    using Parent::x;                                                                                                   \
+    using Parent::H;                                                                                                   \
+    using Parent::H_copy;                                                                                              \
+    using Parent::h;                                                                                                   \
+    using Parent::A;                                                                                                   \
+    using Parent::Alb;                                                                                                 \
+    using Parent::Aub;                                                                                                 \
+    using Parent::lb;                                                                                                  \
+    using Parent::ub;                                                                                                  \
+    using Parent::solver;                                                                                              \
+    using Parent::status;                                                                                              \
+    using Parent::checkObjective;                                                                                      \
+    using Parent::initRandomHessian;
+
+template <class t_Solver>
 class SolverObjectiveFixture
 {
 public:
@@ -30,9 +46,8 @@ public:
     Eigen::VectorXd lb;
     Eigen::VectorXd ub;
 
-    qpmad::Solver solver;
-
-    qpmad::Solver::ReturnStatus status;
+    t_Solver solver;
+    typename t_Solver::ReturnStatus status;
 
 
 public:
@@ -53,66 +68,74 @@ public:
         BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
         BOOST_CHECK(tmp.norm() < g_default_tolerance);
     }
+
+    void initRandomHessian(const qpmad_utils::EigenIndex size)
+    {
+        qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
+        H_copy = H;
+    }
 };
 
 
+template <int t_primal_size>
+using TypeListObjective = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 0, 0> >;
 
-BOOST_FIXTURE_TEST_CASE(objective00, SolverObjectiveFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective00, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    checkObjective();
+    this->checkObjective();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(objective01, SolverObjectiveFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective01, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setZero(size);
+    this->initRandomHessian(size);
+    this->h.setZero(size);
 
-    checkObjective();
+    this->checkObjective();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(objective02, SolverObjectiveFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective02, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
+    this->initRandomHessian(size);
 
-    checkObjective();
+    this->checkObjective();
 }
 
-
-BOOST_FIXTURE_TEST_CASE(objective03, SolverObjectiveFixture)
+// qpmad::SolverTemplate<double, 1, 0, 0>  does not compile due to Eigen asserts
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective03, t_Solver, boost::mpl::vector<qpmad::Solver>, SolverObjectiveFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 1;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    checkObjective();
+    this->checkObjective();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(objective04_semidefinite, SolverObjectiveFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        objective04_semidefinite,
+        t_Solver,
+        TypeListObjective<50>,
+        SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 10;
+    qpmad_utils::EigenIndex size = 50;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H(5,5) = 0.0;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->H(5, 5) = 0.0;  // break positive definiteness
+    this->h.setRandom(size);
 
-    BOOST_CHECK_THROW(status = solver.solve(x, H, h, A, Alb, Aub), std::exception);
+    BOOST_CHECK_THROW(this->checkObjective(), std::exception);
 }
 
 
@@ -120,8 +143,12 @@ BOOST_FIXTURE_TEST_CASE(objective04_semidefinite, SolverObjectiveFixture)
 // SolverGeneralEqualitiesFixture
 //===========================================================================
 
-class SolverGeneralEqualitiesFixture : public SolverObjectiveFixture
+template <class t_Solver>
+class SolverGeneralEqualitiesFixture : public SolverObjectiveFixture<t_Solver>
 {
+public:
+    QPMAD_USING_PARENT_FIXTURE(SolverObjectiveFixture<t_Solver>)
+
 public:
     void checkGeneralEqualities()
     {
@@ -144,93 +171,111 @@ public:
 };
 
 
-BOOST_FIXTURE_TEST_CASE(general_equalities00, SolverGeneralEqualitiesFixture)
+template <int t_num_ctr>
+using TypeListGeneralEqualities = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 50, 0, t_num_ctr> >;
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_equalities00,
+        t_Solver,
+        TypeListGeneralEqualities<20>,
+        SolverGeneralEqualitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
     qpmad_utils::EigenIndex num_ctr = 20;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
-    Alb.setRandom(num_ctr);
+    this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->Alb.setRandom(num_ctr);
 
-    checkGeneralEqualities();
+    this->checkGeneralEqualities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_equalities01, SolverGeneralEqualitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_equalities01,
+        t_Solver,
+        TypeListGeneralEqualities<20>,
+        SolverGeneralEqualitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
     qpmad_utils::EigenIndex num_ctr = 20;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
+    this->initRandomHessian(size);
 
-    A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
-    Alb.setRandom(num_ctr);
+    this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->Alb.setRandom(num_ctr);
 
-    checkGeneralEqualities();
+    this->checkGeneralEqualities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_equalities02, SolverGeneralEqualitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_equalities02,
+        t_Solver,
+        TypeListGeneralEqualities<50>,
+        SolverGeneralEqualitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
     qpmad_utils::EigenIndex num_ctr = 50;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
-    Alb.setRandom(num_ctr);
+    this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->Alb.setRandom(num_ctr);
 
-    checkGeneralEqualities();
+    this->checkGeneralEqualities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_equalities03, SolverGeneralEqualitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_equalities03,
+        t_Solver,
+        TypeListGeneralEqualities<51>,
+        SolverGeneralEqualitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
     qpmad_utils::EigenIndex num_ctr = 51;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    A.setRandom(num_ctr, size);
-    A.topRows(size) += Eigen::MatrixXd::Identity(size, size);
-    Alb.setRandom(num_ctr);
-    Alb(num_ctr - 1) += 100.0;
+    this->A.setRandom(num_ctr, size);
+    this->A.topRows(size) += Eigen::MatrixXd::Identity(size, size);
+    this->Alb.setRandom(num_ctr);
+    this->Alb(num_ctr - 1) += 100.0;
 
-    status = solver.solve(x, H, h, A, Alb, Alb);
+    this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb, this->Alb);
 
-    BOOST_CHECK_EQUAL(status, qpmad::Solver::INFEASIBLE_EQUALITY);
+    BOOST_CHECK_EQUAL(this->status, qpmad::Solver::INFEASIBLE_EQUALITY);
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_equalities04, SolverGeneralEqualitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_equalities04,
+        t_Solver,
+        TypeListGeneralEqualities<51>,
+        SolverGeneralEqualitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 50;
     qpmad_utils::EigenIndex num_ctr = 51;
 
-    qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-    H_copy = H;
-    h.setRandom(size);
+    this->initRandomHessian(size);
+    this->h.setRandom(size);
 
-    A.setZero(num_ctr, size);
-    A.topRows(size) += Eigen::MatrixXd::Identity(size, size);
-    A(num_ctr - 1, 0) = 100.0;
-    Alb.resize(num_ctr);
-    Alb.setConstant(1.0);
-    Alb(num_ctr - 1) = 100.0;
+    this->A.setZero(num_ctr, size);
+    this->A.topRows(size) += Eigen::MatrixXd::Identity(size, size);
+    this->A(num_ctr - 1, 0) = 100.0;
+    this->Alb.resize(num_ctr);
+    this->Alb.setConstant(1.0);
+    this->Alb(num_ctr - 1) = 100.0;
 
-    status = solver.solve(x, H, h, A, Alb, Alb);
+    this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb, this->Alb);
 
-    BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
-    BOOST_CHECK(x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
+    BOOST_CHECK_EQUAL(this->status, qpmad::Solver::OK);
+    BOOST_CHECK(this->x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
 }
 
 
@@ -238,8 +283,12 @@ BOOST_FIXTURE_TEST_CASE(general_equalities04, SolverGeneralEqualitiesFixture)
 // SolverGeneralInequalitiesFixture
 //===========================================================================
 
-class SolverGeneralInequalitiesFixture : public SolverObjectiveFixture
+template <class t_Solver>
+class SolverGeneralInequalitiesFixture : public SolverObjectiveFixture<t_Solver>
 {
+public:
+    QPMAD_USING_PARENT_FIXTURE(SolverObjectiveFixture<t_Solver>)
+
 public:
     Eigen::VectorXd x_ref;
 
@@ -254,156 +303,190 @@ public:
 };
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities00, SolverGeneralInequalitiesFixture)
+template <int t_num_ctr>
+using TypeListGeneralInequalities00 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 2, 0, t_num_ctr> >;
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities00,
+        t_Solver,
+        TypeListGeneralInequalities00<1>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
     qpmad_utils::EigenIndex num_ctr = 1;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
-    A = Eigen::MatrixXd::Identity(size, size).topRows(1);
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb(0) = -10;
-    Aub(0) = -5;
+    this->A = Eigen::MatrixXd::Identity(size, size).topRows(1);
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb(0) = -10;
+    this->Aub(0) = -5;
 
-    x_ref.resize(size);
-    x_ref << -5, -1;
+    this->x_ref.resize(size);
+    this->x_ref << -5, -1;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities01, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities01,
+        t_Solver,
+        TypeListGeneralInequalities00<3>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
     qpmad_utils::EigenIndex num_ctr = 3;
 
-    H.setIdentity(size, size);
+    this->H.setIdentity(size, size);
 
-    A.resize(num_ctr, size);
-    A << 1, 0, 1, 1, 2, 0.5;
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 0, 1, 1;
-    Aub << 0, 1e10, 1e10;
+    this->A.resize(num_ctr, size);
+    this->A << 1, 0, 1, 1, 2, 0.5;
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 0, 1, 1;
+    this->Aub << 0, 1e10, 1e10;
 
-    x_ref.resize(size);
-    x_ref << 0, 2;
+    this->x_ref.resize(size);
+    this->x_ref << 0, 2;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities02, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities02,
+        t_Solver,
+        TypeListGeneralInequalities00<3>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
     qpmad_utils::EigenIndex num_ctr = 3;
 
-    H.setIdentity(size, size);
+    this->H.setIdentity(size, size);
 
-    A.resize(num_ctr, size);
-    A << 1, 0, 1, 1, 2, 0.5;
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 0, -1e10, -1e10;
-    Aub << 0, -1, -1;
+    this->A.resize(num_ctr, size);
+    this->A << 1, 0, 1, 1, 2, 0.5;
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 0, -1e10, -1e10;
+    this->Aub << 0, -1, -1;
 
-    x_ref.resize(size);
-    x_ref << 0, -2;
+    this->x_ref.resize(size);
+    this->x_ref << 0, -2;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities03, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities03,
+        t_Solver,
+        TypeListGeneralInequalities00<3>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
     qpmad_utils::EigenIndex num_ctr = 3;
 
-    H.setIdentity(size, size);
+    this->H.setIdentity(size, size);
 
-    A.resize(num_ctr, size);
-    A << 1, 0, -1, -1, -2, -0.5;
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 0, -1e10, -1e10;
-    Aub << 0, -1, -1;
+    this->A.resize(num_ctr, size);
+    this->A << 1, 0, -1, -1, -2, -0.5;
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 0, -1e10, -1e10;
+    this->Aub << 0, -1, -1;
 
-    x_ref.resize(size);
-    x_ref << 0, 2;
+    this->x_ref.resize(size);
+    this->x_ref << 0, 2;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities04, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities04,
+        t_Solver,
+        TypeListGeneralInequalities00<3>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
     qpmad_utils::EigenIndex num_ctr = 3;
 
-    H.setIdentity(size, size);
+    this->H.setIdentity(size, size);
 
-    A.resize(num_ctr, size);
-    A << 1, 0, -1, -1, -2, -0.5;
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 0, 1, 1;
-    Aub << 0, 1e10, 1e10;
+    this->A.resize(num_ctr, size);
+    this->A << 1, 0, -1, -1, -2, -0.5;
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 0, 1, 1;
+    this->Aub << 0, 1e10, 1e10;
 
-    x_ref.resize(size);
-    x_ref << 0, -2;
+    this->x_ref.resize(size);
+    this->x_ref << 0, -2;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
+template <int t_num_ctr>
+using TypeListGeneralInequalities01 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 0, t_num_ctr> >;
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities20, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities20,
+        t_Solver,
+        TypeListGeneralInequalities01<20>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 20;
     qpmad_utils::EigenIndex num_ctr = size;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
 
-    A = Eigen::MatrixXd::Identity(num_ctr, size);
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 1, 2, 3, 4, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5;
-    Aub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+    this->A = Eigen::MatrixXd::Identity(num_ctr, size);
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 1, 2, 3, 4, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+            -0.5;
+    this->Aub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
 
-    x_ref.resize(size);
-    x_ref << 1.0, 2.0, 3.0, 4.0, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
-            -0.5, -0.5;
+    this->x_ref.resize(size);
+    this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+            -0.5, -0.5, -0.5;
 
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(general_inequalities21, SolverGeneralInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities21,
+        t_Solver,
+        TypeListGeneralInequalities01<21>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 20;
     qpmad_utils::EigenIndex num_ctr = size + 1;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
 
-    A.resize(num_ctr, size);
-    A.topRows(size) = Eigen::MatrixXd::Identity(size, size);
-    A.row(num_ctr - 1).setOnes();
-    Alb.resize(num_ctr);
-    Aub.resize(num_ctr);
-    Alb << 1, 2, 3, 4, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -1.5;
-    Aub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5;
+    this->A.resize(num_ctr, size);
+    this->A.topRows(size) = Eigen::MatrixXd::Identity(size, size);
+    this->A.row(num_ctr - 1).setOnes();
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << 1, 2, 3, 4, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -1.5;
+    this->Aub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5;
 
-    x_ref.resize(size);
-    x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
+    this->x_ref.resize(size);
+    this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
             -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875;
-    checkGeneralInequalities();
+    this->checkGeneralInequalities();
 }
 
 
@@ -411,8 +494,12 @@ BOOST_FIXTURE_TEST_CASE(general_inequalities21, SolverGeneralInequalitiesFixture
 // SolverSimpleInequalitiesFixture
 //===========================================================================
 
-class SolverSimpleInequalitiesFixture : public SolverObjectiveFixture
+template <class t_Solver>
+class SolverSimpleInequalitiesFixture : public SolverObjectiveFixture<t_Solver>
 {
+public:
+    QPMAD_USING_PARENT_FIXTURE(SolverObjectiveFixture<t_Solver>)
+
 public:
     Eigen::VectorXd x_ref;
 
@@ -427,69 +514,87 @@ public:
 };
 
 
-BOOST_FIXTURE_TEST_CASE(simple_inequalities00, SolverSimpleInequalitiesFixture)
+template <int t_primal_size>
+using TypeListSolverSimpleInequalities00 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 1, 0> >;
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        simple_inequalities00,
+        t_Solver,
+        TypeListSolverSimpleInequalities00<2>,
+        SolverSimpleInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 2;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
-    lb.resize(size);
-    ub.resize(size);
-    lb << -10, -g_infinity;
-    ub << -5, g_infinity;
+    this->lb.resize(size);
+    this->ub.resize(size);
+    this->lb << -10, -g_infinity;
+    this->ub << -5, g_infinity;
 
-    x_ref.resize(size);
-    x_ref << -5, -1;
+    this->x_ref.resize(size);
+    this->x_ref << -5, -1;
 
-    checkSimpleInequalities();
+    this->checkSimpleInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(simple_inequalities20, SolverSimpleInequalitiesFixture)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        simple_inequalities20,
+        t_Solver,
+        TypeListSolverSimpleInequalities00<20>,
+        SolverSimpleInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 20;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
 
-    lb.resize(size);
-    ub.resize(size);
-    lb << 1, 2, 3, 4, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5;
-    ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+    this->lb.resize(size);
+    this->ub.resize(size);
+    this->lb << 1, 2, 3, 4, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+            -0.5;
+    this->ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
 
-    x_ref.resize(size);
-    x_ref << 1.0, 2.0, 3.0, 4.0, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
-            -0.5, -0.5;
+    this->x_ref.resize(size);
+    this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+            -0.5, -0.5, -0.5;
 
-    checkSimpleInequalities();
+    this->checkSimpleInequalities();
 }
 
 
-BOOST_FIXTURE_TEST_CASE(simple_inequalities21, SolverSimpleInequalitiesFixture)
+using TypeListSolverSimpleInequalities01 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 1> >;
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        simple_inequalities21,
+        t_Solver,
+        TypeListSolverSimpleInequalities01,
+        SolverSimpleInequalitiesFixture<t_Solver>)
 {
     qpmad_utils::EigenIndex size = 20;
     qpmad_utils::EigenIndex num_eq_ctr = 1;
 
-    H.setIdentity(size, size);
-    h.setOnes(size);
+    this->H.setIdentity(size, size);
+    this->h.setOnes(size);
 
 
-    A.resize(num_eq_ctr, size);
-    A.setOnes();
-    Alb.resize(num_eq_ctr);
-    Aub.resize(num_eq_ctr);
-    Alb << -1.5;
-    Aub << 1.5;
+    this->A.resize(num_eq_ctr, size);
+    this->A.setOnes();
+    this->Alb.resize(num_eq_ctr);
+    this->Aub.resize(num_eq_ctr);
+    this->Alb << -1.5;
+    this->Aub << 1.5;
 
-    lb.resize(size);
-    ub.resize(size);
-    lb << 1, 2, 3, 4, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5;
-    ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
+    this->lb.resize(size);
+    this->ub.resize(size);
+    this->lb << 1, 2, 3, 4, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5;
+    this->ub << 1, 2, 3, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5;
 
-    x_ref.resize(size);
-    x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
+    this->x_ref.resize(size);
+    this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
             -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875;
-    checkSimpleInequalities();
+    this->checkSimpleInequalities();
 }

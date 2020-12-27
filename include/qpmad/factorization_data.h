@@ -13,14 +13,15 @@
 
 namespace qpmad
 {
+    template <typename t_Scalar, int t_primal_size>
     class FactorizationData
     {
     public:
-        QPMatrix QLi_aka_J;
-        QPMatrix R;
+        Eigen::Matrix<t_Scalar, t_primal_size, t_primal_size> QLi_aka_J;
+        Eigen::Matrix<t_Scalar, t_primal_size, Eigen::Dynamic == t_primal_size ? Eigen::Dynamic : t_primal_size + 1> R;
         qpmad_utils::EigenIndex primal_size_;
 #ifdef QPMAD_USE_HOUSEHOLDER
-        QPMatrix householder_workspace_;
+        Eigen::Matrix<t_Scalar, t_primal_size, t_primal_size> householder_workspace_;
 #endif
         qpmad_utils::EigenIndex length_nonzero_head_d_;
 
@@ -32,7 +33,7 @@ namespace qpmad
             primal_size_ = primal_size;
 
             QLi_aka_J.resize(primal_size_, primal_size_);
-            QLi_aka_J.triangularView<Eigen::Lower>().setZero();
+            QLi_aka_J.template triangularView<Eigen::Lower>().setZero();
             TriangularInversion::compute(QLi_aka_J, H);
 
             R.resize(primal_size_, primal_size_ + 1);
@@ -75,7 +76,7 @@ namespace qpmad
 
             return (std::abs(beta) > tolerance);
 #else
-            GivensRotation<double> givens;
+            GivensRotation<t_Scalar> givens;
             if (is_simple)
             {
                 for (qpmad_utils::EigenIndex i = length_nonzero_head_d_ - 1; i > R_col;)
@@ -105,7 +106,7 @@ namespace qpmad
 
         void downdate(const qpmad_utils::EigenIndex R_col_index, const qpmad_utils::EigenIndex R_cols)
         {
-            GivensRotation<double> givens;
+            GivensRotation<t_Scalar> givens;
             for (qpmad_utils::EigenIndex i = R_col_index + 1; i < R_cols; ++i)
             {
                 givens.computeAndApply(R(i - 1, i), R(i, i), 0.0);
@@ -146,20 +147,20 @@ namespace qpmad
         }
 
 
-        template <class t_VectorType0>
-        void computeInequalityPrimalStep(t_VectorType0 &primal_step_direction, const ActiveSet &active_set)
+        template <class t_VectorType0, class t_ActiveSet>
+        void computeInequalityPrimalStep(t_VectorType0 &primal_step_direction, const t_ActiveSet &active_set)
         {
             computePrimalStepDirection(primal_step_direction, active_set.size_);
         }
 
 
 
-        template <class t_VectorType, class t_MatrixType>
+        template <class t_VectorType, class t_MatrixType, class t_ActiveSet>
         void computeInequalityDualStep(
                 t_VectorType &dual_step_direction,
                 const ChosenConstraint &chosen_ctr,
                 const t_MatrixType &A,
-                const ActiveSet &active_set)
+                const t_ActiveSet &active_set)
         {
             if (chosen_ctr.is_simple_)
             {
@@ -197,22 +198,22 @@ namespace qpmad
         }
 
 
-        template <class t_VectorType0, class t_VectorType1>
+        template <class t_VectorType0, class t_VectorType1, class t_ActiveSet>
         void updateStepsAfterPartialStep(
                 t_VectorType0 &primal_step_direction,
                 t_VectorType1 &dual_step_direction,
-                const ActiveSet &active_set)
+                const t_ActiveSet &active_set)
         {
             primal_step_direction.noalias() -= QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
             computeDualStepDirection(dual_step_direction, active_set);
         }
 
 
-        template <class t_VectorType0, class t_VectorType1>
+        template <class t_VectorType0, class t_VectorType1, class t_ActiveSet>
         void updateStepsAfterPureDualStep(
                 t_VectorType0 &primal_step_direction,
                 t_VectorType1 &dual_step_direction,
-                const ActiveSet &active_set)
+                const t_ActiveSet &active_set)
         {
             primal_step_direction.noalias() = -QLi_aka_J.col(active_set.size_) * R(active_set.size_, active_set.size_);
             computeDualStepDirection(dual_step_direction, active_set);
@@ -229,15 +230,15 @@ namespace qpmad
         }
 
 
-        template <class t_VectorType>
-        void computeDualStepDirection(t_VectorType &step_direction, const ActiveSet &active_set)
+        template <class t_VectorType, class t_ActiveSet>
+        void computeDualStepDirection(t_VectorType &step_direction, const t_ActiveSet &active_set)
         {
             step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
                     -R.block(active_set.num_equalities_,
                              active_set.num_equalities_,
                              active_set.num_inequalities_,
                              active_set.num_inequalities_)
-                             .triangularView<Eigen::Upper>()
+                             .template triangularView<Eigen::Upper>()
                              .solve(R.col(active_set.size_)
                                             .segment(active_set.num_equalities_, active_set.num_inequalities_));
         }

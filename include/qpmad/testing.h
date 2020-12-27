@@ -35,14 +35,15 @@ namespace qpmad
         }
 
 
+        template <class t_ActiveSet, class t_ConstraintStatuses>
         void checkLagrangeMultipliers(
                 const Eigen::MatrixXd &H,
                 const Eigen::VectorXd &h,
                 const Eigen::VectorXd &primal,
                 const Eigen::MatrixXd &A,
-                const ActiveSet &active_set,
+                const t_ActiveSet &active_set,
                 const qpmad_utils::EigenIndex &num_simple_bounds,
-                const std::vector<ConstraintStatus::Status> &constraints_status,
+                const t_ConstraintStatuses &constraints_status,
                 const Eigen::VectorXd &dual,
                 const Eigen::VectorXd &dual_direction = Eigen::VectorXd())
         {
@@ -160,9 +161,10 @@ namespace qpmad
         }
 
 
+        template <class t_ActiveSet, class t_ConstraintStatuses>
         void printActiveSet(
-                const ActiveSet &active_set,
-                const std::vector<ConstraintStatus::Status> &constraints_status,
+                const t_ActiveSet &active_set,
+                const t_ConstraintStatuses &constraints_status,
                 const Eigen::VectorXd &dual)
         {
             std::cout << "====================================[Active set]================================"

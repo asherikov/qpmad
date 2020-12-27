@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include "common.h"
 #include "givens.h"
 #include "input_parser.h"
@@ -29,7 +27,8 @@
 
 namespace qpmad
 {
-    class Solver : public InputParser
+    template <typename t_Scalar, int t_primal_size, int t_has_bounds, int t_general_ctr_number>
+    class SolverTemplate : public InputParser
     {
     public:
         enum ReturnStatus
@@ -41,35 +40,92 @@ namespace qpmad
             MAXIMAL_NUMBER_OF_ITERATIONS = 4
         };
 
+        template <int t_rows>
+        using Vector = Eigen::Matrix<t_Scalar, t_rows, 1>;
+        template <int t_rows, int t_cols>
+        using Matrix = Eigen::Matrix<t_Scalar, t_rows, t_cols>;
+
+
+    protected:
+        const static qpmad_utils::EigenIndex num_constraints_compile_time_ =
+                Eigen::Dynamic == t_general_ctr_number ?
+                        Eigen::Dynamic :
+                        (0 == t_has_bounds ? t_general_ctr_number :
+                                             (Eigen::Dynamic == t_primal_size ? Eigen::Dynamic :
+                                                                                t_general_ctr_number + t_primal_size));
+        qpmad_utils::EigenIndex num_constraints_;
+        bool machinery_initialized_;
+
+        ActiveSet<t_primal_size> active_set_;
+        FactorizationData<t_Scalar, t_primal_size> factorization_data_;
+
+        Vector<t_primal_size> dual_;
+
+        Vector<t_primal_size> primal_step_direction_;
+        Vector<t_primal_size> dual_step_direction_;
+
+        Vector<t_general_ctr_number> general_ctr_dot_primal_;
+
+        Eigen::Array<uint8_t, num_constraints_compile_time_, 1> constraints_status_;
+
+        ChosenConstraint chosen_ctr_;
+
+
 
     public:
+        template <
+                int t_rows_primal,
+                int t_rows_H,
+                int t_cols_H,
+                int t_rows_h,
+                int t_rows_A,
+                int t_cols_A,
+                int t_rows_Alb,
+                int t_rows_Aub>
         ReturnStatus solve(
-                QPVector &primal,
-                QPMatrix &H,
-                const QPVector &h,
-                const QPMatrix &A,
-                const QPVector &Alb,
-                const QPVector &Aub)
+                Vector<t_rows_primal> &primal,
+                Matrix<t_rows_H, t_cols_H> &H,
+                const Vector<t_rows_h> &h,
+                const Matrix<t_rows_A, t_cols_A> &A,
+                const Vector<t_rows_Alb> &Alb,
+                const Vector<t_rows_Aub> &Aub)
         {
             return (solve(primal, H, h, Eigen::VectorXd(), Eigen::VectorXd(), A, Alb, Aub, SolverParameters()));
         }
 
 
+        template <
+                int t_rows_primal,
+                int t_rows_H,
+                int t_cols_H,
+                int t_rows_h,
+                int t_rows_lb,
+                int t_rows_ub,
+                int t_rows_A,
+                int t_cols_A,
+                int t_rows_Alb,
+                int t_rows_Aub>
         ReturnStatus solve(
-                QPVector &primal,
-                QPMatrix &H,
-                const QPVector &h,
-                const QPVector &lb,
-                const QPVector &ub,
-                const QPMatrix &A,
-                const QPVector &Alb,
-                const QPVector &Aub)
+                Vector<t_rows_primal> &primal,
+                Matrix<t_rows_H, t_cols_H> &H,
+                const Vector<t_rows_h> &h,
+                const Vector<t_rows_lb> &lb,
+                const Vector<t_rows_ub> &ub,
+                const Matrix<t_rows_A, t_cols_A> &A,
+                const Vector<t_rows_Alb> &Alb,
+                const Vector<t_rows_Aub> &Aub)
         {
             return (solve(primal, H, h, lb, ub, A, Alb, Aub, SolverParameters()));
         }
 
 
-        ReturnStatus solve(QPVector &primal, QPMatrix &H, const QPVector &h, const QPVector &lb, const QPVector &ub)
+        template <int t_rows_primal, int t_rows_H, int t_cols_H, int t_rows_h, int t_rows_lb, int t_rows_ub>
+        ReturnStatus solve(
+                Vector<t_rows_primal> &primal,
+                Matrix<t_rows_H, t_cols_H> &H,
+                const Vector<t_rows_h> &h,
+                const Vector<t_rows_lb> &lb,
+                const Vector<t_rows_ub> &ub)
         {
             return (solve(
                     primal, H, h, lb, ub, Eigen::MatrixXd(), Eigen::VectorXd(), Eigen::VectorXd(), SolverParameters()));
@@ -77,15 +133,26 @@ namespace qpmad
 
 
 
+        template <
+                int t_rows_primal,
+                int t_rows_H,
+                int t_cols_H,
+                int t_rows_h,
+                int t_rows_lb,
+                int t_rows_ub,
+                int t_rows_A,
+                int t_cols_A,
+                int t_rows_Alb,
+                int t_rows_Aub>
         ReturnStatus solve(
-                QPVector &primal,
-                QPMatrix &H,
-                const QPVector &h,
-                const QPVector &lb,
-                const QPVector &ub,
-                const QPMatrix &A,
-                const QPVector &Alb,
-                const QPVector &Aub,
+                Vector<t_rows_primal> &primal,
+                Matrix<t_rows_H, t_cols_H> &H,
+                const Vector<t_rows_h> &h,
+                const Vector<t_rows_lb> &lb,
+                const Vector<t_rows_ub> &ub,
+                const Matrix<t_rows_A, t_cols_A> &A,
+                const Vector<t_rows_Alb> &Alb,
+                const Vector<t_rows_Aub> &Aub,
                 const SolverParameters &param)
         {
             QPMAD_TRACE(std::setprecision(std::numeric_limits<double>::digits10));
@@ -102,7 +169,7 @@ namespace qpmad
                 case SolverParameters::HESSIAN_LOWER_TRIANGULAR:
                 {
                     const Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(H);
-                    QPMAD_UTILS_ASSERT(
+                    QPMAD_UTILS_PERSISTENT_ASSERT(
                             Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian.");
                 }
                     // no break here!
@@ -230,7 +297,7 @@ namespace qpmad
 
                             continue;
                         }
-                    } // otherwise -- linear dependence
+                    }  // otherwise -- linear dependence
 
                     // this point is reached if constraint is linearly dependent
 
@@ -483,25 +550,6 @@ namespace qpmad
 
 
     private:
-        qpmad_utils::EigenIndex num_constraints_;
-        bool machinery_initialized_;
-
-        ActiveSet active_set_;
-        FactorizationData factorization_data_;
-
-        QPVector dual_;
-
-        QPVector primal_step_direction_;
-        QPVector dual_step_direction_;
-
-        QPVector general_ctr_dot_primal_;
-
-        std::vector<ConstraintStatus::Status> constraints_status_;
-
-        ChosenConstraint chosen_ctr_;
-
-
-    private:
         template <class t_MatrixType>
         void initializeMachineryLazy(const t_MatrixType &H)
         {
@@ -517,13 +565,20 @@ namespace qpmad
         }
 
 
+        template <
+                class t_Primal,
+                class t_LowerBounds,
+                class t_UpperBounds,
+                class t_Constraints,
+                class t_ConstraintsLowerBounds,
+                class t_ConstraintsUpperBounds>
         void chooseConstraint(
-                const QPVector &primal,
-                const QPVector &lb,
-                const QPVector &ub,
-                const QPMatrix &A,
-                const QPVector &Alb,
-                const QPVector &Aub,
+                const t_Primal &primal,
+                const t_LowerBounds &lb,
+                const t_UpperBounds &ub,
+                const t_Constraints &A,
+                const t_ConstraintsLowerBounds &Alb,
+                const t_ConstraintsUpperBounds &Aub,
                 const double tolerance)
         {
             chosen_ctr_.reset();
@@ -600,4 +655,7 @@ namespace qpmad
             }
         }
     };
+
+
+    using Solver=SolverTemplate<double, Eigen::Dynamic, 1, Eigen::Dynamic>;
 }  // namespace qpmad

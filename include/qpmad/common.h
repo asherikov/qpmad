@@ -32,13 +32,16 @@ namespace qpmad
 {
     typedef qpmad_utils::EigenIndex MatrixIndex; // deprecated
 
-    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix;
-    typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector;
+    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix; // deprecated
+    typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector; // deprecated
 
 
     template <class t_VectorType>
     inline void dropElementWithoutResize(t_VectorType &vector, const qpmad_utils::EigenIndex index, const qpmad_utils::EigenIndex size)
     {
-        vector.segment(index, size - index - 1) = vector.segment(index + 1, size - index - 1);
+        if (size - index > 1)
+        {
+            vector.segment(index, size - index - 1) = vector.segment(index + 1, size - index - 1);
+        }
     }
 }  // namespace qpmad
