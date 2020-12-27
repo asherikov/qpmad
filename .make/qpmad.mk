@@ -1,6 +1,7 @@
 OPTIONS?=default
 ROOT_DIR=../../
-BUILD_DIR?=build/${OPTIONS}
+BUILD_ROOT?=build/
+BUILD_DIR?=${BUILD_ROOT}/${OPTIONS}
 MAKE_FLAGS?=-j5
 VERSION?="XXX__version_not_set__XXX"
 
@@ -92,7 +93,7 @@ dox: doxclean clean
 #----------------------------------------------
 
 clean:
-	rm -Rf ${BUILD_DIR}
+	rm -Rf ${BUILD_ROOT}
 	rm -Rf include/qpmad/config.h
 	rm -Rf include/qpmad/eigenut*.h
 	rm -Rf debian/ obj-*/

@@ -13,6 +13,7 @@ jacobi
 lagrange
 noalias
 qpmad
+semidefinite
 setprecision
 sherikov
 stdexcept
