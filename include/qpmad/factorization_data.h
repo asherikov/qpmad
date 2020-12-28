@@ -19,16 +19,16 @@ namespace qpmad
     public:
         Eigen::Matrix<t_Scalar, t_primal_size, t_primal_size> QLi_aka_J;
         Eigen::Matrix<t_Scalar, t_primal_size, Eigen::Dynamic == t_primal_size ? Eigen::Dynamic : t_primal_size + 1> R;
-        qpmad_utils::EigenIndex primal_size_;
+        MatrixIndex primal_size_;
 #ifdef QPMAD_USE_HOUSEHOLDER
         Eigen::Matrix<t_Scalar, t_primal_size, t_primal_size> householder_workspace_;
 #endif
-        qpmad_utils::EigenIndex length_nonzero_head_d_;
+        MatrixIndex length_nonzero_head_d_;
 
 
     public:
         template <class t_MatrixType>
-        void initialize(const t_MatrixType &H, const qpmad_utils::EigenIndex primal_size)
+        void initialize(const t_MatrixType &H, const MatrixIndex primal_size)
         {
             primal_size_ = primal_size;
 
@@ -45,7 +45,7 @@ namespace qpmad
 
 
         bool update(
-                const qpmad_utils::EigenIndex R_col,
+                const MatrixIndex R_col,
 #ifdef QPMAD_USE_HOUSEHOLDER
                 const bool /*is_simple*/,
 #else
@@ -79,9 +79,9 @@ namespace qpmad
             GivensRotation<t_Scalar> givens;
             if (is_simple)
             {
-                for (qpmad_utils::EigenIndex i = length_nonzero_head_d_ - 1; i > R_col;)
+                for (MatrixIndex i = length_nonzero_head_d_ - 1; i > R_col;)
                 {
-                    qpmad_utils::EigenIndex j;
+                    MatrixIndex j;
                     for (j = i - 1; (0.0 == R(j, R_col)) && (j > R_col); --j)
                     {
                     }
@@ -92,7 +92,7 @@ namespace qpmad
             }
             else
             {
-                for (qpmad_utils::EigenIndex i = length_nonzero_head_d_ - 1; i > R_col; --i)
+                for (MatrixIndex i = length_nonzero_head_d_ - 1; i > R_col; --i)
                 {
                     givens.computeAndApply(R(i - 1, R_col), R(i, R_col), 0.0);
                     givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i - 1, i);
@@ -104,10 +104,10 @@ namespace qpmad
         }
 
 
-        void downdate(const qpmad_utils::EigenIndex R_col_index, const qpmad_utils::EigenIndex R_cols)
+        void downdate(const MatrixIndex R_col_index, const MatrixIndex R_cols)
         {
             GivensRotation<t_Scalar> givens;
-            for (qpmad_utils::EigenIndex i = R_col_index + 1; i < R_cols; ++i)
+            for (MatrixIndex i = R_col_index + 1; i < R_cols; ++i)
             {
                 givens.computeAndApply(R(i - 1, i), R(i, i), 0.0);
                 givens.applyColumnWise(QLi_aka_J, 0, primal_size_, i - 1, i);
@@ -124,8 +124,8 @@ namespace qpmad
         template <class t_VectorType>
         void computeEqualityPrimalStep(
                 t_VectorType &step_direction,
-                const qpmad_utils::EigenIndex simple_bound_index,
-                const qpmad_utils::EigenIndex active_set_size)
+                const MatrixIndex simple_bound_index,
+                const MatrixIndex active_set_size)
         {
             // vector 'd'
             R.col(active_set_size) = QLi_aka_J.row(simple_bound_index).transpose();
@@ -138,7 +138,7 @@ namespace qpmad
         void computeEqualityPrimalStep(
                 t_VectorType &step_direction,
                 const t_RowVectorType &ctr,
-                const qpmad_utils::EigenIndex active_set_size)
+                const MatrixIndex active_set_size)
         {
             // vector 'd'
             R.col(active_set_size).noalias() = QLi_aka_J.transpose() * ctr.transpose();
@@ -222,7 +222,7 @@ namespace qpmad
 
     private:
         template <class t_VectorType>
-        void computePrimalStepDirection(t_VectorType &step_direction, const qpmad_utils::EigenIndex active_set_size)
+        void computePrimalStepDirection(t_VectorType &step_direction, const MatrixIndex active_set_size)
         {
             step_direction.noalias() =
                     -QLi_aka_J.middleCols(active_set_size, length_nonzero_head_d_ - active_set_size)

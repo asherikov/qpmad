@@ -63,13 +63,13 @@ ctest:
 #----------------------------------------------
 
 addutils:
-	git remote add cmakeut https://github.com/asherikov/cmakeut --no-tags
-	git remote add eigenut https://github.com/asherikov/eigenut --no-tags
+	-git remote add cmakeut https://github.com/asherikov/cmakeut --no-tags
+	-git remote add cpput https://github.com/asherikov/cpput --no-tags
 
 updateutils:
 	git fetch --all
-	git rm --ignore-unmatch -rf eigenut
-	git read-tree --prefix=eigenut -u eigenut/master
+	git rm --ignore-unmatch -rf cpput
+	git read-tree --prefix=cpput -u cpput/master
 	git show remotes/cmakeut/master:cmake/FindEigen3.cmake                  > cmake/FindEigen3.cmake
 	git show remotes/cmakeut/master:cmake/cmakeut_compiler_flags.cmake      > cmake/cmakeut_compiler_flags.cmake
 	git show remotes/cmakeut/master:cmake/cmakeut_detect_func_macro.cmake   > cmake/cmakeut_detect_func_macro.cmake
@@ -93,10 +93,10 @@ dox: doxclean clean
 clean:
 	rm -Rf ${BUILD_ROOT}
 	rm -Rf include/qpmad/config.h
-	rm -Rf include/qpmad/eigenut*.h
+	rm -Rf include/qpmad/cpput*.h
 	rm -Rf debian/ obj-*/
 	cd matlab_octave; ${MAKE} clean
-	cd eigenut; ${MAKE} clean
+	cd cpput; ${MAKE} clean
 
 forceclean: clean
 	cd matlab_octave; ${MAKE} forceclean

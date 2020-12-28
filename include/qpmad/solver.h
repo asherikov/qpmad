@@ -47,13 +47,13 @@ namespace qpmad
 
 
     protected:
-        const static qpmad_utils::EigenIndex num_constraints_compile_time_ =
+        const static MatrixIndex num_constraints_compile_time_ =
                 Eigen::Dynamic == t_general_ctr_number ?
                         Eigen::Dynamic :
                         (0 == t_has_bounds ? t_general_ctr_number :
                                              (Eigen::Dynamic == t_primal_size ? Eigen::Dynamic :
                                                                                 t_general_ctr_number + t_primal_size));
-        qpmad_utils::EigenIndex num_constraints_;
+        MatrixIndex num_constraints_;
         bool machinery_initialized_;
 
         ActiveSet<t_primal_size> active_set_;
@@ -94,8 +94,9 @@ namespace qpmad
 
         /**
          * @brief Returns dual variables (Lagrange multipliers) corresponding
-         * to inequlity constraints. Must be called after successful `solve()`,
-         * the result is undefined if previous call to `solve()` failed.
+         * to inequality constraints. Must be called after successful
+         * `solve()`, the result is undefined if previous call to `solve()`
+         * failed.
          *
          * @tparam t_status_size
          * @tparam t_dual_size
@@ -111,16 +112,16 @@ namespace qpmad
         template <int t_status_size, int t_dual_size, int t_index_size>
         void getInequalityDual(
                 Vector<t_dual_size> &dual,
-                Eigen::Matrix<qpmad_utils::EigenIndex, t_index_size, 1> &indices,
+                Eigen::Matrix<MatrixIndex, t_index_size, 1> &indices,
                 Eigen::Matrix<bool, t_status_size, 1> &is_lower) const
         {
-            const qpmad_utils::EigenIndex size = active_set_.size_ - active_set_.num_equalities_;
+            const MatrixIndex size = active_set_.size_ - active_set_.num_equalities_;
 
             dual.resize(size);
             indices.resize(size);
             is_lower.resize(size);
 
-            for (qpmad_utils::EigenIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+            for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
             {
                 const std::size_t output_index = i - active_set_.num_equalities_;
 
@@ -266,8 +267,8 @@ namespace qpmad
             // check consistency of general constraints and activate
             // equality constraints
             constraints_status_.resize(num_constraints_);
-            qpmad_utils::EigenIndex num_equalities = 0;
-            for (qpmad_utils::EigenIndex i = 0; i < num_constraints_; ++i)
+            MatrixIndex num_equalities = 0;
+            for (MatrixIndex i = 0; i < num_constraints_; ++i)
             {
                 chosen_ctr_.is_simple_ = i < num_simple_bounds_;
 
@@ -411,7 +412,8 @@ namespace qpmad
                 }
 
 
-                for (iter_counter_ = 0; (param.max_iter_ < 0) or (iter_counter_ < param.max_iter_); ++iter_counter_)
+                // last iteration is not counted, so iter_counter_ starts with 1.
+                for (iter_counter_ = 1; (param.max_iter_ < 0) or (iter_counter_ <= param.max_iter_); ++iter_counter_)
                 {
                     QPMAD_TRACE(">>>>>>>>>" << iter_counter_ << "<<<<<<<<<");
 #ifdef QPMAD_ENABLE_TRACING
@@ -423,9 +425,9 @@ namespace qpmad
 
 
                     // check dual feasibility
-                    qpmad_utils::EigenIndex dual_blocking_index = primal_size_;
+                    MatrixIndex dual_blocking_index = primal_size_;
                     double dual_step_length = std::numeric_limits<double>::infinity();
-                    for (qpmad_utils::EigenIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+                    for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
                     {
                         if (dual_step_direction_(i) < -param.tolerance_)
                         {
@@ -643,7 +645,7 @@ namespace qpmad
             chosen_ctr_.reset();
 
 
-            for (qpmad_utils::EigenIndex i = 0; i < num_simple_bounds_; ++i)
+            for (MatrixIndex i = 0; i < num_simple_bounds_; ++i)
             {
                 if (ConstraintStatus::INACTIVE == constraints_status_[i])
                 {
@@ -654,7 +656,7 @@ namespace qpmad
             if ((std::abs(chosen_ctr_.violation_) < tolerance) && (num_general_constraints_ > 0))
             {
                 general_ctr_dot_primal_.noalias() = A * primal;
-                for (qpmad_utils::EigenIndex i = num_simple_bounds_; i < num_constraints_; ++i)
+                for (MatrixIndex i = num_simple_bounds_; i < num_constraints_; ++i)
                 {
                     if (ConstraintStatus::INACTIVE == constraints_status_[i])
                     {
@@ -677,7 +679,7 @@ namespace qpmad
 
 
         void checkConstraintViolation(
-                const qpmad_utils::EigenIndex i,
+                const MatrixIndex i,
                 const double lb_i,
                 const double ub_i,
                 const double ctr_i_dot_primal)

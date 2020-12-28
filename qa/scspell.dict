@@ -18,6 +18,7 @@ semidefinite
 setprecision
 sherikov
 stdexcept
+tparam
 typelb
 typeub
 wpedantic

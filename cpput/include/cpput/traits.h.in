@@ -1,0 +1,31 @@
+/**
+    @file
+    @author  Alexander Sherikov
+    @copyright 2020 Alexander Sherikov, Licensed under the Apache License, Version 2.0.
+    (see @ref LICENSE or http://www.apache.org/licenses/LICENSE-2.0)
+
+    @brief
+*/
+
+#pragma once
+
+
+#ifndef H_@CPPUT_ID@_TRAITS
+#define H_@CPPUT_ID@_TRAITS
+
+namespace @CPPUT_ID@
+{
+    namespace utils
+    {
+        template<class T>   struct DecayConst
+        {
+            typedef T Type;
+        };
+        template<class T>   struct DecayConst<const T>
+        {
+            typedef T Type;
+        };
+    }
+}
+
+#endif

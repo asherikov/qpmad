@@ -87,6 +87,8 @@ function(cmakeut_compiler_flags STANDARD)
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-type-vararg,-hicpp-vararg")
         # there is no from_string
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-boost-use-to-string")
+        # too common
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay")
 
         # overly restrictive fuchsia stuff
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-fuchsia-overloaded-operator,-fuchsia-multiple-inheritance,-fuchsia-statically-constructed-objects")
@@ -102,7 +104,6 @@ function(cmakeut_compiler_flags STANDARD)
         #,-modernize-avoid-c-arrays
         #,-cppcoreguidelines-pro-type-union-access
         #,-readability-simplify-boolean-expr
-        #,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay
 
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}" PARENT_SCOPE)
     endif()

@@ -83,12 +83,12 @@ write_basic_package_version_file(
 # --------------
 # Dependencies
 # --------------
-# eigenut
-option(EIGENUT_EMBEDDED "" ON)
-set(EIGENUT_EMBEDDED_ID "QPMAD_UTILS"  CACHE STRING "" FORCE)
-set(EIGENUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}"  CACHE STRING "" FORCE)
-set(EIGENUT_SELECT_HEADERS "config.h;types.h;misc.h"  CACHE STRING "" FORCE)
-add_subdirectory(eigenut)
+# cpput
+set(CPPUT_EMBEDDED      ON              CACHE BOOL "" FORCE)
+set(CPPUT_EMBEDDED_ID   "QPMAD_UTILS"   CACHE STRING "" FORCE)
+set(CPPUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}"  CACHE STRING "" FORCE)
+set(CPPUT_SELECT_HEADERS "config.h;exception.h"  CACHE STRING "" FORCE)
+add_subdirectory(cpput)
 # --------------
 
 

@@ -9,6 +9,7 @@
 */
 
 #include "utf_common.h"
+
 #include <boost/mpl/vector.hpp>
 
 #include <qpmad/solver.h>
@@ -71,7 +72,7 @@ public:
         BOOST_CHECK(tmp.norm() < g_default_tolerance);
     }
 
-    void initRandomHessian(const qpmad_utils::EigenIndex size)
+    void initRandomHessian(const qpmad::MatrixIndex size)
     {
         qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
         H_copy = H;
@@ -84,7 +85,7 @@ using TypeListObjective = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplat
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective00, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
+    qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -95,7 +96,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective00, t_Solver, TypeListObjective<50>, S
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective01, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
+    qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->h.setZero(size);
@@ -106,7 +107,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective01, t_Solver, TypeListObjective<50>, S
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective02, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
+    qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
 
@@ -116,7 +117,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective02, t_Solver, TypeListObjective<50>, S
 // qpmad::SolverTemplate<double, 1, 0, 0>  does not compile due to Eigen asserts
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective03, t_Solver, boost::mpl::vector<qpmad::Solver>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 1;
+    qpmad::MatrixIndex size = 1;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -131,7 +132,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListObjective<50>,
         SolverObjectiveFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
+    qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->H(5, 5) = 0.0;  // break positive definiteness
@@ -182,8 +183,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<20>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
-    qpmad_utils::EigenIndex num_ctr = 20;
+    qpmad::MatrixIndex size = 50;
+    qpmad::MatrixIndex num_ctr = 20;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -201,8 +202,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<20>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
-    qpmad_utils::EigenIndex num_ctr = 20;
+    qpmad::MatrixIndex size = 50;
+    qpmad::MatrixIndex num_ctr = 20;
 
     this->initRandomHessian(size);
 
@@ -219,8 +220,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<50>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
-    qpmad_utils::EigenIndex num_ctr = 50;
+    qpmad::MatrixIndex size = 50;
+    qpmad::MatrixIndex num_ctr = 50;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -238,8 +239,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<51>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
-    qpmad_utils::EigenIndex num_ctr = 51;
+    qpmad::MatrixIndex size = 50;
+    qpmad::MatrixIndex num_ctr = 51;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -261,8 +262,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<51>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 50;
-    qpmad_utils::EigenIndex num_ctr = 51;
+    qpmad::MatrixIndex size = 50;
+    qpmad::MatrixIndex num_ctr = 51;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -314,8 +315,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<1>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
-    qpmad_utils::EigenIndex num_ctr = 1;
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 1;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -339,8 +340,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
-    qpmad_utils::EigenIndex num_ctr = 3;
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 3;
 
     this->H.setIdentity(size, size);
 
@@ -364,8 +365,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
-    qpmad_utils::EigenIndex num_ctr = 3;
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 3;
 
     this->H.setIdentity(size, size);
 
@@ -389,8 +390,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
-    qpmad_utils::EigenIndex num_ctr = 3;
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 3;
 
     this->H.setIdentity(size, size);
 
@@ -414,8 +415,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
-    qpmad_utils::EigenIndex num_ctr = 3;
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 3;
 
     this->H.setIdentity(size, size);
 
@@ -442,8 +443,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities01<20>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 20;
-    qpmad_utils::EigenIndex num_ctr = size;
+    qpmad::MatrixIndex size = 20;
+    qpmad::MatrixIndex num_ctr = size;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -470,8 +471,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities01<21>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 20;
-    qpmad_utils::EigenIndex num_ctr = size + 1;
+    qpmad::MatrixIndex size = 20;
+    qpmad::MatrixIndex num_ctr = size + 1;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -525,7 +526,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities00<2>,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 2;
+    qpmad::MatrixIndex size = 2;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -548,7 +549,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities00<20>,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 20;
+    qpmad::MatrixIndex size = 20;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -576,8 +577,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities01,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad_utils::EigenIndex size = 20;
-    qpmad_utils::EigenIndex num_eq_ctr = 1;
+    qpmad::MatrixIndex size = 20;
+    qpmad::MatrixIndex num_eq_ctr = 1;
 
     this->H.setIdentity(size, size);
     this->h.setOnes(size);
@@ -601,12 +602,14 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->checkSimpleInequalities();
 
 
-    std::cout << "Number of iterations = " << this->solver.getNumberOfInequalityIterations() << std::endl;
+    BOOST_CHECK_EQUAL(1, this->solver.getNumberOfInequalityIterations());
 
     Eigen::VectorXd dual;
-    Eigen::Matrix<qpmad_utils::EigenIndex, Eigen::Dynamic, 1> indices;
+    Eigen::Matrix<qpmad::MatrixIndex, Eigen::Dynamic, 1> indices;
     Eigen::Matrix<bool, Eigen::Dynamic, 1> is_lower;
 
     this->solver.getInequalityDual(dual, indices, is_lower);
     qpmad::testing::printDualVariables(dual, indices, is_lower);
+
+    BOOST_CHECK_EQUAL(1, dual.size());
 }

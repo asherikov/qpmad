@@ -17,9 +17,7 @@
 
 #include <iostream>
 
-#include <qpmad/eigenut_config.h>
-#include <qpmad/eigenut_types.h>
-#include <qpmad/eigenut_misc.h>
+#include "eigenut_misc.h"
 
 
 const double g_default_tolerance = 1e-12;
