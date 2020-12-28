@@ -33,7 +33,7 @@ namespace qpmad
             primal_size_ = primal_size;
 
             QLi_aka_J.resize(primal_size_, primal_size_);
-            QLi_aka_J.template triangularView<Eigen::Lower>().setZero();
+            QLi_aka_J.template triangularView<Eigen::StrictlyLower>().setZero();
             TriangularInversion::compute(QLi_aka_J, H);
 
             R.resize(primal_size_, primal_size_ + 1);

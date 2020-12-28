@@ -72,6 +72,7 @@ namespace qpmad
 
         std::ptrdiff_t iter_counter_;
 
+        SolverParameters::HessianType hessian_type_;
 
 
     public:
@@ -79,6 +80,17 @@ namespace qpmad
         {
             iter_counter_ = 0;
             machinery_initialized_ = false;
+            hessian_type_ = SolverParameters::UNDEFINED;
+        }
+
+
+        /**
+         * @brief Returns type of the Hessian produced by the latest execution
+         * of `solve()`.
+         */
+        SolverParameters::HessianType getHessianType() const
+        {
+            return (hessian_type_);
         }
 
 
@@ -218,13 +230,30 @@ namespace qpmad
             QPMAD_TRACE(std::setprecision(std::numeric_limits<double>::digits10));
 
             machinery_initialized_ = false;
+            iter_counter_ = 0;
 
             parseObjective(H, h);
             parseSimpleBounds(lb, ub);
             parseGeneralConstraints(A, Alb, Aub);
 
 
-            switch (param.hessian_type_)
+            hessian_type_ = param.hessian_type_;
+            num_constraints_ = num_simple_bounds_ + num_general_constraints_;
+
+            if (0 == h_size_)
+            {
+                // trivial unconstrained optimum
+                primal.setZero(primal_size_);
+
+                if (0 == num_constraints_)
+                {
+                    // trivial solution
+                    return (OK);
+                }
+            }
+
+
+            switch (hessian_type_)
             {
                 case SolverParameters::HESSIAN_LOWER_TRIANGULAR:
                 {
@@ -233,7 +262,15 @@ namespace qpmad
                             Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian.");
                 }
                     // no break here!
+                    /* Falls through. */
                 case SolverParameters::HESSIAN_CHOLESKY_FACTOR:
+                    hessian_type_ = SolverParameters::HESSIAN_CHOLESKY_FACTOR;
+                    // unconstrained optimum
+                    if (h_size_ > 0)
+                    {
+                        primal = H.template triangularView<Eigen::Lower>().solve(-h);
+                        H.transpose().template triangularView<Eigen::Upper>().solveInPlace(primal);
+                    }
                     break;
 
                 default:
@@ -242,26 +279,11 @@ namespace qpmad
             }
 
 
-            // Unconstrained optimum
-            if (h_size_ > 0)
-            {
-                primal = H.template triangularView<Eigen::Lower>().solve(-h);
-                H.transpose().template triangularView<Eigen::Upper>().solveInPlace(primal);
-            }
-            else
-            {
-                primal.setZero(primal_size_);
-            }
-
-
-            num_constraints_ = num_simple_bounds_ + num_general_constraints_;
-
             if (0 == num_constraints_)
             {
-                // exit early -- avoid unnecessary memory allocations
+                // return unconstrained optimum
                 return (OK);
             }
-
 
 
             // check consistency of general constraints and activate

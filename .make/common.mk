@@ -1,4 +1,4 @@
-FIND_QPMAD_SOURCES=find ./matlab_octave ./test/ ./include/ -iname "*.h" -or -iname "*.cpp" | grep -v "cpput_" | grep -v "eigenut_"
+FIND_QPMAD_SOURCES=find ./matlab_octave ./test/ ./include/ -iname "*.h" -or -iname "*.cpp" | grep -v "cpput_"
 
 help:
 	-@grep --color -Ev "(^	)|(^$$)" Makefile

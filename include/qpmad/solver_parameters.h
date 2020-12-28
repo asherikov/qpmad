@@ -35,10 +35,12 @@ namespace qpmad
     public:
         SolverParameters()
         {
+            // default hessian type
             hessian_type_ = HESSIAN_LOWER_TRIANGULAR;
 
             tolerance_ = 1e-12;
 
+            // -1 -> unlimited
             max_iter_ = -1;
         }
     };
