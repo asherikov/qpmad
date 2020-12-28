@@ -70,9 +70,68 @@ namespace qpmad
 
         ChosenConstraint chosen_ctr_;
 
+        std::ptrdiff_t iter_counter_;
+
 
 
     public:
+        SolverTemplate()
+        {
+            iter_counter_ = 0;
+            machinery_initialized_ = false;
+        }
+
+
+        /**
+         * @brief Returns number of inequality iterations during the latest
+         * execution of `solve()`.
+         */
+        std::ptrdiff_t getNumberOfInequalityIterations() const
+        {
+            return (iter_counter_);
+        }
+
+
+        /**
+         * @brief Returns dual variables (Lagrange multipliers) corresponding
+         * to inequlity constraints. Must be called after successful `solve()`,
+         * the result is undefined if previous call to `solve()` failed.
+         *
+         * @tparam t_status_size
+         * @tparam t_dual_size
+         * @tparam t_index_size
+         *
+         * @param[out] dual dual variables
+         * @param[out] indices constraint indices corresponding to the dual
+         * variables, index 0 corresponds to the first simple bound if present
+         * or to the first general constraint otherwise
+         * @param[out] is_lower flags indicating if lower or upper bound is
+         * active
+         */
+        template <int t_status_size, int t_dual_size, int t_index_size>
+        void getInequalityDual(
+                Vector<t_dual_size> &dual,
+                Eigen::Matrix<qpmad_utils::EigenIndex, t_index_size, 1> &indices,
+                Eigen::Matrix<bool, t_status_size, 1> &is_lower) const
+        {
+            const qpmad_utils::EigenIndex size = active_set_.size_ - active_set_.num_equalities_;
+
+            dual.resize(size);
+            indices.resize(size);
+            is_lower.resize(size);
+
+            for (qpmad_utils::EigenIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+            {
+                const std::size_t output_index = i - active_set_.num_equalities_;
+
+                dual(output_index) = dual_(i);
+                indices(output_index) = active_set_.getIndex(i);
+                is_lower(output_index) =
+                        ConstraintStatus::ACTIVE_LOWER_BOUND == constraints_status_(indices(output_index));
+            }
+        }
+
+
         template <
                 int t_rows_primal,
                 int t_rows_H,
@@ -352,9 +411,9 @@ namespace qpmad
                 }
 
 
-                for (int iter = 0; (iter < param.max_iter_) || (param.max_iter_ < 0); ++iter)
+                for (iter_counter_ = 0; (param.max_iter_ < 0) or (iter_counter_ < param.max_iter_); ++iter_counter_)
                 {
-                    QPMAD_TRACE(">>>>>>>>>" << iter << "<<<<<<<<<");
+                    QPMAD_TRACE(">>>>>>>>>" << iter_counter_ << "<<<<<<<<<");
 #ifdef QPMAD_ENABLE_TRACING
                     testing::computeObjective(H, h, primal);
 #endif
@@ -370,7 +429,7 @@ namespace qpmad
                     {
                         if (dual_step_direction_(i) < -param.tolerance_)
                         {
-                            double dual_step_length_i = -dual_(i) / dual_step_direction_(i);
+                            const double dual_step_length_i = -dual_(i) / dual_step_direction_(i);
                             if (dual_step_length_i < dual_step_length)
                             {
                                 dual_step_length = dual_step_length_i;
@@ -657,5 +716,5 @@ namespace qpmad
     };
 
 
-    using Solver=SolverTemplate<double, Eigen::Dynamic, 1, Eigen::Dynamic>;
+    using Solver = SolverTemplate<double, Eigen::Dynamic, 1, Eigen::Dynamic>;
 }  // namespace qpmad

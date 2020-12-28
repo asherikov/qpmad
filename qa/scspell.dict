@@ -12,6 +12,7 @@ iomanip
 jacobi
 lagrange
 noalias
+ptrdiff
 qpmad
 semidefinite
 setprecision

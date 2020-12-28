@@ -180,5 +180,24 @@ namespace qpmad
             std::cout << "================================================================================"
                       << std::endl;
         }
+
+        template <class t_Dual, class t_Indices, class t_IsLower>
+        void printDualVariables(
+                const t_Dual &dual,
+                const t_Indices &indices,
+                const t_IsLower &is_lower)
+        {
+            std::cout << "================================[Dual variables]================================"
+                      << std::endl;
+            QPMAD_UTILS_PERSISTENT_ASSERT(
+                    dual.size() == indices.size() and dual.size() == is_lower.size(), "Incosistent vector length");
+            for (qpmad_utils::EigenIndex i = 0; i < dual.size(); ++i)
+            {
+                std::cout << " ## " << i << " ## | Index = " << indices(i) << " | Lower = " << is_lower(i)
+                          << " | Dual = " << dual(i) << std::endl;
+            }
+            std::cout << "================================================================================"
+                      << std::endl;
+        }
     }  // namespace testing
 }  // namespace qpmad

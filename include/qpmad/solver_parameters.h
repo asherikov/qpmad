@@ -29,7 +29,7 @@ namespace qpmad
 
         double tolerance_;
 
-        int max_iter_;
+        std::ptrdiff_t max_iter_;
 
 
     public:

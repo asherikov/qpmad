@@ -8,6 +8,7 @@ Changelog for package ariles_ros
 * Refactor API to avoid instantiation of dynamic Eigen matrices and vectors.
 * Allow specification of scalar type and problem dimensions at compilation time.
 * The source code is now dependent on C++11 features.
+* Added methods that expose number of iterations and dual variables.
 
 
 1.0.2 (2019-12-31)

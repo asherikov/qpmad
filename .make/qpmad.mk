@@ -26,7 +26,13 @@ install:
 	cd ${BUILD_DIR}; ${MAKE} install
 
 
-test: clean unit_tests_debug unit_tests_householder unit_tests_default test_octave
+test: clean
+	${MAKE} cppcheck
+	${MAKE} spell
+	${MAKE}	unit_tests OPTIONS=householder
+	${MAKE}	unit_tests OPTIONS=testdefault
+	${MAKE} unit_tests OPTIONS=debug
+	${MAKE}	test_octave
 
 test_octave:
 	cd matlab_octave; ${MAKE} octave octave_test
@@ -40,17 +46,9 @@ test_dependency: clean
 # build targets
 #----------------------------------------------
 
-unit_tests_householder:
-	${MAKE}	cmake OPTIONS=householder
-	${MAKE}	ctest OPTIONS=householder
-
-unit_tests_debug:
-	${MAKE}	cmake OPTIONS=debug
-	${MAKE}	ctest OPTIONS=debug
-
-unit_tests_default:
-	${MAKE}	cmake OPTIONS=testdefault
-	${MAKE}	ctest OPTIONS=testdefault
+unit_tests:
+	${MAKE}	cmake OPTIONS=${OPTIONS}
+	${MAKE}	ctest OPTIONS=${OPTIONS}
 
 cmake:
 	mkdir -p ${BUILD_DIR};

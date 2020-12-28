@@ -13,6 +13,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - run: sudo apt update
+            - run: $APT cppcheck
+            - run: $APT python3-pip python3-setuptools
+            - run: sudo pip3 install scspell3k
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
             - run: $APT clang-tidy-9
             - run: make test
@@ -53,18 +56,6 @@ jobs:
             - run: make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=`git branch --show-current`
               env:
                   CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
-
-
-    bionic_static_checks:
-        runs-on: ubuntu-18.04
-        steps:
-            - uses: actions/checkout@v2
-            - run: sudo apt update
-            - run: $APT cppcheck
-            - run: $APT python3-pip python3-setuptools
-            - run: sudo pip3 install scspell3k
-            - run: make cppcheck
-            - run: make spell
 
 
     bionic_scanbuild:

@@ -12,6 +12,8 @@
 #include <boost/mpl/vector.hpp>
 
 #include <qpmad/solver.h>
+#include <qpmad/testing.h>
+
 
 //===========================================================================
 // SolverObjectiveFixture
@@ -597,4 +599,14 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
             -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875;
     this->checkSimpleInequalities();
+
+
+    std::cout << "Number of iterations = " << this->solver.getNumberOfInequalityIterations() << std::endl;
+
+    Eigen::VectorXd dual;
+    Eigen::Matrix<qpmad_utils::EigenIndex, Eigen::Dynamic, 1> indices;
+    Eigen::Matrix<bool, Eigen::Dynamic, 1> is_lower;
+
+    this->solver.getInequalityDual(dual, indices, is_lower);
+    qpmad::testing::printDualVariables(dual, indices, is_lower);
 }
