@@ -54,6 +54,9 @@ Features:
 
 - Does not compute/update Lagrange multipliers for equality constraints.
 
+- Solver can be instantiated with static dimensions in order to avoid memory
+  allocations.
+
 
 <a name="dependencies"></a>
 Dependencies:
