@@ -94,7 +94,7 @@ namespace qpmad
                     }
                 }
             }
-            if (M.cols() > 0)
+            if (M.cols() > 0 and active_set.num_equalities_ < active_set.size_)
             {
                 Eigen::HouseholderQR<Eigen::MatrixXd> dec(M);
                 Eigen::VectorXd dual_check = dec.solve(-v);

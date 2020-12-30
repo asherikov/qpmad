@@ -197,6 +197,19 @@ namespace qpmad
                 Matrix<t_rows_H, t_cols_H> &H,
                 const Vector<t_rows_h> &h,
                 const Vector<t_rows_lb> &lb,
+                const Vector<t_rows_ub> &ub,
+                const SolverParameters &param)
+        {
+            return (solve(primal, H, h, lb, ub, Eigen::MatrixXd(), Eigen::VectorXd(), Eigen::VectorXd(), param));
+        }
+
+
+        template <int t_rows_primal, int t_rows_H, int t_cols_H, int t_rows_h, int t_rows_lb, int t_rows_ub>
+        ReturnStatus solve(
+                Vector<t_rows_primal> &primal,
+                Matrix<t_rows_H, t_cols_H> &H,
+                const Vector<t_rows_h> &h,
+                const Vector<t_rows_lb> &lb,
                 const Vector<t_rows_ub> &ub)
         {
             return (solve(
@@ -237,7 +250,6 @@ namespace qpmad
             parseGeneralConstraints(A, Alb, Aub);
 
 
-            hessian_type_ = param.hessian_type_;
             num_constraints_ = num_simple_bounds_ + num_general_constraints_;
 
             if (0 == h_size_)
@@ -253,7 +265,7 @@ namespace qpmad
             }
 
 
-            switch (hessian_type_)
+            switch (param.hessian_type_)
             {
                 case SolverParameters::HESSIAN_LOWER_TRIANGULAR:
                 {
@@ -270,6 +282,16 @@ namespace qpmad
                     {
                         primal = H.template triangularView<Eigen::Lower>().solve(-h);
                         H.transpose().template triangularView<Eigen::Upper>().solveInPlace(primal);
+                    }
+                    break;
+
+                case SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR:
+                    hessian_type_ = SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR;
+                    // unconstrained optimum
+                    if (h_size_ > 0)
+                    {
+                        primal_step_direction_.noalias() = H.template triangularView<Eigen::Upper>().transpose() * -h;
+                        primal.noalias() = H.template triangularView<Eigen::Upper>() * primal_step_direction_;
                     }
                     break;
 
@@ -335,7 +357,7 @@ namespace qpmad
                         chosen_ctr_.violation_ = lb_i - A.row(chosen_ctr_.general_constraint_index_) * primal;
                     }
 
-                    initializeMachineryLazy(H);
+                    initializeMachineryLazy(H, param.return_inverted_cholesky_factor_);
 
 
                     // if 'primal_size_' constraints are already activated
@@ -416,7 +438,7 @@ namespace qpmad
                 return_status = MAXIMAL_NUMBER_OF_ITERATIONS;
 
 
-                initializeMachineryLazy(H);
+                initializeMachineryLazy(H, param.return_inverted_cholesky_factor_);
                 dual_.resize(primal_size_);
                 dual_step_direction_.resize(primal_size_);
 
@@ -634,14 +656,19 @@ namespace qpmad
 
     private:
         template <class t_MatrixType>
-        void initializeMachineryLazy(const t_MatrixType &H)
+        void initializeMachineryLazy(t_MatrixType &H, const bool return_inverted_cholesky_factor)
         {
             if (not machinery_initialized_)
             {
                 active_set_.initialize(primal_size_);
-                factorization_data_.initialize(H, primal_size_);
                 primal_step_direction_.resize(primal_size_);
                 general_ctr_dot_primal_.resize(num_general_constraints_);
+
+                factorization_data_.initialize(H, hessian_type_, primal_size_, return_inverted_cholesky_factor);
+                if (return_inverted_cholesky_factor)
+                {
+                    hessian_type_ = SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR;
+                }
 
                 machinery_initialized_ = true;
             }

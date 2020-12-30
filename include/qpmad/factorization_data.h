@@ -28,13 +28,34 @@ namespace qpmad
 
     public:
         template <class t_MatrixType>
-        void initialize(const t_MatrixType &H, const MatrixIndex primal_size)
+        void initialize(
+                t_MatrixType &H,
+                const SolverParameters::HessianType hessian_type,
+                const MatrixIndex primal_size,
+                const bool return_inverted_cholesky_factor)
         {
             primal_size_ = primal_size;
 
             QLi_aka_J.resize(primal_size_, primal_size_);
             QLi_aka_J.template triangularView<Eigen::StrictlyLower>().setZero();
-            TriangularInversion::compute(QLi_aka_J, H);
+            switch (hessian_type)
+            {
+                case SolverParameters::HESSIAN_CHOLESKY_FACTOR:
+                    TriangularInversion::compute(QLi_aka_J, H);
+                    if (return_inverted_cholesky_factor)
+                    {
+                        H.template triangularView<Eigen::Upper>() = QLi_aka_J.template triangularView<Eigen::Upper>();
+                    }
+                    break;
+
+                case SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR:
+                    QLi_aka_J.template triangularView<Eigen::Upper>() = H.template triangularView<Eigen::Upper>();
+                    break;
+
+                default:
+                    QPMAD_UTILS_THROW("Unexpected Hessian type in factorization.");
+                    break;
+            }
 
             R.resize(primal_size_, primal_size_ + 1);
             length_nonzero_head_d_ = primal_size_;

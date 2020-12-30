@@ -47,7 +47,8 @@ Features:
 - Works with positive-definite problems only (add regularization if necessary).
 
 - Performs in-place factorization of Hessian and can reuse it on subsequent
-  iterations.
+  iterations. Can optionally store inverted Cholesky factor in the Hessian
+  matrix for additional performance gain.
 
 - Does not compute value of the objective function.
 

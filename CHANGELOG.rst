@@ -9,6 +9,7 @@ Changelog for package ariles_ros
 * Allow specification of scalar type and problem dimensions at compilation time.
 * The source code is now dependent on C++11 features.
 * Added methods that expose number of iterations and dual variables.
+* Added optional hot-starting with inverted Cholesky factor.
 * DANGER: Solver does not perform Cholesky factorization in some trivial cases
   anymore, i.e. the Hessian is not necessarily modified. Use `getHessianType()`
   to get the correct Hessian type when using solver with constant Hessian.
