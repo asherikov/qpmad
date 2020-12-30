@@ -34,9 +34,6 @@ namespace qpmad
         enum ReturnStatus
         {
             OK = 0,
-            INCONSISTENT = 1,
-            INFEASIBLE_EQUALITY = 2,
-            INFEASIBLE_INEQUALITY = 3,
             MAXIMAL_NUMBER_OF_ITERATIONS = 4
         };
 
@@ -335,7 +332,7 @@ namespace qpmad
                 if (lb_i - param.tolerance_ > ub_i)
                 {
                     constraints_status_[i] = ConstraintStatus::INCONSISTENT;
-                    return (INCONSISTENT);
+                    QPMAD_UTILS_THROW("Inconsistent constraints (lb > ub).");
                 }
 
                 if (std::abs(lb_i - ub_i) > param.tolerance_)
@@ -410,7 +407,7 @@ namespace qpmad
                     {
                         // nope it is not
                         constraints_status_[i] = ConstraintStatus::INCONSISTENT;
-                        return (INFEASIBLE_EQUALITY);
+                        QPMAD_UTILS_THROW("Infeasible equality constraints");
                     }
                     // otherwise keep going
                 }
@@ -603,8 +600,7 @@ namespace qpmad
                     {
                         if (dual_blocking_index == primal_size_)
                         {
-                            return_status = INFEASIBLE_INEQUALITY;
-                            break;
+                            QPMAD_UTILS_THROW("Infeasible inequality constraints.");
                         }
                         else
                         {

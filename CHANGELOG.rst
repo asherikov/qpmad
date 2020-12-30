@@ -13,6 +13,10 @@ Changelog for package ariles_ros
 * DANGER: Solver does not perform Cholesky factorization in some trivial cases
   anymore, i.e. the Hessian is not necessarily modified. Use `getHessianType()`
   to get the correct Hessian type when using solver with constant Hessian.
+* DANGER: Solver does not return error codes anymore, exceptions are used
+  instead in order to make error handling consistent (some errors used to be
+  exceptions in older versions as well). The return codes are: OK,
+  MAXIMAL_NUMBER_OF_ITERATIONS.
 
 
 1.0.2 (2019-12-31)

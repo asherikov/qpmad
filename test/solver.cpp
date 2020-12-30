@@ -115,7 +115,11 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective02, t_Solver, TypeListObjective<50>, S
 }
 
 // qpmad::SolverTemplate<double, 1, 0, 0>  does not compile due to Eigen asserts
-BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective03, t_Solver, boost::mpl::vector<qpmad::Solver>, SolverObjectiveFixture<t_Solver>)
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        objective03,
+        t_Solver,
+        boost::mpl::vector<qpmad::Solver>,
+        SolverObjectiveFixture<t_Solver>)
 {
     qpmad::MatrixIndex size = 1;
 
@@ -250,9 +254,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->Alb.setRandom(num_ctr);
     this->Alb(num_ctr - 1) += 100.0;
 
-    this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb, this->Alb);
-
-    BOOST_CHECK_EQUAL(this->status, qpmad::Solver::INFEASIBLE_EQUALITY);
+    // Infeasible equalities
+    BOOST_CHECK_THROW(
+            this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb, this->Alb),
+            std::exception);
 }
 
 
@@ -307,7 +312,8 @@ public:
 
 
 template <int t_num_ctr>
-using TypeListGeneralInequalities00 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 2, 0, t_num_ctr> >;
+using TypeListGeneralInequalities00 =
+        boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 2, 0, t_num_ctr> >;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         general_inequalities00,
@@ -435,7 +441,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 
 
 template <int t_num_ctr>
-using TypeListGeneralInequalities01 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 0, t_num_ctr> >;
+using TypeListGeneralInequalities01 =
+        boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 0, t_num_ctr> >;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         general_inequalities20,
@@ -518,7 +525,8 @@ public:
 
 
 template <int t_primal_size>
-using TypeListSolverSimpleInequalities00 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 1, 0> >;
+using TypeListSolverSimpleInequalities00 =
+        boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 1, 0> >;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         simple_inequalities00,
