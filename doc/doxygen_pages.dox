@@ -13,3 +13,10 @@
  *
  * @include demo.cpp
  */
+
+
+/**
+ * @page CHANGELOG Changelog
+ *
+ * @include CHANGELOG.rst
+ */

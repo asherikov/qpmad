@@ -2,6 +2,9 @@
 Changelog for package ariles_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2021-01-18)
+------------------
+
 * Use Eigen Cholesky decomposition instead of a custom one, detect
   semi-definite Hessians. This change introduces dependency on Eigen 3.3, use
   older version of `qpmad` if not available.

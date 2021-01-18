@@ -815,6 +815,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../README.md \
                          ../LICENSE \
+                         ../CHANGELOG.rst \
                          ../include \
                          ../test/dependency/demo.cpp \
                          ./doxygen_pages.dox
@@ -935,6 +936,7 @@ EXCLUDE_SYMBOLS        =
 # command).
 
 EXAMPLE_PATH           = ../LICENSE \
+                         ../CHANGELOG.rst \
                          ../test/dependency/demo.cpp
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
