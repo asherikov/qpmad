@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ok',['OK',['../classqpmad_1_1Solver.html#a13439c9649ea5dc5ca89228229847c83a0db75f137928d918785b93bc67ad6eee',1,'qpmad::Solver']]]
+  ['ok',['OK',['../classqpmad_1_1SolverTemplate.html#a698a535ba2b627cee28ad46027ab3f4ba50af1055074bd82afc1b9ed517b01b83',1,'qpmad::SolverTemplate']]]
 ];

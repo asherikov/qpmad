@@ -66,9 +66,10 @@ $(function() {
 <div class="title">qpmad </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Travis CI: <a href="https://travis-ci.org/asherikov/qpmad">https://travis-ci.org/asherikov/qpmad</a> <a href="https://travis-ci.org/asherikov/qpmad"><img src="https://travis-ci.org/asherikov/qpmad.svg?branch=master" alt="Build Status" class="inline"/>
-</a></p>
-<p>Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set algorithm for quadratic programming. The intended purpose of this solver is embedded optimization for robot control, for this reason some of the computations are omitted as described below. The package is ROS compatible.</p>
+<div class="textblock"><p>CI status: <a href="https://github.com/asherikov/qpmad/actions?query=workflow%3A.github%2Fworkflows%2Fmaster.yml+branch%3Amaster"><img src="https://github.com/asherikov/qpmad/workflows/.github/workflows/master.yml/badge.svg?branch=master" alt="Build Status" class="inline"/>
+ </a></p>
+<p>Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set algorithm for quadratic programming. The package is ROS compatible.</p>
+<p>The solver is optimized for performance, for this reason some of the computations are omitted as described below. See <a href="https://github.com/asherikov/qpmad_benchmark">https://github.com/asherikov/qpmad_benchmark</a> for comparison with <code>qpOASES</code> and <code>eiQuadProg</code>.</p>
 <h2>Contents </h2>
 <ul>
 <li><a href="#links">Links</a></li>
@@ -88,13 +89,17 @@ $(function() {
 <li>Double sided inequality constraints: <code>lb &lt;= A*x &lt;= ub</code>. Such constraints can be handled in a more efficient way than <code>lb &lt;= A*x</code> commonly used in other implementations of the algorithm.</li>
 <li>Simple bounds: <code>lb &lt;= x &lt;= ub</code>.</li>
 <li>Lazy data initialization, e.g., perform inversion of the Cholesky factor only if some of the constraints are activated.</li>
+<li>Works with positive-definite problems only (add regularization if necessary).</li>
+<li>Performs in-place factorization of Hessian and can reuse it on subsequent iterations. Can optionally store inverted Cholesky factor in the Hessian matrix for additional performance gain.</li>
 <li>Does not compute value of the objective function.</li>
 <li>Does not compute/update Lagrange multipliers for equality constraints.</li>
+<li>Solver can be instantiated with static dimensions in order to avoid memory allocations.</li>
 </ul>
 <p><a class="anchor" id="dependencies"></a> </p><h1>Dependencies: </h1>
 <ul>
-<li>cmake</li>
-<li>Eigen</li>
+<li>C++11 compatible compiler</li>
+<li>cmake &gt;= 3.0</li>
+<li>Eigen &gt;= 3.3.0</li>
 <li>Boost (for C++ tests)</li>
 </ul>
 <p><a class="anchor" id="notes"></a> </p><h1>Notes: </h1>

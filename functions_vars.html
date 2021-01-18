@@ -66,20 +66,20 @@ $(function() {
 
 <h3><a id="index_a"></a>- a -</h3><ul>
 <li>active_constraints_indices_
-: <a class="el" href="classqpmad_1_1ActiveSet.html#afe27561df72290067e3184c2a275fe3f">qpmad::ActiveSet</a>
+: <a class="el" href="classqpmad_1_1ActiveSet.html#af851c0ebbf32dd42d290771c93e32f26">qpmad::ActiveSet&lt; t_primal_size &gt;</a>
 </li>
 <li>active_set_
-: <a class="el" href="classqpmad_1_1Solver.html#aba49261c03858bc0c2f0ade968c81630">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a9c27cf29be94ac3dde03f439610f00ef">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>chosen_ctr_
-: <a class="el" href="classqpmad_1_1Solver.html#a5296e309ad72989b4c0ac5daf0a57701">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a9012494fd770b5c4fbded064c7e6f693">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 <li>constraints_status_
-: <a class="el" href="classqpmad_1_1Solver.html#a63a1c0487a1019f5e61f6bd8c626c0d3">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#aac1f677fb7168414595724c009fb60ee">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 <li>cos
 : <a class="el" href="classqpmad_1_1GivensRotation.html#af70f7ca66418f8a00d0d261a1ba30a7b">qpmad::GivensRotation&lt; t_Scalar &gt;</a>
@@ -90,20 +90,17 @@ $(function() {
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>dual_
 : <a class="el" href="classqpmad_1_1ChosenConstraint.html#ad53c5a375e1b31071cf2a8080eb16366">qpmad::ChosenConstraint</a>
-, <a class="el" href="classqpmad_1_1Solver.html#a56e963b27b9402df7ec0f62e2f2f1993">qpmad::Solver</a>
+, <a class="el" href="classqpmad_1_1SolverTemplate.html#a2d8f53fa118d1648e9b54c83805a35bc">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 <li>dual_step_direction_
-: <a class="el" href="classqpmad_1_1Solver.html#afffa8b667e3264f4bf65646d878181c7">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a4fef745962745443b696666658abcd10">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_f"></a>- f -</h3><ul>
 <li>factorization_data_
-: <a class="el" href="classqpmad_1_1Solver.html#a89ec2e1687b3fa7cdce4e9eca287a58b">qpmad::Solver</a>
-</li>
-<li>first_index_
-: <a class="el" href="classqpmad__utils_1_1SelectionMatrix.html#a50f37260c7fa247e1523e2c240914cae">qpmad_utils::SelectionMatrix</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a164133c0c47b569dd2f5ffc7f5a04708">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
@@ -113,7 +110,7 @@ $(function() {
 : <a class="el" href="classqpmad_1_1ChosenConstraint.html#a009d61be24f6602467e23ab8a431d20f">qpmad::ChosenConstraint</a>
 </li>
 <li>general_ctr_dot_primal_
-: <a class="el" href="classqpmad_1_1Solver.html#ae02b3f34be9a642f1b57691f266760d0">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a9766fa34dd7b0e86bc7bd892fbf89773">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
@@ -124,6 +121,7 @@ $(function() {
 </li>
 <li>hessian_type_
 : <a class="el" href="classqpmad_1_1SolverParameters.html#a6bd1ca6bfe264123cca7ee531eec0ffe">qpmad::SolverParameters</a>
+, <a class="el" href="classqpmad_1_1SolverTemplate.html#a447f62cac3cab1b98fc96e25a31586a9">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
@@ -138,38 +136,44 @@ $(function() {
 <li>is_simple_
 : <a class="el" href="classqpmad_1_1ChosenConstraint.html#a3491ac6647bd8f7f0d7f22f893b377ce">qpmad::ChosenConstraint</a>
 </li>
+<li>iter_counter_
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a8381a8c4ddd3d45a2839c80791875463">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
+</li>
 </ul>
 
 
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>length_nonzero_head_d_
-: <a class="el" href="classqpmad_1_1FactorizationData.html#a7c2b55a5b480a192048a759780d8b083">qpmad::FactorizationData</a>
+: <a class="el" href="classqpmad_1_1FactorizationData.html#a35c4d917b1a0fd1b53385f4e73e5fbaf">qpmad::FactorizationData&lt; t_Scalar, t_primal_size &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_m"></a>- m -</h3><ul>
 <li>machinery_initialized_
-: <a class="el" href="classqpmad_1_1Solver.html#a01b01e9ccf4245ed06bd92d466685b49">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#ad6da3a4c8f293c57571e6c1e1b84b229">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 <li>max_iter_
-: <a class="el" href="classqpmad_1_1SolverParameters.html#a1cfd3c09c18eb6a09b144ffbe08a27a1">qpmad::SolverParameters</a>
+: <a class="el" href="classqpmad_1_1SolverParameters.html#a2ffde5050feb736adb1f3029b6588c3f">qpmad::SolverParameters</a>
 </li>
 </ul>
 
 
 <h3><a id="index_n"></a>- n -</h3><ul>
 <li>num_constraints_
-: <a class="el" href="classqpmad_1_1Solver.html#a20d803c947a74fe0a7700232a36ec073">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a8e47c3e4b18b11fcc04b7479c1f22626">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
+</li>
+<li>num_constraints_compile_time_
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#a05d7824c546a6e61aad5773db68d9bda">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 <li>num_equalities_
-: <a class="el" href="classqpmad_1_1ActiveSet.html#a66be4509fce416357aa23b68bd5db3c8">qpmad::ActiveSet</a>
+: <a class="el" href="classqpmad_1_1ActiveSet.html#ab592155dd2f465a2179b23656046efde">qpmad::ActiveSet&lt; t_primal_size &gt;</a>
 </li>
 <li>num_general_constraints_
 : <a class="el" href="classqpmad_1_1InputParser.html#a7be0a58c100255a94bc7192bb30928c3">qpmad::InputParser</a>
 </li>
 <li>num_inequalities_
-: <a class="el" href="classqpmad_1_1ActiveSet.html#a681c1e1e934afad4f8932b57a6b2b2dc">qpmad::ActiveSet</a>
+: <a class="el" href="classqpmad_1_1ActiveSet.html#a21a7824ec82ace3ea0fb374e74f2d53b">qpmad::ActiveSet&lt; t_primal_size &gt;</a>
 </li>
 <li>num_simple_bounds_
 : <a class="el" href="classqpmad_1_1InputParser.html#a15a0b7de51fb8a015f260bad7725e9c5">qpmad::InputParser</a>
@@ -179,25 +183,28 @@ $(function() {
 
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>primal_size_
-: <a class="el" href="classqpmad_1_1FactorizationData.html#a7b3598895a9c51d619b58883b5599963">qpmad::FactorizationData</a>
+: <a class="el" href="classqpmad_1_1FactorizationData.html#a89fe93b8854dd39a74b69305e093a8fa">qpmad::FactorizationData&lt; t_Scalar, t_primal_size &gt;</a>
 , <a class="el" href="classqpmad_1_1InputParser.html#afadcb8980111b8323e5f7b1644ed4f38">qpmad::InputParser</a>
 </li>
 <li>primal_step_direction_
-: <a class="el" href="classqpmad_1_1Solver.html#a6c607ef45ba1b0d3ab4982f3d885697d">qpmad::Solver</a>
+: <a class="el" href="classqpmad_1_1SolverTemplate.html#ad12a15e959ad28e58e85a565d69f7393">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_q"></a>- q -</h3><ul>
 <li>QLi_aka_J
-: <a class="el" href="classqpmad_1_1FactorizationData.html#aad2e61e2e791f5664e4bb6c0e4cf14c4">qpmad::FactorizationData</a>
+: <a class="el" href="classqpmad_1_1FactorizationData.html#a0939f2a6b91583a8585c383e171bbf76">qpmad::FactorizationData&lt; t_Scalar, t_primal_size &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>R
-: <a class="el" href="classqpmad_1_1FactorizationData.html#a55e226d6adac085eb721732fc05fe3e6">qpmad::FactorizationData</a>
+: <a class="el" href="classqpmad_1_1FactorizationData.html#ac6a67c8e325d78f70e701b612bc380c4">qpmad::FactorizationData&lt; t_Scalar, t_primal_size &gt;</a>
+</li>
+<li>return_inverted_cholesky_factor_
+: <a class="el" href="classqpmad_1_1SolverParameters.html#af8fc4924c305813bcc1dae60e4570969">qpmad::SolverParameters</a>
 </li>
 </ul>
 
@@ -207,10 +214,7 @@ $(function() {
 : <a class="el" href="classqpmad_1_1GivensRotation.html#a137c5a24b2a670f308f967205924d462">qpmad::GivensRotation&lt; t_Scalar &gt;</a>
 </li>
 <li>size_
-: <a class="el" href="classqpmad_1_1ActiveSet.html#a64a46d48556aa2e16a41549776eb5313">qpmad::ActiveSet</a>
-</li>
-<li>step_size_
-: <a class="el" href="classqpmad__utils_1_1SelectionMatrix.html#a44f2c0984c6b2c761c729cc36e10cd9f">qpmad_utils::SelectionMatrix</a>
+: <a class="el" href="classqpmad_1_1ActiveSet.html#ac7ba3b6c7d79f14c1f02c71391d6b1b8">qpmad::ActiveSet&lt; t_primal_size &gt;</a>
 </li>
 </ul>
 

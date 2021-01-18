@@ -68,7 +68,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">solver.h File Reference</div>  </div>
 </div><!--header-->
@@ -80,9 +81,7 @@ $(function() {
 <p class="definition">Definition in file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
 </div>
 <p><a href="solver_8h_source.html">Go to the source code of this file.</a></p>
-<div class="textblock"><code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="cholesky_8h_source.html">cholesky.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="givens_8h_source.html">givens.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="input__parser_8h_source.html">input_parser.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="inverse_8h_source.html">inverse.h</a>&quot;</code><br />
@@ -94,13 +93,18 @@ $(function() {
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1Solver.html">qpmad::Solver</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceqpmad"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceqpmad.html">qpmad</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a90f6aa52d29317fc2f6cf77e4bed3901"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceqpmad.html#a90f6aa52d29317fc2f6cf77e4bed3901">qpmad::Solver</a> = SolverTemplate&lt; double, Eigen::Dynamic, 1, Eigen::Dynamic &gt;</td></tr>
+<tr class="separator:a90f6aa52d29317fc2f6cf77e4bed3901"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

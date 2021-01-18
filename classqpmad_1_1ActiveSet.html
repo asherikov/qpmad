@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>qpmad: qpmad::ActiveSet Class Reference</title>
+<title>qpmad: qpmad::ActiveSet&lt; t_primal_size &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,55 +71,60 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classqpmad_1_1ActiveSet-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">qpmad::ActiveSet Class Reference</div>  </div>
+<div class="title">qpmad::ActiveSet&lt; t_primal_size &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00016">16</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<div class="textblock"><h3>template&lt;int t_primal_size&gt;<br />
+class qpmad::ActiveSet&lt; t_primal_size &gt;</h3>
+
+
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00017">17</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="active__set_8h_source.html">active_set.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac6b4d50cc8f5b57d3cdc84ed4ebc7429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#ac6b4d50cc8f5b57d3cdc84ed4ebc7429">initialize</a> (const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> max_size)</td></tr>
-<tr class="separator:ac6b4d50cc8f5b57d3cdc84ed4ebc7429"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3baa1129147314f1ea379a72e39ff335"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a3baa1129147314f1ea379a72e39ff335">getIndex</a> (const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> index) const</td></tr>
-<tr class="separator:a3baa1129147314f1ea379a72e39ff335"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6accab9e785f7c5989475deb59d1869f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a6accab9e785f7c5989475deb59d1869f">hasEmptySpace</a> () const</td></tr>
-<tr class="separator:a6accab9e785f7c5989475deb59d1869f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17fda24054025d0dd8fab9ba08996aa4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a17fda24054025d0dd8fab9ba08996aa4">addEquality</a> (const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> index)</td></tr>
-<tr class="separator:a17fda24054025d0dd8fab9ba08996aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ef0886677112598e042d07475bd40a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a2ef0886677112598e042d07475bd40a3">addInequality</a> (const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> index)</td></tr>
-<tr class="separator:a2ef0886677112598e042d07475bd40a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2037aefdd11603ad22686886a9a24c9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a2037aefdd11603ad22686886a9a24c9a">removeInequality</a> (const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> index)</td></tr>
-<tr class="separator:a2037aefdd11603ad22686886a9a24c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c4449812d3cf26742a2c45111802f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a68c4449812d3cf26742a2c45111802f3">initialize</a> (const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> max_size)</td></tr>
+<tr class="separator:a68c4449812d3cf26742a2c45111802f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a51f9eb3c3238a766dcf5b70a737969"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a7a51f9eb3c3238a766dcf5b70a737969">getIndex</a> (const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> index) const</td></tr>
+<tr class="separator:a7a51f9eb3c3238a766dcf5b70a737969"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81da96cd645a86e6a25ada09fb0727b9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a81da96cd645a86e6a25ada09fb0727b9">hasEmptySpace</a> () const</td></tr>
+<tr class="separator:a81da96cd645a86e6a25ada09fb0727b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af13fe13b3167d5ce7f444e02b8ac650a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#af13fe13b3167d5ce7f444e02b8ac650a">addEquality</a> (const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> index)</td></tr>
+<tr class="separator:af13fe13b3167d5ce7f444e02b8ac650a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8229b6dc1d605a7b8d27477961306133"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a8229b6dc1d605a7b8d27477961306133">addInequality</a> (const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> index)</td></tr>
+<tr class="separator:a8229b6dc1d605a7b8d27477961306133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e4c072d4b04230c2a9a914e348adc77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a6e4c072d4b04230c2a9a914e348adc77">removeInequality</a> (const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> index)</td></tr>
+<tr class="separator:a6e4c072d4b04230c2a9a914e348adc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:afe27561df72290067e3184c2a275fe3f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#afe27561df72290067e3184c2a275fe3f">active_constraints_indices_</a></td></tr>
-<tr class="separator:afe27561df72290067e3184c2a275fe3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a46d48556aa2e16a41549776eb5313"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a64a46d48556aa2e16a41549776eb5313">size_</a></td></tr>
-<tr class="separator:a64a46d48556aa2e16a41549776eb5313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66be4509fce416357aa23b68bd5db3c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a66be4509fce416357aa23b68bd5db3c8">num_equalities_</a></td></tr>
-<tr class="separator:a66be4509fce416357aa23b68bd5db3c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a681c1e1e934afad4f8932b57a6b2b2dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a681c1e1e934afad4f8932b57a6b2b2dc">num_inequalities_</a></td></tr>
-<tr class="separator:a681c1e1e934afad4f8932b57a6b2b2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af851c0ebbf32dd42d290771c93e32f26"><td class="memItemLeft" align="right" valign="top">Eigen::Array&lt; <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>, t_primal_size, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#af851c0ebbf32dd42d290771c93e32f26">active_constraints_indices_</a></td></tr>
+<tr class="separator:af851c0ebbf32dd42d290771c93e32f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ba3b6c7d79f14c1f02c71391d6b1b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#ac7ba3b6c7d79f14c1f02c71391d6b1b8">size_</a></td></tr>
+<tr class="separator:ac7ba3b6c7d79f14c1f02c71391d6b1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab592155dd2f465a2179b23656046efde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#ab592155dd2f465a2179b23656046efde">num_equalities_</a></td></tr>
+<tr class="separator:ab592155dd2f465a2179b23656046efde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a7824ec82ace3ea0fb374e74f2d53b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1ActiveSet.html#a21a7824ec82ace3ea0fb374e74f2d53b">num_inequalities_</a></td></tr>
+<tr class="separator:a21a7824ec82ace3ea0fb374e74f2d53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a17fda24054025d0dd8fab9ba08996aa4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17fda24054025d0dd8fab9ba08996aa4">&#9670;&nbsp;</a></span>addEquality()</h2>
+<a id="af13fe13b3167d5ce7f444e02b8ac650a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af13fe13b3167d5ce7f444e02b8ac650a">&#9670;&nbsp;</a></span>addEquality()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void qpmad::ActiveSet::addEquality </td>
+          <td class="memname">void <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::addEquality </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
@@ -131,23 +136,25 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00047">47</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00048">48</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="a2ef0886677112598e042d07475bd40a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ef0886677112598e042d07475bd40a3">&#9670;&nbsp;</a></span>addInequality()</h2>
+<a id="a8229b6dc1d605a7b8d27477961306133"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8229b6dc1d605a7b8d27477961306133">&#9670;&nbsp;</a></span>addInequality()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void qpmad::ActiveSet::addInequality </td>
+          <td class="memname">void <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::addInequality </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
@@ -159,23 +166,25 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00055">55</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00056">56</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="a3baa1129147314f1ea379a72e39ff335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3baa1129147314f1ea379a72e39ff335">&#9670;&nbsp;</a></span>getIndex()</h2>
+<a id="a7a51f9eb3c3238a766dcf5b70a737969"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a51f9eb3c3238a766dcf5b70a737969">&#9670;&nbsp;</a></span>getIndex()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> qpmad::ActiveSet::getIndex </td>
+          <td class="memname"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::getIndex </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -187,21 +196,23 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00035">35</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00036">36</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="a6accab9e785f7c5989475deb59d1869f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6accab9e785f7c5989475deb59d1869f">&#9670;&nbsp;</a></span>hasEmptySpace()</h2>
+<a id="a81da96cd645a86e6a25ada09fb0727b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81da96cd645a86e6a25ada09fb0727b9">&#9670;&nbsp;</a></span>hasEmptySpace()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool qpmad::ActiveSet::hasEmptySpace </td>
+          <td class="memname">bool <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::hasEmptySpace </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -214,23 +225,25 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00041">41</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00042">42</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="ac6b4d50cc8f5b57d3cdc84ed4ebc7429"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6b4d50cc8f5b57d3cdc84ed4ebc7429">&#9670;&nbsp;</a></span>initialize()</h2>
+<a id="a68c4449812d3cf26742a2c45111802f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68c4449812d3cf26742a2c45111802f3">&#9670;&nbsp;</a></span>initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void qpmad::ActiveSet::initialize </td>
+          <td class="memname">void <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::initialize </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>max_size</em></td><td>)</td>
           <td></td>
         </tr>
@@ -242,23 +255,25 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00026">26</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00027">27</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="a2037aefdd11603ad22686886a9a24c9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2037aefdd11603ad22686886a9a24c9a">&#9670;&nbsp;</a></span>removeInequality()</h2>
+<a id="a6e4c072d4b04230c2a9a914e348adc77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e4c072d4b04230c2a9a914e348adc77">&#9670;&nbsp;</a></span>removeInequality()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void qpmad::ActiveSet::removeInequality </td>
+          <td class="memname">void <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::removeInequality </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
@@ -270,51 +285,39 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00063">63</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00064">64</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="afe27561df72290067e3184c2a275fe3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe27561df72290067e3184c2a275fe3f">&#9670;&nbsp;</a></span>active_constraints_indices_</h2>
+<a id="af851c0ebbf32dd42d290771c93e32f26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af851c0ebbf32dd42d290771c93e32f26">&#9670;&nbsp;</a></span>active_constraints_indices_</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a>&gt; qpmad::ActiveSet::active_constraints_indices_</td>
+          <td class="memname">Eigen::Array&lt;<a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>, t_primal_size, 1&gt; <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::active_constraints_indices_</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00019">19</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00020">20</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>
-<a id="a66be4509fce416357aa23b68bd5db3c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66be4509fce416357aa23b68bd5db3c8">&#9670;&nbsp;</a></span>num_equalities_</h2>
+<a id="ab592155dd2f465a2179b23656046efde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab592155dd2f465a2179b23656046efde">&#9670;&nbsp;</a></span>num_equalities_</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> qpmad::ActiveSet::num_equalities_</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00021">21</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
-
-</div>
-</div>
-<a id="a681c1e1e934afad4f8932b57a6b2b2dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a681c1e1e934afad4f8932b57a6b2b2dc">&#9670;&nbsp;</a></span>num_inequalities_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> qpmad::ActiveSet::num_inequalities_</td>
+          <td class="memname"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::num_equalities_</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -323,19 +326,39 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a64a46d48556aa2e16a41549776eb5313"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64a46d48556aa2e16a41549776eb5313">&#9670;&nbsp;</a></span>size_</h2>
+<a id="a21a7824ec82ace3ea0fb374e74f2d53b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a7824ec82ace3ea0fb374e74f2d53b">&#9670;&nbsp;</a></span>num_inequalities_</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> qpmad::ActiveSet::size_</td>
+          <td class="memname"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::num_inequalities_</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00020">20</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00023">23</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
+
+</div>
+</div>
+<a id="ac7ba3b6c7d79f14c1f02c71391d6b1b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ba3b6c7d79f14c1f02c71391d6b1b8">&#9670;&nbsp;</a></span>size_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int t_primal_size&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> <a class="el" href="classqpmad_1_1ActiveSet.html">qpmad::ActiveSet</a>&lt; t_primal_size &gt;::size_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="active__set_8h_source.html#l00021">21</a> of file <a class="el" href="active__set_8h_source.html">active_set.h</a>.</p>
 
 </div>
 </div>

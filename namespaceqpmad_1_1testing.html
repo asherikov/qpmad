@@ -77,17 +77,24 @@ $(function() {
 Functions</h2></td></tr>
 <tr class="memitem:a2140c92969f91bd116c9b452a35cff00"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#a2140c92969f91bd116c9b452a35cff00">computeObjective</a> (const Eigen::MatrixXd &amp;H, const Eigen::VectorXd &amp;h, const Eigen::VectorXd &amp;primal)</td></tr>
 <tr class="separator:a2140c92969f91bd116c9b452a35cff00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f988408cb8a5bc531cc1f78425648df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#a7f988408cb8a5bc531cc1f78425648df">checkLagrangeMultipliers</a> (const Eigen::MatrixXd &amp;H, const Eigen::VectorXd &amp;h, const Eigen::VectorXd &amp;primal, const Eigen::MatrixXd &amp;A, const <a class="el" href="classqpmad_1_1ActiveSet.html">ActiveSet</a> &amp;active_set, const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> &amp;num_simple_bounds, const std::vector&lt; <a class="el" href="classqpmad_1_1ConstraintStatus.html#a322762352546c9a0ccb2447e2219d052">ConstraintStatus::Status</a> &gt; &amp;constraints_status, const Eigen::VectorXd &amp;dual, const Eigen::VectorXd &amp;dual_direction=Eigen::VectorXd())</td></tr>
-<tr class="separator:a7f988408cb8a5bc531cc1f78425648df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab48e37510e52f13273a7a08e7332822e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#ab48e37510e52f13273a7a08e7332822e">printActiveSet</a> (const <a class="el" href="classqpmad_1_1ActiveSet.html">ActiveSet</a> &amp;active_set, const std::vector&lt; <a class="el" href="classqpmad_1_1ConstraintStatus.html#a322762352546c9a0ccb2447e2219d052">ConstraintStatus::Status</a> &gt; &amp;constraints_status, const Eigen::VectorXd &amp;dual)</td></tr>
-<tr class="separator:ab48e37510e52f13273a7a08e7332822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8987ba9cbf159c940c4e2898552a32fc"><td class="memTemplParams" colspan="2">template&lt;class t_ActiveSet , class t_ConstraintStatuses &gt; </td></tr>
+<tr class="memitem:a8987ba9cbf159c940c4e2898552a32fc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#a8987ba9cbf159c940c4e2898552a32fc">checkLagrangeMultipliers</a> (const Eigen::MatrixXd &amp;H, const Eigen::VectorXd &amp;h, const Eigen::VectorXd &amp;primal, const Eigen::MatrixXd &amp;A, const t_ActiveSet &amp;active_set, const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> &amp;num_simple_bounds, const t_ConstraintStatuses &amp;constraints_status, const Eigen::VectorXd &amp;dual, const Eigen::VectorXd &amp;dual_direction=Eigen::VectorXd())</td></tr>
+<tr class="separator:a8987ba9cbf159c940c4e2898552a32fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6732c471a4af7480e0ddddc09b71723c"><td class="memTemplParams" colspan="2">template&lt;class t_ActiveSet , class t_ConstraintStatuses &gt; </td></tr>
+<tr class="memitem:a6732c471a4af7480e0ddddc09b71723c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#a6732c471a4af7480e0ddddc09b71723c">printActiveSet</a> (const t_ActiveSet &amp;active_set, const t_ConstraintStatuses &amp;constraints_status, const Eigen::VectorXd &amp;dual)</td></tr>
+<tr class="separator:a6732c471a4af7480e0ddddc09b71723c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99829bc7e6c54039803e9e3c533c137d"><td class="memTemplParams" colspan="2">template&lt;class t_Dual , class t_Indices , class t_IsLower &gt; </td></tr>
+<tr class="memitem:a99829bc7e6c54039803e9e3c533c137d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceqpmad_1_1testing.html#a99829bc7e6c54039803e9e3c533c137d">printDualVariables</a> (const t_Dual &amp;dual, const t_Indices &amp;indices, const t_IsLower &amp;is_lower)</td></tr>
+<tr class="separator:a99829bc7e6c54039803e9e3c533c137d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a7f988408cb8a5bc531cc1f78425648df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f988408cb8a5bc531cc1f78425648df">&#9670;&nbsp;</a></span>checkLagrangeMultipliers()</h2>
+<a id="a8987ba9cbf159c940c4e2898552a32fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8987ba9cbf159c940c4e2898552a32fc">&#9670;&nbsp;</a></span>checkLagrangeMultipliers()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class t_ActiveSet , class t_ConstraintStatuses &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void qpmad::testing::checkLagrangeMultipliers </td>
@@ -116,19 +123,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classqpmad_1_1ActiveSet.html">ActiveSet</a> &amp;&#160;</td>
+          <td class="paramtype">const t_ActiveSet &amp;&#160;</td>
           <td class="paramname"><em>active_set</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac831d69e29b82cd8649c5618f707a462">MatrixIndex</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> &amp;&#160;</td>
           <td class="paramname"><em>num_simple_bounds</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classqpmad_1_1ConstraintStatus.html#a322762352546c9a0ccb2447e2219d052">ConstraintStatus::Status</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const t_ConstraintStatuses &amp;&#160;</td>
           <td class="paramname"><em>constraints_status</em>, </td>
         </tr>
         <tr>
@@ -151,7 +158,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="testing_8h_source.html#l00040">40</a> of file <a class="el" href="testing_8h_source.html">testing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="testing_8h_source.html#l00039">39</a> of file <a class="el" href="testing_8h_source.html">testing.h</a>.</p>
 
 </div>
 </div>
@@ -191,22 +198,24 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab48e37510e52f13273a7a08e7332822e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab48e37510e52f13273a7a08e7332822e">&#9670;&nbsp;</a></span>printActiveSet()</h2>
+<a id="a6732c471a4af7480e0ddddc09b71723c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6732c471a4af7480e0ddddc09b71723c">&#9670;&nbsp;</a></span>printActiveSet()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class t_ActiveSet , class t_ConstraintStatuses &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void qpmad::testing::printActiveSet </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classqpmad_1_1ActiveSet.html">ActiveSet</a> &amp;&#160;</td>
+          <td class="paramtype">const t_ActiveSet &amp;&#160;</td>
           <td class="paramname"><em>active_set</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classqpmad_1_1ConstraintStatus.html#a322762352546c9a0ccb2447e2219d052">ConstraintStatus::Status</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const t_ConstraintStatuses &amp;&#160;</td>
           <td class="paramname"><em>constraints_status</em>, </td>
         </tr>
         <tr>
@@ -223,7 +232,45 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="testing_8h_source.html#l00162">162</a> of file <a class="el" href="testing_8h_source.html">testing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="testing_8h_source.html#l00165">165</a> of file <a class="el" href="testing_8h_source.html">testing.h</a>.</p>
+
+</div>
+</div>
+<a id="a99829bc7e6c54039803e9e3c533c137d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99829bc7e6c54039803e9e3c533c137d">&#9670;&nbsp;</a></span>printDualVariables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class t_Dual , class t_Indices , class t_IsLower &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void qpmad::testing::printDualVariables </td>
+          <td>(</td>
+          <td class="paramtype">const t_Dual &amp;&#160;</td>
+          <td class="paramname"><em>dual</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const t_Indices &amp;&#160;</td>
+          <td class="paramname"><em>indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const t_IsLower &amp;&#160;</td>
+          <td class="paramname"><em>is_lower</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testing_8h_source.html#l00185">185</a> of file <a class="el" href="testing_8h_source.html">testing.h</a>.</p>
 
 </div>
 </div>

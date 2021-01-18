@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['initialize',['initialize',['../classqpmad_1_1ActiveSet.html#ac6b4d50cc8f5b57d3cdc84ed4ebc7429',1,'qpmad::ActiveSet::initialize()'],['../classqpmad_1_1FactorizationData.html#a0ff5792ebc01355843a5ed505b4667ae',1,'qpmad::FactorizationData::initialize()']]],
-  ['initializemachinerylazy',['initializeMachineryLazy',['../classqpmad_1_1Solver.html#a6b4dba309a4e15e98eace6859c6fc6ff',1,'qpmad::Solver']]],
+  ['initialize',['initialize',['../classqpmad_1_1ActiveSet.html#a68c4449812d3cf26742a2c45111802f3',1,'qpmad::ActiveSet::initialize()'],['../classqpmad_1_1FactorizationData.html#ab7a269f8d8f4c669160d4fd31910d5e8',1,'qpmad::FactorizationData::initialize()']]],
+  ['initializemachinerylazy',['initializeMachineryLazy',['../classqpmad_1_1SolverTemplate.html#a08199be3b9a244e889636f4f299cd1ee',1,'qpmad::SolverTemplate']]],
   ['inputparser',['InputParser',['../classqpmad_1_1InputParser.html#adde686d9bcb712a4a273d30a4df03947',1,'qpmad::InputParser']]]
 ];
