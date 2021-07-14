@@ -124,20 +124,29 @@ namespace qpmad
                 Eigen::Matrix<MatrixIndex, t_index_size, 1> &indices,
                 Eigen::Matrix<bool, t_status_size, 1> &is_lower) const
         {
-            const MatrixIndex size = active_set_.size_ - active_set_.num_equalities_;
-
-            dual.resize(size);
-            indices.resize(size);
-            is_lower.resize(size);
-
-            for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+            if (machinery_initialized_)
             {
-                const std::size_t output_index = i - active_set_.num_equalities_;
+                const MatrixIndex size = active_set_.size_ - active_set_.num_equalities_;
 
-                dual(output_index) = dual_(i);
-                indices(output_index) = active_set_.getIndex(i);
-                is_lower(output_index) =
-                        ConstraintStatus::ACTIVE_LOWER_BOUND == constraints_status_(indices(output_index));
+                dual.resize(size);
+                indices.resize(size);
+                is_lower.resize(size);
+
+                for (MatrixIndex i = active_set_.num_equalities_; i < active_set_.size_; ++i)
+                {
+                    const std::size_t output_index = i - active_set_.num_equalities_;
+
+                    dual(output_index) = dual_(i);
+                    indices(output_index) = active_set_.getIndex(i);
+                    is_lower(output_index) =
+                            ConstraintStatus::ACTIVE_LOWER_BOUND == constraints_status_(indices(output_index));
+                }
+            }
+            else
+            {
+                dual.resize(0);
+                indices.resize(0);
+                is_lower.resize(0);
             }
         }
 
