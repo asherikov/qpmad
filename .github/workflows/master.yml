@@ -69,3 +69,19 @@ jobs:
             - run: $APT clang-tidy-9
             - run: make clangcheck SCANBUILD=scan-build-9
 
+    deb:
+        runs-on: ubuntu-18.04
+        steps:
+            - uses: actions/checkout@v2
+            - run: $APT libeigen3-dev
+            - run: sudo gem install fpm
+            - run: make cmake OPTIONS=deb
+            - run: make install OPTIONS=deb
+            - run: grep "<version>" package.xml | grep -o "[0-9]*\.[0-9]*\.[0-9]*" > build/version
+            - run: fpm -t deb --depends libeigen3-dev --version $(cat build/version) --package qpmad-$(cat build/version)-any.deb
+            - run: sudo dpkg -i qpmad-*-any.deb
+            - run: make test_dependency
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: deb
+                  path: qpmad-*-any.deb

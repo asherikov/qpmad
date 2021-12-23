@@ -1,0 +1,10 @@
+-s dir
+--name qpmad
+--license "Apache 2.0"
+--architecture all
+--description "ROS-compatible Eigen-based Goldfarb-Idnani quadratic programming solver"
+--url "https://asherikov.github.io/qpmad/"
+--maintainer "Alexander Sherikov <asherikov@yandex.com>"
+--chdir install
+
+usr
