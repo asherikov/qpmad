@@ -1,10 +1,27 @@
 qpmad
 =====
-CI status:
-<a href="https://github.com/asherikov/qpmad/actions?query=workflow%3A.github%2Fworkflows%2Fmaster.yml+branch%3Amaster">
-<img src="https://github.com/asherikov/qpmad/workflows/.github/workflows/master.yml/badge.svg?branch=master" alt="Build Status">
-</a>
-
+<table>
+  <tr>
+    <td align="center">
+        CI status
+    </td>
+    <td align="center">
+        Debian package
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+        <a href="https://github.com/asherikov/qpmad/actions?query=workflow%3A.github%2Fworkflows%2Fmaster.yml+branch%3Amaster">
+        <img src="https://github.com/asherikov/qpmad/workflows/.github/workflows/master.yml/badge.svg?branch=master" alt="Build Status">
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://cloudsmith.io/~asherikov-aV7/repos/qpmad/packages/detail/deb/qpmad/latest/a=all;d=any-distro%252Fany-version;t=binary/">
+        <img src="https://api-prd.cloudsmith.io/v1/badges/version/asherikov-aV7/qpmad/deb/qpmad/latest/a=all;d=any-distro%252Fany-version;t=binary/?render=true&show_latest=true" alt="Latest version of 'qpmad' @ Cloudsmith">
+        </a>
+    </td>
+  </tr>
+</table>
 
 Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set
 algorithm for quadratic programming. The package is ROS compatible.
