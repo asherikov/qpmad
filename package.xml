@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>qpmad</name>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <description>qpmad QP solver</description>
 
   <maintainer email="asherikov@yandex.com">Alexander Sherikov</maintainer>

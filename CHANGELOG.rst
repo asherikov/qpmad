@@ -2,6 +2,13 @@
 Changelog for package ariles_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.1 (2021-12-24)
+------------------
+
+* Bugfixes
+* Binary debian package generation
+
+
 1.1.0 (2021-01-18)
 ------------------
 
