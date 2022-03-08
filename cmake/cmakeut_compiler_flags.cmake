@@ -59,12 +59,12 @@ function(cmakeut_compiler_flags STANDARD)
 
 
     if (CMAKEUT_CLANG_TIDY)
-        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-9 clang-tidy11 clang-tidy-8 REQUIRED)
+        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy11 clang-tidy-10 clang-tidy-9 clang-tidy-8 REQUIRED)
 
         set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-warnings-as-errors=*;-checks=*")
 
         # too annoying
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvm-include-order")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvm-include-order,-google-readability-todo,-readability-static-accessed-through-instance")
         # do not enforce auto
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-trailing-return-type,-hicpp-use-auto,-modernize-use-auto")
         # do not enforce capitalization of literal suffix, e.g., x = 1u -> x = 1U.
@@ -89,6 +89,9 @@ function(cmakeut_compiler_flags STANDARD)
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-boost-use-to-string")
         # too common
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay")
+        # long functions are ok
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-google-readability-function-size,-readability-function-size,-hicpp-function-size")
+
 
         # overly restrictive fuchsia stuff
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-fuchsia-overloaded-operator,-fuchsia-multiple-inheritance,-fuchsia-statically-constructed-objects")

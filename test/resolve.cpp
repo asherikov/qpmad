@@ -209,4 +209,3 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     // solution is the same
     BOOST_CHECK(x_copy.isApprox(this->x, g_default_tolerance));
 }
-

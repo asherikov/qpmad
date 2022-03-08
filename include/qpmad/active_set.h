@@ -13,7 +13,7 @@
 
 namespace qpmad
 {
-    template<int t_primal_size>
+    template <int t_primal_size>
     class ActiveSet
     {
     public:

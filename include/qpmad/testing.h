@@ -182,10 +182,7 @@ namespace qpmad
         }
 
         template <class t_Dual, class t_Indices, class t_IsLower>
-        void printDualVariables(
-                const t_Dual &dual,
-                const t_Indices &indices,
-                const t_IsLower &is_lower)
+        void printDualVariables(const t_Dual &dual, const t_Indices &indices, const t_IsLower &is_lower)
         {
             std::cout << "================================[Dual variables]================================"
                       << std::endl;

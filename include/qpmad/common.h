@@ -31,8 +31,8 @@ namespace qpmad
 {
     typedef EIGEN_DEFAULT_DENSE_INDEX_TYPE MatrixIndex;
 
-    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix; // deprecated
-    typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector; // deprecated
+    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> QPMatrix;  // deprecated
+    typedef Eigen::Matrix<double, Eigen::Dynamic, 1> QPVector;               // deprecated
 
 
     template <class t_VectorType>

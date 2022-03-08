@@ -46,7 +46,6 @@ Links
 =====
 * Doxygen: https://asherikov.github.io/qpmad/
 * GitHub: https://github.com/asherikov/qpmad
-* CI: https://travis-ci.org/asherikov/qpmad
 
 
 <a name="features"></a>

@@ -26,7 +26,8 @@ namespace qpmad
                 U_inverse(i, i) = 1.0 / L(i, i);
                 for (MatrixIndex j = i - 1; j >= 0; --j)
                 {
-                    const double tmp = L.transpose().row(j).segment(j + 1, i - j) * U_inverse.col(i).segment(j + 1, i - j);
+                    const double tmp =
+                            L.transpose().row(j).segment(j + 1, i - j) * U_inverse.col(i).segment(j + 1, i - j);
                     U_inverse(j, i) = -tmp / L(j, j);
                 }
             }

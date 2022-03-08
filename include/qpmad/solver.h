@@ -25,6 +25,10 @@
 #    include "testing.h"
 #endif
 
+// is_eigen_type requires Boost
+#define QPMAD_UTILS_EIGEN_MATRIX_ENABLER(Type) const typename Type::StorageIndex * = NULL
+
+
 namespace qpmad
 {
     template <typename t_Scalar, int t_primal_size, int t_has_bounds, int t_general_ctr_number>
@@ -40,7 +44,17 @@ namespace qpmad
         template <int t_rows>
         using Vector = Eigen::Matrix<t_Scalar, t_rows, 1>;
         template <int t_rows, int t_cols>
-        using Matrix = Eigen::Matrix<t_Scalar, t_rows, t_cols>;
+        using Matrix = Eigen::Matrix<t_Scalar, t_rows, t_cols>;  // DEPRECATED
+        using Scalar = t_Scalar;
+
+
+    protected:
+        const struct InputPlaceholders
+        {
+            Eigen::Matrix<t_Scalar, Eigen::Dynamic, 1> empty_vector_;
+            Eigen::Matrix<t_Scalar, Eigen::Dynamic, Eigen::Dynamic> empty_matrix_;
+            SolverParameters solver_parameters_;
+        } input_placeholders_;
 
 
     protected:
@@ -151,100 +165,96 @@ namespace qpmad
         }
 
 
-        template <
-                int t_rows_primal,
-                int t_rows_H,
-                int t_cols_H,
-                int t_rows_h,
-                int t_rows_A,
-                int t_cols_A,
-                int t_rows_Alb,
-                int t_rows_Aub>
-        ReturnStatus solve(
-                Vector<t_rows_primal> &primal,
-                Matrix<t_rows_H, t_cols_H> &H,
-                const Vector<t_rows_h> &h,
-                const Matrix<t_rows_A, t_cols_A> &A,
-                const Vector<t_rows_Alb> &Alb,
-                const Vector<t_rows_Aub> &Aub)
+        template <class t_primal, class t_H, class t_h, class t_A, class t_Alb, class t_Aub>
+        ReturnStatus solve(t_primal &primal, t_H &H, const t_h &h, const t_A &A, const t_Alb &Alb, const t_Aub &Aub)
         {
-            return (solve(primal, H, h, Eigen::VectorXd(), Eigen::VectorXd(), A, Alb, Aub, SolverParameters()));
+            return (
+                    solve(primal,
+                          H,
+                          h,
+                          input_placeholders_.empty_vector_,
+                          input_placeholders_.empty_vector_,
+                          A,
+                          Alb,
+                          Aub,
+                          input_placeholders_.solver_parameters_));
         }
 
 
-        template <
-                int t_rows_primal,
-                int t_rows_H,
-                int t_cols_H,
-                int t_rows_h,
-                int t_rows_lb,
-                int t_rows_ub,
-                int t_rows_A,
-                int t_cols_A,
-                int t_rows_Alb,
-                int t_rows_Aub>
+        template <class t_primal, class t_H, class t_h, class t_lb, class t_ub, class t_A, class t_Alb, class t_Aub>
         ReturnStatus solve(
-                Vector<t_rows_primal> &primal,
-                Matrix<t_rows_H, t_cols_H> &H,
-                const Vector<t_rows_h> &h,
-                const Vector<t_rows_lb> &lb,
-                const Vector<t_rows_ub> &ub,
-                const Matrix<t_rows_A, t_cols_A> &A,
-                const Vector<t_rows_Alb> &Alb,
-                const Vector<t_rows_Aub> &Aub)
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_lb &lb,
+                const t_ub &ub,
+                const t_A &A,
+                const t_Alb &Alb,
+                const t_Aub &Aub)
         {
-            return (solve(primal, H, h, lb, ub, A, Alb, Aub, SolverParameters()));
+            return (solve(primal, H, h, lb, ub, A, Alb, Aub, input_placeholders_.solver_parameters_));
         }
 
 
-        template <int t_rows_primal, int t_rows_H, int t_cols_H, int t_rows_h, int t_rows_lb, int t_rows_ub>
+        template <class t_primal, class t_H, class t_h, class t_lb, class t_ub>
         ReturnStatus solve(
-                Vector<t_rows_primal> &primal,
-                Matrix<t_rows_H, t_cols_H> &H,
-                const Vector<t_rows_h> &h,
-                const Vector<t_rows_lb> &lb,
-                const Vector<t_rows_ub> &ub,
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_lb &lb,
+                const t_ub &ub,
                 const SolverParameters &param)
         {
-            return (solve(primal, H, h, lb, ub, Eigen::MatrixXd(), Eigen::VectorXd(), Eigen::VectorXd(), param));
+            return (
+                    solve(primal,
+                          H,
+                          h,
+                          lb,
+                          ub,
+                          input_placeholders_.empty_matrix_,
+                          input_placeholders_.empty_vector_,
+                          input_placeholders_.empty_vector_,
+                          param));
         }
 
 
-        template <int t_rows_primal, int t_rows_H, int t_cols_H, int t_rows_h, int t_rows_lb, int t_rows_ub>
-        ReturnStatus solve(
-                Vector<t_rows_primal> &primal,
-                Matrix<t_rows_H, t_cols_H> &H,
-                const Vector<t_rows_h> &h,
-                const Vector<t_rows_lb> &lb,
-                const Vector<t_rows_ub> &ub)
+        template <class t_primal, class t_H, class t_h, class t_lb, class t_ub>
+        ReturnStatus solve(t_primal &primal, t_H &H, const t_h &h, const t_lb &lb, const t_ub &ub)
         {
-            return (solve(
-                    primal, H, h, lb, ub, Eigen::MatrixXd(), Eigen::VectorXd(), Eigen::VectorXd(), SolverParameters()));
+            return (
+                    solve(primal,
+                          H,
+                          h,
+                          lb,
+                          ub,
+                          input_placeholders_.empty_matrix_,
+                          input_placeholders_.empty_vector_,
+                          input_placeholders_.empty_vector_,
+                          input_placeholders_.solver_parameters_));
         }
 
 
 
-        template <
-                int t_rows_primal,
-                int t_rows_H,
-                int t_cols_H,
-                int t_rows_h,
-                int t_rows_lb,
-                int t_rows_ub,
-                int t_rows_A,
-                int t_cols_A,
-                int t_rows_Alb,
-                int t_rows_Aub>
+        template <class t_primal, class t_H, class t_h, class t_lb, class t_ub, class t_A, class t_Alb, class t_Aub>
         ReturnStatus solve(
-                Vector<t_rows_primal> &primal,
-                Matrix<t_rows_H, t_cols_H> &H,
-                const Vector<t_rows_h> &h,
-                const Vector<t_rows_lb> &lb,
-                const Vector<t_rows_ub> &ub,
-                const Matrix<t_rows_A, t_cols_A> &A,
-                const Vector<t_rows_Alb> &Alb,
-                const Vector<t_rows_Aub> &Aub,
-                const SolverParameters &param)
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_lb &lb,
+                const t_ub &ub,
+                const t_A &A,
+                const t_Alb &Alb,
+                const t_Aub &Aub,
+                const SolverParameters &param,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_ub),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_Alb),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_Aub))
         {
             QPMAD_TRACE(std::setprecision(std::numeric_limits<double>::digits10));
 

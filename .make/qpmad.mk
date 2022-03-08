@@ -87,6 +87,18 @@ dox: doxclean clean
 	cd doc; doxygen
 
 
+# deb
+#----------------------------------------------
+deb:
+	${MAKE} cmake OPTIONS=deb
+	${MAKE} install OPTIONS=deb
+	grep "<version>" package.xml | grep -o "[0-9]*\.[0-9]*\.[0-9]*" > build/version
+	fpm -t deb --depends ${DEBIAN_SYSTEM_DEPENDENCIES} --version `cat build/version` --package qpmad-`cat build/version`-any.deb
+
+deb-cloudsmith:
+	ls qpmad-*-any.deb | xargs --no-run-if-empty -I {} cloudsmith push deb asherikov-aV7/qpmad/any-distro/any-version {}
+
+
 # clean
 #----------------------------------------------
 
