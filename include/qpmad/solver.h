@@ -26,7 +26,10 @@
 #endif
 
 // is_eigen_type requires Boost
-#define QPMAD_UTILS_EIGEN_MATRIX_ENABLER(Type) const typename Type::StorageIndex * = NULL
+#define QPMAD_UTILS_EIGEN_VECTOR_ENABLER(Type) const typename std::enable_if<Type::IsVectorAtCompileTime>::type * = NULL
+#define QPMAD_UTILS_EIGEN_MATRIX_ENABLER(Type)                                                                         \
+    const typename std::enable_if<(Type::ColsAtCompileTime == Eigen::Dynamic or Type::ColsAtCompileTime > 1)>::type    \
+            * = NULL
 
 
 namespace qpmad
@@ -247,14 +250,14 @@ namespace qpmad
                 const t_Aub &Aub,
                 const SolverParameters &param,
                 // accept only Eigen types as inputs
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
                 QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_h),
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_lb),
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_ub),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_ub),
                 QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_Alb),
-                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_Aub))
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Alb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Aub))
         {
             QPMAD_TRACE(std::setprecision(std::numeric_limits<double>::digits10));
 
@@ -284,12 +287,7 @@ namespace qpmad
             switch (param.hessian_type_)
             {
                 case SolverParameters::HESSIAN_LOWER_TRIANGULAR:
-                {
-                    const Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(H);
-                    QPMAD_UTILS_PERSISTENT_ASSERT(
-                            Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian.");
-                }
-                    // no break here!
+                    factorizeCholeskyInPlace(H);
                     /* Falls through. */
                 case SolverParameters::HESSIAN_CHOLESKY_FACTOR:
                     hessian_type_ = SolverParameters::HESSIAN_CHOLESKY_FACTOR;
@@ -778,6 +776,25 @@ namespace qpmad
             {
                 return (A.row(chosen_ctr_.general_constraint_index_) * primal_step_direction);
             }
+        }
+
+
+        template <int t_rows, int t_cols>
+        static void factorizeCholeskyInPlace(Eigen::Matrix<t_Scalar, t_rows, t_cols> &H)
+        {
+            const Eigen::LLT<Eigen::Ref<typename std::decay<decltype(H)>::type>, Eigen::Lower> llt(H);
+            QPMAD_UTILS_PERSISTENT_ASSERT(
+                    Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian (dense).");
+        }
+
+
+        template <int t_Options, typename t_StorageIndex>
+        static void factorizeCholeskyInPlace(Eigen::SparseMatrix<t_Scalar, t_Options, t_StorageIndex> &H)
+        {
+            const Eigen::SimplicialLLT<typename std::decay<decltype(H)>::type, Eigen::Lower> llt(H);
+            QPMAD_UTILS_PERSISTENT_ASSERT(
+                    Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian (sparse).");
+            H = llt.matrixL();
         }
     };
 

@@ -22,16 +22,19 @@
 
 #define QPMAD_USING_PARENT_FIXTURE(Parent)                                                                             \
     using Parent::x;                                                                                                   \
+    using Parent::x_sparse;                                                                                            \
     using Parent::H;                                                                                                   \
     using Parent::H_copy;                                                                                              \
     using Parent::h;                                                                                                   \
     using Parent::A;                                                                                                   \
+    using Parent::A_sparse;                                                                                            \
     using Parent::Alb;                                                                                                 \
     using Parent::Aub;                                                                                                 \
     using Parent::lb;                                                                                                  \
     using Parent::ub;                                                                                                  \
     using Parent::solver;                                                                                              \
     using Parent::status;                                                                                              \
+    using Parent::status_sparse;                                                                                       \
     using Parent::checkObjective;                                                                                      \
     using Parent::initRandomHessian;
 
@@ -40,10 +43,12 @@ class SolverObjectiveFixture
 {
 public:
     Eigen::VectorXd x;
+    Eigen::VectorXd x_sparse;
     Eigen::MatrixXd H;
     Eigen::MatrixXd H_copy;
     Eigen::VectorXd h;
     Eigen::MatrixXd A;
+    Eigen::SparseMatrix<double> A_sparse;
     Eigen::VectorXd Alb;
     Eigen::VectorXd Aub;
     Eigen::VectorXd lb;
@@ -51,6 +56,7 @@ public:
 
     t_Solver solver;
     typename t_Solver::ReturnStatus status;
+    typename t_Solver::ReturnStatus status_sparse;
 
 
 public:
@@ -174,6 +180,13 @@ public:
 
         BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
         BOOST_CHECK(x.isApprox(tmp, g_default_tolerance));
+
+        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        {
+            status_sparse = solver.solve(x_sparse, H_copy, h, A_sparse, Alb, Alb);
+            BOOST_CHECK_EQUAL(status, status_sparse);
+            BOOST_CHECK(x.isApprox(x_sparse, g_default_tolerance));
+        }
     }
 };
 
@@ -194,6 +207,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->h.setRandom(size);
 
     this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->A_sparse = this->A.sparseView();
     this->Alb.setRandom(num_ctr);
 
     this->checkGeneralEqualities();
@@ -212,6 +226,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->initRandomHessian(size);
 
     this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->A_sparse = this->A.sparseView();
     this->Alb.setRandom(num_ctr);
 
     this->checkGeneralEqualities();
@@ -231,6 +246,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->h.setRandom(size);
 
     this->A = Eigen::MatrixXd::Identity(size, size).topRows(num_ctr);
+    this->A_sparse = this->A.sparseView();
     this->Alb.setRandom(num_ctr);
 
     this->checkGeneralEqualities();
@@ -276,6 +292,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->A.setZero(num_ctr, size);
     this->A.topRows(size) += Eigen::MatrixXd::Identity(size, size);
     this->A(num_ctr - 1, 0) = 100.0;
+    this->A_sparse = this->A.sparseView();
     this->Alb.resize(num_ctr);
     this->Alb.setConstant(1.0);
     this->Alb(num_ctr - 1) = 100.0;
@@ -284,6 +301,14 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 
     BOOST_CHECK_EQUAL(this->status, qpmad::Solver::OK);
     BOOST_CHECK(this->x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
+
+    if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+    {
+        this->status_sparse =
+                this->solver.solve(this->x_sparse, this->H_copy, this->h, this->A_sparse, this->Alb, this->Alb);
+        BOOST_CHECK_EQUAL(this->status, this->status_sparse);
+        BOOST_CHECK(this->x.isApprox(this->x_sparse, g_default_tolerance));
+    }
 }
 
 
@@ -303,10 +328,19 @@ public:
 public:
     void checkGeneralInequalities()
     {
+        H_copy = H;
+
         status = solver.solve(x, H, h, A, Alb, Aub);
 
         BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
         BOOST_CHECK(x.isApprox(x_ref, g_default_tolerance));
+
+        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        {
+            status_sparse = solver.solve(x_sparse, H_copy, h, A_sparse, Alb, Aub);
+            BOOST_CHECK_EQUAL(status, status_sparse);
+            BOOST_CHECK(x.isApprox(x_sparse, g_default_tolerance));
+        }
     }
 };
 
@@ -328,6 +362,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->h.setOnes(size);
 
     this->A = Eigen::MatrixXd::Identity(size, size).topRows(1);
+    this->A_sparse = this->A.sparseView();
     this->Alb.resize(num_ctr);
     this->Aub.resize(num_ctr);
     this->Alb(0) = -10;
@@ -440,6 +475,38 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 }
 
 
+BOOST_FIXTURE_TEST_CASE_TEMPLATE(
+        general_inequalities05_sparse,
+        t_Solver,
+        TypeListGeneralInequalities00<3>,
+        SolverGeneralInequalitiesFixture<t_Solver>)
+{
+    qpmad::MatrixIndex size = 2;
+    qpmad::MatrixIndex num_ctr = 3;
+
+    this->H.setIdentity(size, size);
+    this->h.resize(size);
+    this->h << -1.0, 0.0;
+
+    // x + y <= 1, x >= 0, y >= 0.
+    this->A_sparse.resize(num_ctr, size);
+    this->A_sparse.insert(0, 0) = 1.0;
+    this->A_sparse.insert(0, 1) = 1.0;
+    this->A_sparse.insert(1, 0) = 1.0;
+    this->A_sparse.insert(2, 1) = 1.0;
+    this->A = Eigen::MatrixXd(this->A_sparse);
+    this->Alb.resize(num_ctr);
+    this->Aub.resize(num_ctr);
+    this->Alb << -g_infinity, 0.0, 0.0;
+    this->Aub << 1.0, g_infinity, g_infinity;
+
+    this->x_ref.resize(size);
+    this->x_ref << 1.0, 0.0;
+
+    this->checkGeneralInequalities();
+}
+
+
 template <int t_num_ctr>
 using TypeListGeneralInequalities01 =
         boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 0, t_num_ctr> >;
@@ -516,10 +583,19 @@ public:
 public:
     void checkSimpleInequalities()
     {
+        H_copy = H;
+
         status = solver.solve(x, H, h, lb, ub, A, Alb, Aub);
 
         BOOST_CHECK_EQUAL(status, qpmad::Solver::OK);
         BOOST_CHECK(x.isApprox(x_ref, g_default_tolerance));
+
+        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        {
+            status_sparse = solver.solve(x_sparse, H_copy, h, A_sparse, Alb, Aub);
+            BOOST_CHECK_EQUAL(status, status_sparse);
+            BOOST_CHECK(x.isApprox(x_sparse, g_default_tolerance));
+        }
     }
 };
 

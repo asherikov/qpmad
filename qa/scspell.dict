@@ -4,6 +4,7 @@ apache
 cholesky
 copysign
 cpput
+decltype
 downdate
 eigenut
 fstream
@@ -21,6 +22,7 @@ qpmad
 semidefinite
 setprecision
 sherikov
+simplicial
 stdexcept
 tparam
 typelb

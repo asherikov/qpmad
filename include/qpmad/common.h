@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 
 #include "config.h"
 
