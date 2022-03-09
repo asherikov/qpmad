@@ -169,7 +169,20 @@ namespace qpmad
 
 
         template <class t_primal, class t_H, class t_h, class t_A, class t_Alb, class t_Aub>
-        ReturnStatus solve(t_primal &primal, t_H &H, const t_h &h, const t_A &A, const t_Alb &Alb, const t_Aub &Aub)
+        ReturnStatus solve(
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_A &A,
+                const t_Alb &Alb,
+                const t_Aub &Aub,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Alb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Aub))
         {
             return (
                     solve(primal,
@@ -184,6 +197,33 @@ namespace qpmad
         }
 
 
+        template <class t_primal, class t_H, class t_h, class t_A, class t_Alb>
+        ReturnStatus solve(
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_A &A,
+                const t_Alb &Alb,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Alb))
+        {
+            return (
+                    solve(primal,
+                          H,
+                          h,
+                          input_placeholders_.empty_vector_,
+                          input_placeholders_.empty_vector_,
+                          A,
+                          Alb,
+                          Alb,
+                          input_placeholders_.solver_parameters_));
+        }
+
+
         template <class t_primal, class t_H, class t_h, class t_lb, class t_ub, class t_A, class t_Alb, class t_Aub>
         ReturnStatus solve(
                 t_primal &primal,
@@ -193,9 +233,40 @@ namespace qpmad
                 const t_ub &ub,
                 const t_A &A,
                 const t_Alb &Alb,
-                const t_Aub &Aub)
+                const t_Aub &Aub,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_ub),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Alb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Aub))
         {
             return (solve(primal, H, h, lb, ub, A, Alb, Aub, input_placeholders_.solver_parameters_));
+        }
+
+
+        template <class t_primal, class t_H, class t_h, class t_lb, class t_ub, class t_A, class t_Alb>
+        ReturnStatus solve(
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_lb &lb,
+                const t_ub &ub,
+                const t_A &A,
+                const t_Alb &Alb,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_ub),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_A),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_Alb))
+        {
+            return (solve(primal, H, h, lb, ub, A, Alb, Alb, input_placeholders_.solver_parameters_));
         }
 
 
@@ -206,7 +277,13 @@ namespace qpmad
                 const t_h &h,
                 const t_lb &lb,
                 const t_ub &ub,
-                const SolverParameters &param)
+                const SolverParameters &param,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_ub))
         {
             return (
                     solve(primal,
@@ -222,7 +299,18 @@ namespace qpmad
 
 
         template <class t_primal, class t_H, class t_h, class t_lb, class t_ub>
-        ReturnStatus solve(t_primal &primal, t_H &H, const t_h &h, const t_lb &lb, const t_ub &ub)
+        ReturnStatus solve(
+                t_primal &primal,
+                t_H &H,
+                const t_h &h,
+                const t_lb &lb,
+                const t_ub &ub,
+                // accept only Eigen types as inputs
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_primal),
+                QPMAD_UTILS_EIGEN_MATRIX_ENABLER(t_H),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_h),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_lb),
+                QPMAD_UTILS_EIGEN_VECTOR_ENABLER(t_ub))
         {
             return (
                     solve(primal,
