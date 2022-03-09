@@ -56,7 +56,7 @@ cmake:
 	cd ${BUILD_DIR}; ${MAKE} ${MAKE_FLAGS}
 
 ctest:
-	cd ${BUILD_DIR}; ${MAKE} test
+	cd ${BUILD_DIR}; ctest --schedule-random --output-on-failure
 
 
 # utils
