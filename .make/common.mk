@@ -43,7 +43,7 @@ spell:
 	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./qa/scspell.dict
 
 format:
-	${FIND_QPMAD_SOURCES} | grep -v "cpput" | grep -v "eigenut" | xargs clang-format-10 -verbose -i
+	${FIND_QPMAD_SOURCES} | grep -v "cpput" | grep -v "eigenut" | xargs clang-format13 -verbose -i
 
 
 clangcheck:

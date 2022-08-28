@@ -9,7 +9,7 @@ env:
 
 jobs:
     cpp_octave:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v2
             - run: sudo apt update
@@ -21,7 +21,7 @@ jobs:
             - run: make test
 
     dependency:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v2
             - run: $APT libeigen3-dev
@@ -48,7 +48,7 @@ jobs:
                 make catkin_test_new ROS_DISTRO=melodic UBUNTU_DISTRO=bionic
 
     prerelease:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v2
               with:
@@ -59,7 +59,7 @@ jobs:
 
 
     bionic_scanbuild:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
 
         # Install system dependencies, namely a very barebones ROS setup.
         steps:
@@ -70,7 +70,7 @@ jobs:
             - run: make clangcheck SCANBUILD=scan-build-10
 
     deb:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v2
             - run: $APT libeigen3-dev

@@ -53,7 +53,7 @@ Features:
 =========
 - Double sided inequality constraints: `lb <= A*x <= ub`. Such constraints
   can be handled in a more efficient way than `lb <= A*x` commonly used in
-  other implementations of the algorithm.
+  other implementations of the algorithm. `A` can be sparse.
 
 - Simple bounds: `lb <= x <= ub`.
 

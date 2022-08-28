@@ -47,7 +47,7 @@ namespace qpmad
         template <int t_rows>
         using Vector = Eigen::Matrix<t_Scalar, t_rows, 1>;
         template <int t_rows, int t_cols>
-        using Matrix = Eigen::Matrix<t_Scalar, t_rows, t_cols>;  // DEPRECATED
+        using Matrix = Eigen::Matrix<t_Scalar, t_rows, t_cols>;  /// @deprecated
         using Scalar = t_Scalar;
 
 

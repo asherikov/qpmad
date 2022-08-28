@@ -8,7 +8,8 @@ problems:
 	${MAKE} fetch_qpoases
 
 fetch_qpoases:
-	svn export https://projects.coin-or.org/svn/qpOASES/misc/testingdata/cpp . --force
+	#svn export https://projects.coin-or.org/svn/qpOASES/misc/testingdata/cpp . --force
+	svn export https://github.com/coin-or/qpOASES/branches/misc/testingdata/cpp . --force
 
 clean:
 

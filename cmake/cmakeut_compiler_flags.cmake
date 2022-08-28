@@ -59,7 +59,7 @@ function(cmakeut_compiler_flags STANDARD)
 
 
     if (CMAKEUT_CLANG_TIDY)
-        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy11 clang-tidy-10 clang-tidy-9 clang-tidy-8 REQUIRED)
+        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy13 clang-tidy11 clang-tidy-10 clang-tidy-9 clang-tidy-8 REQUIRED)
 
         set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-warnings-as-errors=*;-checks=*")
 
@@ -76,7 +76,7 @@ function(cmakeut_compiler_flags STANDARD)
         # member initialization in constructors -- false positives
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-type-member-init,-hicpp-member-init")
         # default member initialization scatters initializations -- initialization must be done via constructors
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-default-member-init")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-default-member-init,-cppcoreguidelines-prefer-member-initializer")
         # calling virtual functions from desctructors is well defined and generally safe
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-clang-analyzer-optin.cplusplus.VirtualCall")
         # these checks require values to be assigned to const variables, which is inconvenient
@@ -101,6 +101,9 @@ function(cmakeut_compiler_flags STANDARD)
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvmlibc-*")
 
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES}")
+
+        #altera-	Checks related to OpenCL programming for FPGAs.
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-altera-*")
 
         # might be useful too
         #,-cert-env33-c
