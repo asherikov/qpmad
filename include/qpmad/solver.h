@@ -541,8 +541,7 @@ namespace qpmad
 
 
                 initializeMachineryLazy(H, param.return_inverted_cholesky_factor_);
-                dual_.resize(primal_size_);
-                dual_step_direction_.resize(primal_size_);
+                reserveDual(primal_size_);
 
 
                 double chosen_ctr_dot_primal_step_direction = 0.0;
@@ -755,15 +754,41 @@ namespace qpmad
         }
 
 
+        void reserve(
+                const MatrixIndex primal_size,
+                const MatrixIndex num_simple_bounds,
+                const MatrixIndex num_general_constraints)
+        {
+            reserveMachinery(primal_size, num_general_constraints);
+            constraints_status_.resize(num_simple_bounds + num_general_constraints);
+            reserveDual(primal_size);
+        }
+
+
     private:
+        void reserveMachinery(const MatrixIndex primal_size, const MatrixIndex num_general_constraints)
+        {
+            active_set_.initialize(primal_size);
+            primal_step_direction_.resize(primal_size);
+            general_ctr_dot_primal_.resize(num_general_constraints);
+
+            factorization_data_.reserve(primal_size);
+        }
+
+
+        void reserveDual(const MatrixIndex primal_size)
+        {
+            dual_.resize(primal_size);
+            dual_step_direction_.resize(primal_size);
+        }
+
+
         template <class t_MatrixType>
         void initializeMachineryLazy(t_MatrixType &H, const bool return_inverted_cholesky_factor)
         {
             if (not machinery_initialized_)
             {
-                active_set_.initialize(primal_size_);
-                primal_step_direction_.resize(primal_size_);
-                general_ctr_dot_primal_.resize(num_general_constraints_);
+                reserveMachinery(primal_size_, num_general_constraints_);
 
                 factorization_data_.initialize(H, hessian_type_, primal_size_, return_inverted_cholesky_factor);
                 if (return_inverted_cholesky_factor)

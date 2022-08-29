@@ -13,6 +13,9 @@ qpmad_add_test("test_solver_objective" "solver_objective.cpp")
 qpmad_add_test("test_solver_simpleineq" "solver_simpleineq.cpp")
 qpmad_add_test("test_resolve" "resolve.cpp")
 
+
 if(NOT QPMAD_ENABLE_TRACING)
     qpmad_add_test("test_allocation" "allocation.cpp")
+    qpmad_add_test("test_preallocation" "preallocation.cpp")
 endif()
+

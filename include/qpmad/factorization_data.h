@@ -27,6 +27,16 @@ namespace qpmad
 
 
     public:
+        void reserve(const MatrixIndex primal_size)
+        {
+            QLi_aka_J.resize(primal_size, primal_size);
+            R.resize(primal_size, primal_size + 1);
+#ifdef QPMAD_USE_HOUSEHOLDER
+            householder_workspace_.resize(primal_size, primal_size);
+#endif
+        }
+
+
         template <class t_MatrixType>
         void initialize(
                 t_MatrixType &H,
@@ -36,7 +46,6 @@ namespace qpmad
         {
             primal_size_ = primal_size;
 
-            QLi_aka_J.resize(primal_size_, primal_size_);
             QLi_aka_J.template triangularView<Eigen::StrictlyLower>().setZero();
             switch (hessian_type)
             {
@@ -57,11 +66,7 @@ namespace qpmad
                     break;
             }
 
-            R.resize(primal_size_, primal_size_ + 1);
             length_nonzero_head_d_ = primal_size_;
-#ifdef QPMAD_USE_HOUSEHOLDER
-            householder_workspace_.resize(primal_size_, primal_size_);
-#endif
         }
 
 

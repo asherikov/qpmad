@@ -70,8 +70,10 @@ Features:
 
 - Does not compute/update Lagrange multipliers for equality constraints.
 
-- Solver can be instantiated with static dimensions in order to avoid memory
-  allocations.
+- Three types of memory allocation:
+    - on demand (default);
+    - on compile time using template parameters;
+    - dynamic preallocation using `reserve()` method.
 
 
 <a name="dependencies"></a>
