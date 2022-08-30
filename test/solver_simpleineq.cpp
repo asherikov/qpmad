@@ -27,7 +27,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 {
     qpmad::MatrixIndex size = 2;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
     this->lb.resize(size);
@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 {
     qpmad::MatrixIndex size = 20;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
 
@@ -79,7 +79,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 20;
     qpmad::MatrixIndex num_eq_ctr = 1;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
 

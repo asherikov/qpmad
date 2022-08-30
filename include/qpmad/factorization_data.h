@@ -259,14 +259,14 @@ namespace qpmad
         template <class t_VectorType, class t_ActiveSet>
         void computeDualStepDirection(t_VectorType &step_direction, const t_ActiveSet &active_set)
         {
-            step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_).noalias() =
-                    -R.block(active_set.num_equalities_,
-                             active_set.num_equalities_,
-                             active_set.num_inequalities_,
-                             active_set.num_inequalities_)
-                             .template triangularView<Eigen::Upper>()
-                             .solve(R.col(active_set.size_)
-                                            .segment(active_set.num_equalities_, active_set.num_inequalities_));
+            step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_) =
+                    -R.col(active_set.size_).segment(active_set.num_equalities_, active_set.num_inequalities_);
+            R.block(active_set.num_equalities_,
+                    active_set.num_equalities_,
+                    active_set.num_inequalities_,
+                    active_set.num_inequalities_)
+                    .template triangularView<Eigen::Upper>()
+                    .solveInPlace(step_direction.segment(active_set.num_equalities_, active_set.num_inequalities_));
         }
     };
 }  // namespace qpmad

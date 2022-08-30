@@ -29,7 +29,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 1;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
     this->A = Eigen::MatrixXd::Identity(size, size).topRows(1);
@@ -55,7 +55,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
 
     this->A.resize(num_ctr, size);
     this->A << 1, 0, 1, 1, 2, 0.5;
@@ -80,7 +80,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
 
     this->A.resize(num_ctr, size);
     this->A << 1, 0, 1, 1, 2, 0.5;
@@ -105,7 +105,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
 
     this->A.resize(num_ctr, size);
     this->A << 1, 0, -1, -1, -2, -0.5;
@@ -130,7 +130,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
 
     this->A.resize(num_ctr, size);
     this->A << 1, 0, -1, -1, -2, -0.5;
@@ -155,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.resize(size);
     this->h << -1.0, 0.0;
 
@@ -187,7 +187,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 3;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.resize(size);
     this->h << -1.0, 0.0;
 
@@ -219,7 +219,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 2;
     qpmad::MatrixIndex num_ctr = 2;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.resize(size);
     this->h << 0.0, 0.0;
 
@@ -233,7 +233,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->Alb << 10, 100.0;
     this->Aub << 10, g_infinity;
 
-    BOOST_CHECK_THROW(this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb), std::exception);
+    BOOST_CHECK_THROW(
+            this->xH.status = this->solver.solve(this->xH.x, this->xH.H, this->h, this->A, this->Alb), std::exception);
 }
 
 
@@ -250,7 +251,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 20;
     qpmad::MatrixIndex num_ctr = size;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
 
@@ -278,7 +279,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 20;
     qpmad::MatrixIndex num_ctr = size + 1;
 
-    this->H.setIdentity(size, size);
+    this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
 
 

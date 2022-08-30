@@ -17,6 +17,7 @@ lagrange
 michalczyk
 noalias
 nolint
+preallocation
 ptrdiff
 qpmad
 semidefinite
@@ -27,6 +28,7 @@ stdexcept
 tparam
 typelb
 typeub
+ubuntu
 wpedantic
-preallocation
+ubuntu
 
