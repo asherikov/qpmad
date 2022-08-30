@@ -74,7 +74,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
-    this->H(5, 5) = 0.0;  // break positive definiteness
+    this->xH.H(5, 5) = 0.0;  // break positive definiteness
     this->h.setRandom(size);
 
     BOOST_CHECK_THROW(this->checkObjective(), std::exception);

@@ -95,7 +95,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->Alb(num_ctr - 1) += 100.0;
 
     // Infeasible equalities
-    BOOST_CHECK_THROW(this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb), std::exception);
+    BOOST_CHECK_THROW(
+            this->xH.status = this->solver.solve(this->xH.x, this->xH.H, this->h, this->A, this->Alb), std::exception);
 }
 
 
@@ -119,15 +120,28 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->Alb.setConstant(1.0);
     this->Alb(num_ctr - 1) = 100.0;
 
-    this->status = this->solver.solve(this->x, this->H, this->h, this->A, this->Alb);
+    this->xH.status = this->solver.solve(this->xH.x, this->xH.H, this->h, this->A, this->Alb);
 
-    BOOST_CHECK_EQUAL(this->status, qpmad::Solver::OK);
-    BOOST_CHECK(this->x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
+    BOOST_CHECK_EQUAL(this->xH.status, qpmad::Solver::OK);
+    BOOST_CHECK(this->xH.x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
 
     if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
     {
-        this->status_sparse = this->solver.solve(this->x_sparse, this->H_copy, this->h, this->A_sparse, this->Alb);
-        BOOST_CHECK_EQUAL(this->status, this->status_sparse);
-        BOOST_CHECK(this->x.isApprox(this->x_sparse, g_default_tolerance));
+        this->xH_sparse.status =
+                this->solver.solve(this->xH_sparse.x, this->xH_sparse.H, this->h, this->A_sparse, this->Alb);
+        BOOST_CHECK_EQUAL(this->xH.status, this->xH_sparse.status);
+        BOOST_CHECK(this->xH.x.isApprox(this->xH_sparse.x, g_default_tolerance));
     }
+
+#ifdef EIGEN_RUNTIME_NO_MALLOC
+    this->solver_prealloc.reserve(this->xH_prealloc.H.rows(), 0, this->A.rows());
+
+    Eigen::internal::set_is_malloc_allowed(false);
+    this->xH_prealloc.status =
+            this->solver_prealloc.solve(this->xH_prealloc.x, this->xH_prealloc.H, this->h, this->A, this->Alb);
+    Eigen::internal::set_is_malloc_allowed(true);
+
+    BOOST_CHECK_EQUAL(this->xH.status, this->xH_prealloc.status);
+    BOOST_CHECK(this->xH.x.isApprox(this->xH_prealloc.x, g_default_tolerance));
+#endif
 }
