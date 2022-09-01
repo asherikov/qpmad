@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['violation_5f_245',['violation_',['../classqpmad_1_1ChosenConstraint.html#a27297f11d5bd87a228fea8e1c2f6f613',1,'qpmad::ChosenConstraint']]]
+  ['tolerance_5f_0',['tolerance_',['../classqpmad_1_1SolverParameters.html#af86d0296b871eb0aa9135cc1fe0456ac',1,'qpmad::SolverParameters']]],
+  ['type_1',['type',['../classqpmad_1_1GivensRotation.html#aa35fdfe9543be066eb429c2644b35e16',1,'qpmad::GivensRotation']]]
 ];

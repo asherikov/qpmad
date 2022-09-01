@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sin_241',['sin',['../classqpmad_1_1GivensRotation.html#a137c5a24b2a670f308f967205924d462',1,'qpmad::GivensRotation']]],
-  ['size_5f_242',['size_',['../classqpmad_1_1ActiveSet.html#ac7ba3b6c7d79f14c1f02c71391d6b1b8',1,'qpmad::ActiveSet']]]
+  ['r_0',['R',['../classqpmad_1_1FactorizationData.html#ac6a67c8e325d78f70e701b612bc380c4',1,'qpmad::FactorizationData']]],
+  ['return_5finverted_5fcholesky_5ffactor_5f_1',['return_inverted_cholesky_factor_',['../classqpmad_1_1SolverParameters.html#af8fc4924c305813bcc1dae60e4570969',1,'qpmad::SolverParameters']]]
 ];

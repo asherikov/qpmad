@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['num_5fconstraints_5f_230',['num_constraints_',['../classqpmad_1_1SolverTemplate.html#a8e47c3e4b18b11fcc04b7479c1f22626',1,'qpmad::SolverTemplate']]],
-  ['num_5fconstraints_5fcompile_5ftime_5f_231',['num_constraints_compile_time_',['../classqpmad_1_1SolverTemplate.html#a05d7824c546a6e61aad5773db68d9bda',1,'qpmad::SolverTemplate']]],
-  ['num_5fequalities_5f_232',['num_equalities_',['../classqpmad_1_1ActiveSet.html#ab592155dd2f465a2179b23656046efde',1,'qpmad::ActiveSet']]],
-  ['num_5fgeneral_5fconstraints_5f_233',['num_general_constraints_',['../classqpmad_1_1InputParser.html#a7be0a58c100255a94bc7192bb30928c3',1,'qpmad::InputParser']]],
-  ['num_5finequalities_5f_234',['num_inequalities_',['../classqpmad_1_1ActiveSet.html#a21a7824ec82ace3ea0fb374e74f2d53b',1,'qpmad::ActiveSet']]],
-  ['num_5fsimple_5fbounds_5f_235',['num_simple_bounds_',['../classqpmad_1_1InputParser.html#a15a0b7de51fb8a015f260bad7725e9c5',1,'qpmad::InputParser']]]
+  ['machinery_5finitialized_5f_0',['machinery_initialized_',['../classqpmad_1_1SolverTemplate.html#ad6da3a4c8f293c57571e6c1e1b84b229',1,'qpmad::SolverTemplate']]],
+  ['max_5fiter_5f_1',['max_iter_',['../classqpmad_1_1SolverParameters.html#a2ffde5050feb736adb1f3029b6588c3f',1,'qpmad::SolverParameters']]]
 ];

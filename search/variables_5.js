@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['h_5fsize_5f_221',['h_size_',['../classqpmad_1_1InputParser.html#a43d68d46dc2e3634cfa369fee21e92ba',1,'qpmad::InputParser']]],
-  ['hessian_5ftype_5f_222',['hessian_type_',['../classqpmad_1_1SolverTemplate.html#a447f62cac3cab1b98fc96e25a31586a9',1,'qpmad::SolverTemplate::hessian_type_()'],['../classqpmad_1_1SolverParameters.html#a6bd1ca6bfe264123cca7ee531eec0ffe',1,'qpmad::SolverParameters::hessian_type_()']]]
+  ['general_5fconstraint_5findex_5f_0',['general_constraint_index_',['../classqpmad_1_1ChosenConstraint.html#a009d61be24f6602467e23ab8a431d20f',1,'qpmad::ChosenConstraint']]],
+  ['general_5fctr_5fdot_5fprimal_5f_1',['general_ctr_dot_primal_',['../classqpmad_1_1SolverTemplate.html#a9766fa34dd7b0e86bc7bd892fbf89773',1,'qpmad::SolverTemplate']]]
 ];

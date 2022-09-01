@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['qli_5faka_5fj_238',['QLi_aka_J',['../classqpmad_1_1FactorizationData.html#a0939f2a6b91583a8585c383e171bbf76',1,'qpmad::FactorizationData']]]
+  ['primal_5fsize_5f_0',['primal_size_',['../classqpmad_1_1FactorizationData.html#a89fe93b8854dd39a74b69305e093a8fa',1,'qpmad::FactorizationData::primal_size_()'],['../classqpmad_1_1InputParser.html#afadcb8980111b8323e5f7b1644ed4f38',1,'qpmad::InputParser::primal_size_()']]],
+  ['primal_5fstep_5fdirection_5f_1',['primal_step_direction_',['../classqpmad_1_1SolverTemplate.html#ad12a15e959ad28e58e85a565d69f7393',1,'qpmad::SolverTemplate']]]
 ];

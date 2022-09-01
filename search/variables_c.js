@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['r_239',['R',['../classqpmad_1_1FactorizationData.html#ac6a67c8e325d78f70e701b612bc380c4',1,'qpmad::FactorizationData']]],
-  ['return_5finverted_5fcholesky_5ffactor_5f_240',['return_inverted_cholesky_factor_',['../classqpmad_1_1SolverParameters.html#af8fc4924c305813bcc1dae60e4570969',1,'qpmad::SolverParameters']]]
+  ['qli_5faka_5fj_0',['QLi_aka_J',['../classqpmad_1_1FactorizationData.html#a0939f2a6b91583a8585c383e171bbf76',1,'qpmad::FactorizationData']]]
 ];
