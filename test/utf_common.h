@@ -62,7 +62,7 @@ namespace qpmad_utils
     public:
         Eigen::VectorXd x;
         Eigen::MatrixXd H;
-        typename t_Solver::ReturnStatus status;
+        typename t_Solver::ReturnStatus status = t_Solver::UNDEFINED;
 
     public:
         template <typename t_Index>
