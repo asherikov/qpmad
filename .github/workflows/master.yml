@@ -29,23 +29,23 @@ jobs:
             - run: sudo make install
             - run: make test_dependency
 
-    bionic_melodic_catkin_old:
-        container: ros:melodic-ros-base-bionic
+    focal_noetic_catkin_old:
+        container: ros:noetic-ros-base-focal
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - run: |
-                source /opt/ros/melodic/setup.bash
-                make catkin_test_old ROS_DISTRO=melodic UBUNTU_DISTRO=bionic
+                source /opt/ros/noetic/setup.bash
+                make catkin_test_old ROS_DISTRO=noetic UBUNTU_DISTRO=focal
 
-    bionic_melodic_catkin_new:
-        container: ros:melodic-ros-base-bionic
+    focal_noetic_catkin_new:
+        container: ros:noetic-ros-base-focal
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - run: |
-                source /opt/ros/melodic/setup.bash
-                make catkin_test_new ROS_DISTRO=melodic UBUNTU_DISTRO=bionic
+                source /opt/ros/noetic/setup.bash
+                make catkin_test_new ROS_DISTRO=noetic UBUNTU_DISTRO=focal
 
     prerelease:
         runs-on: ubuntu-20.04
@@ -53,7 +53,7 @@ jobs:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
-            - run: make ros_prerelease ROS_DISTRO=melodic UBUNTU_DISTRO=bionic BRANCH=`git branch --show-current`
+            - run: make ros_prerelease ROS_DISTRO=noetic UBUNTU_DISTRO=focal BRANCH=`git branch --show-current`
               env:
                   CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
 

@@ -46,11 +46,11 @@ ros_install_deps:
 	#apt upgrade -y
 	${APT_INSTALL} ${DEBIAN_SYSTEM_DEPENDENCIES}
 	${APT_INSTALL} \
-		python-bloom \
+		python3-bloom \
 		devscripts \
 		debhelper \
 		fakeroot
-	${APT_INSTALL} python-catkin-tools
+	${APT_INSTALL} python3-catkin-tools
 
 
 catkin_test_deb_pkg:
@@ -130,7 +130,7 @@ catkin_test_new: ros_install_deps
 
 ros_prerelease_deps:
 	sudo ${MAKE} ros_add_repos UBUNTU_DISTRO=${UBUNTU_DISTRO}
-	sudo ${APT_INSTALL} python3-ros-buildfarm
+	pip3 install ros_buildfarm
 
 ros_prerelease: ros_prerelease_deps
 	# sudo apt install docker.io
