@@ -42,7 +42,7 @@ namespace qpmad
         {
             OK = 0,
             MAXIMAL_NUMBER_OF_ITERATIONS = 4,
-            UNDEFINED = -1 // used for initialization of status variables
+            UNDEFINED = -1  // used for initialization of status variables
         };
 
         template <int t_rows>

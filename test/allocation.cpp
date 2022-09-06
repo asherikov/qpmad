@@ -39,7 +39,7 @@ public:
 
 
 public:
-    void checkSimpleInequalities()
+    void solveAndCheck()
     {
         status = solver.solve(x, H, h, lb, ub, A, Alb, Aub);
 
@@ -64,5 +64,5 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(simple_inequalities21, t_Fixture, TypeListSolve
 
     this->x_ref << 1.0, 2.0, 3.0, 4.0, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875,
             -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875, -0.71875;
-    this->checkSimpleInequalities();
+    this->solveAndCheck();
 }

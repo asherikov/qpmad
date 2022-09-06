@@ -210,7 +210,14 @@ public:
     {
         copyH();
 
-        xH.status = solver.solve(xH.x, xH.H, h, lb, ub, A, Alb, Aub);
+        if (A.rows() > 0)
+        {
+            xH.status = solver.solve(xH.x, xH.H, h, lb, ub, A, Alb, Aub);
+        }
+        else
+        {
+            xH.status = solver.solve(xH.x, xH.H, h, lb, ub);
+        }
 
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
         BOOST_CHECK(xH.x.isApprox(x_ref, g_default_tolerance));
@@ -226,7 +233,14 @@ public:
         solver_prealloc.reserve(xH_prealloc.H.rows(), lb.rows(), A.rows());
 
         Eigen::internal::set_is_malloc_allowed(false);
-        xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, lb, ub, A, Alb, Aub);
+        if (A.rows() > 0)
+        {
+            xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, lb, ub, A, Alb, Aub);
+        }
+        else
+        {
+            xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, lb, ub);
+        }
         Eigen::internal::set_is_malloc_allowed(true);
 
         BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
