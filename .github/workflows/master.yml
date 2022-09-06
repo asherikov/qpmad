@@ -20,6 +20,20 @@ jobs:
             - run: $APT clang-tidy-10
             - run: make test
 
+    latest_eigen:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v2
+            - run: sudo apt update
+            - run: $APT cppcheck
+            - run: $APT python3-pip python3-setuptools
+            - run: sudo pip3 install scspell3k
+            - run: $APT libboost-all-dev octave liboctave-dev
+            - run: $APT clang-tidy-13
+            - run: make install_latest_eigen
+            # suppressions needed for sanitizers
+            - run: make unit_tests OPTIONS=test
+
     dependency:
         runs-on: ubuntu-20.04
         steps:

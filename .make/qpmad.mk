@@ -42,6 +42,12 @@ test_dependency: clean
 	cd build/dependency_test; cmake ../../${DEPENDENCY_PATH}
 	cd build/dependency_test; ${MAKE} ${MAKE_FLAGS}
 
+install_latest_eigen:
+	mkdir -p ${BUILD_DIR};
+	cd ${BUILD_DIR}; git clone https://gitlab.com/libeigen/eigen.git
+	mkdir -p ${BUILD_DIR}/eigen/build
+	cd ${BUILD_DIR}/eigen/build; cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..; sudo make install
+
 
 # build targets
 #----------------------------------------------

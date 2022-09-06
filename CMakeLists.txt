@@ -36,6 +36,16 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
 
 # --------------
+# Dependencies
+# --------------
+# Eigen
+find_package(Eigen3 REQUIRED)
+include_directories (SYSTEM "${EIGEN3_INCLUDE_DIR}")
+set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
+# --------------
+
+
+# --------------
 # C++ flags
 # --------------
 include(cmakeut_compiler_flags)
@@ -45,18 +55,12 @@ set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
 # Eigen issues
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
-cmakeut_compiler_flags("c++11")
+if ("${EIGEN3_VERSION}" VERSION_GREATER "3.4.0")
+    cmakeut_compiler_flags("c++14")
+else()
+    cmakeut_compiler_flags("c++11")
+endif()
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
-# --------------
-
-
-# --------------
-# Dependencies
-# --------------
-# Eigen
-find_package(Eigen3 REQUIRED)
-include_directories (SYSTEM "${EIGEN3_INCLUDE_DIR}")
-set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 # --------------
 
 
