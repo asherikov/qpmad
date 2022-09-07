@@ -893,8 +893,8 @@ namespace qpmad
         }
 
 
-        template <int t_rows, int t_cols>
-        static void factorizeCholeskyInPlace(Eigen::Matrix<t_Scalar, t_rows, t_cols> &H)
+        template <int t_rows, int t_cols, int... t_Other>
+        static void factorizeCholeskyInPlace(Eigen::Matrix<t_Scalar, t_rows, t_cols, t_Other...> &H)
         {
             const Eigen::LLT<Eigen::Ref<typename std::decay<decltype(H)>::type>, Eigen::Lower> llt(H);
             QPMAD_UTILS_PERSISTENT_ASSERT(
