@@ -79,7 +79,7 @@ public:
         xH.status = solver.solve(xH.x, xH.H, h, lb, ub, A, Alb, Aub, param);
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
 
-        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, lb, ub, A_sparse, Alb, Aub, param);
             BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
@@ -105,7 +105,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(resolve_with_cholesky, t_Solver, TypeListResolv
 {
     this->solve();
     // Hessian changed;
-    BOOST_CHECK(not this->H_copy.isApprox(this->xH.H, g_default_tolerance));
+    BOOST_CHECK(!this->H_copy.isApprox(this->xH.H, g_default_tolerance));
 
     // next iteration
     this->H_copy = this->xH.H;
@@ -126,7 +126,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(resolve_with_inverted_cholesky, t_Solver, TypeL
     this->param.return_inverted_cholesky_factor_ = true;
     this->solve();
     // Hessian changed;
-    BOOST_CHECK(not this->H_copy.isApprox(this->xH.H, g_default_tolerance));
+    BOOST_CHECK(!this->H_copy.isApprox(this->xH.H, g_default_tolerance));
 
     // next iteration
     this->H_copy = this->xH.H;
@@ -213,7 +213,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 {
     this->solve();
     // Hessian changed;
-    BOOST_CHECK(not this->H_copy.isApprox(this->xH.H, g_default_tolerance));
+    BOOST_CHECK(!this->H_copy.isApprox(this->xH.H, g_default_tolerance));
 
     // next iteration
     this->H_copy = this->xH.H;
@@ -238,7 +238,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     this->param.return_inverted_cholesky_factor_ = true;
     this->solve();
     // Hessian changed;
-    BOOST_CHECK(not this->H_copy.isApprox(this->xH.H, g_default_tolerance));
+    BOOST_CHECK(!this->H_copy.isApprox(this->xH.H, g_default_tolerance));
 
     // next iteration
     this->H_copy = this->xH.H;

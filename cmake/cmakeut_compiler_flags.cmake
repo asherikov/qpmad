@@ -23,6 +23,8 @@ function(cmakeut_compiler_flags STANDARD)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 
         # using Visual Studio C++
+        set (CXX_WARNINGS "")
+        set (CXX_OTHER "/bigobj")
 
     endif()
 
@@ -115,12 +117,10 @@ function(cmakeut_compiler_flags STANDARD)
     endif()
 
 
-    set(CXX_GENERIC "${CXX_WARNINGS} ${CXX_OTHER} ${CXX_SANITIZERS}")
-
-
-    if ("${STANDARD}" STREQUAL "")
-        set (CMAKEUT_CXX_FLAGS "${CXX_GENERIC}" PARENT_SCOPE)
+    if (NOT "${STANDARD}" STREQUAL "")
     else()
-        set (CMAKEUT_CXX_FLAGS "-std=${STANDARD} ${CXX_GENERIC}" PARENT_SCOPE)
+        set (CMAKE_CXX_STANDARD "${STANDARD}" PARENT_SCOPE)
     endif()
+
+    set (CMAKEUT_CXX_FLAGS "${CXX_WARNINGS} ${CXX_OTHER} ${CXX_SANITIZERS}" PARENT_SCOPE)
 endfunction()

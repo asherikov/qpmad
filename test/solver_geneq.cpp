@@ -125,7 +125,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
     BOOST_CHECK_EQUAL(this->xH.status, qpmad::Solver::OK);
     BOOST_CHECK(this->xH.x.isApprox(Eigen::VectorXd::Ones(size), g_default_tolerance));
 
-    if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+    if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
     {
         this->xH_sparse.status =
                 this->solver.solve(this->xH_sparse.x, this->xH_sparse.H, this->h, this->A_sparse, this->Alb);

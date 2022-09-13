@@ -127,7 +127,7 @@ public:
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
         BOOST_CHECK(xH.x.isApprox(tmp, g_default_tolerance));
 
-        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, A_sparse, Alb);
             BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
@@ -171,7 +171,7 @@ public:
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
         BOOST_CHECK(xH.x.isApprox(x_ref, g_default_tolerance));
 
-        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, A_sparse, Alb, Aub);
             BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
@@ -222,7 +222,7 @@ public:
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
         BOOST_CHECK(xH.x.isApprox(x_ref, g_default_tolerance));
 
-        if (0 != this->A_sparse.rows() and 0 != this->A_sparse.cols())
+        if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, lb, ub, A_sparse, Alb, Aub);
             BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);

@@ -28,8 +28,8 @@
 // is_eigen_type requires Boost
 #define QPMAD_UTILS_EIGEN_VECTOR_ENABLER(Type) const typename std::enable_if<Type::IsVectorAtCompileTime>::type * = NULL
 #define QPMAD_UTILS_EIGEN_MATRIX_ENABLER(Type)                                                                         \
-    const typename std::enable_if<(Type::ColsAtCompileTime == Eigen::Dynamic or Type::ColsAtCompileTime > 1)>::type    \
-            * = NULL
+    const typename std::enable_if<Type::ColsAtCompileTime == Eigen::Dynamic || Type::ColsAtCompileTime != 1>::type * = \
+            NULL
 
 
 namespace qpmad
@@ -559,7 +559,7 @@ namespace qpmad
 
 
                 // last iteration is not counted, so iter_counter_ starts with 1.
-                for (iter_counter_ = 1; (param.max_iter_ < 0) or (iter_counter_ <= param.max_iter_); ++iter_counter_)
+                for (iter_counter_ = 1; (param.max_iter_ < 0) || (iter_counter_ <= param.max_iter_); ++iter_counter_)
                 {
                     QPMAD_TRACE(">>>>>>>>>" << iter_counter_ << "<<<<<<<<<");
 #ifdef QPMAD_ENABLE_TRACING
@@ -787,7 +787,7 @@ namespace qpmad
         template <class t_MatrixType>
         void initializeMachineryLazy(t_MatrixType &H, const bool return_inverted_cholesky_factor)
         {
-            if (not machinery_initialized_)
+            if (!machinery_initialized_)
             {
                 reserveMachinery(primal_size_, num_general_constraints_);
 

@@ -39,6 +39,7 @@ Contents
 * [Dependencies](#dependencies)
 * [Notes](#notes)
 * [Documentation](#docs)
+* [FAQ](#faq)
 
 
 <a name="links"></a>
@@ -118,3 +119,11 @@ Documentation and examples
 * Precompiled Doxygen documentation: https://asherikov.github.io/qpmad/
 * Introductory demo: https://asherikov.github.io/qpmad/DEMO.html [`./test/dependency/demo.cpp`]
 
+
+<a name="faq"></a>
+FAQ
+===
+
+'Non-negative step lengths expected' exception
+----------------------------------------------
+See discussion at https://github.com/asherikov/qpmad/issues/2

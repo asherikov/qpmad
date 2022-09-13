@@ -11,6 +11,9 @@
 
 #pragma once
 
+#include "common.h"
+
+
 namespace qpmad
 {
     /**
@@ -113,8 +116,12 @@ namespace qpmad
         }
 
         template <class t_MatrixType>
-        void applyColumnWise(t_MatrixType &M, const int start, const int end, const int column_1, const int column_2)
-                const
+        void applyColumnWise(
+                t_MatrixType &M,
+                MatrixIndex start,
+                MatrixIndex end,
+                MatrixIndex column_1,
+                MatrixIndex column_2) const
         {
             switch (type)
             {
@@ -133,7 +140,8 @@ namespace qpmad
 
 
         template <class t_MatrixType>
-        void applyRowWise(t_MatrixType &M, const int start, const int end, const int row_1, const int row_2) const
+        void applyRowWise(t_MatrixType &M, MatrixIndex start, MatrixIndex end, MatrixIndex row_1, MatrixIndex row_2)
+                const
         {
             switch (type)
             {
