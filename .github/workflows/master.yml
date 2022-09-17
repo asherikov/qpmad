@@ -124,9 +124,6 @@ jobs:
               with:
                   arch: x64
             - run: |
-                  Move-Item -Path vcpkg.json.test -Destination vcpkg.json
-                  vcpkg install
-            - run: |
-                  cmake -D CMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D QPMAD_BUILD_TESTS=ON -G "NMake Makefiles" .
+                  cmake -D VCPKG_INSTALL_OPTIONS="--x-feature=test" -D CMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D QPMAD_BUILD_TESTS=ON -G "NMake Makefiles" .
                   nmake
-                  nmake test
+            - run: ctest --schedule-random --output-on-failure

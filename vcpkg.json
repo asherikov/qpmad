@@ -1,0 +1,22 @@
+{
+    "name": "qpmad",
+    "version-string": "1.1.1",
+    "description": "Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set algorithm for quadratic programming.",
+    "homepage": "https://github.com/asherikov/qpmad",
+    "documentation": "https://asherikov.github.io/qpmad/",
+    "license": "Apache-2.0",
+    "dependencies": [
+        "eigen3"
+    ],
+    "features": {
+        "test": {
+            "description": "Testing",
+            "dependencies": [
+                "boost-timer",
+                "boost-test",
+                "boost-system",
+                "boost-lexical-cast"
+            ]
+        }
+    }
+}
