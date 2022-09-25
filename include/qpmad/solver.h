@@ -383,7 +383,8 @@ namespace qpmad
                     // unconstrained optimum
                     if (h_size_ > 0)
                     {
-                        primal = H.template triangularView<Eigen::Lower>().solve(-h);
+                        primal = -h;
+                        H.template triangularView<Eigen::Lower>().solveInPlace(primal);
                         H.transpose().template triangularView<Eigen::Upper>().solveInPlace(primal);
                     }
                     break;
