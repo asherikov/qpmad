@@ -11,7 +11,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: sudo apt update
             - run: $APT cppcheck
             - run: $APT python3-pip python3-setuptools
@@ -26,7 +26,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: sudo apt update
             - run: $APT cppcheck
             - run: $APT python3-pip python3-setuptools
@@ -43,7 +43,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: $APT libeigen3-dev
             - run: make build
             - run: sudo make install
@@ -56,7 +56,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_old ROS_DISTRO=noetic UBUNTU_DISTRO=focal
@@ -68,7 +68,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_new ROS_DISTRO=noetic UBUNTU_DISTRO=focal
@@ -79,7 +79,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
             - run: make ros_prerelease ROS_DISTRO=noetic UBUNTU_DISTRO=focal BRANCH=`git branch --show-current`
@@ -92,7 +92,7 @@ jobs:
 
         # Install system dependencies, namely a very barebones ROS setup.
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: sudo apt update
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
             - run: $APT clang-tidy-10
@@ -104,7 +104,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - run: $APT libeigen3-dev
             - run: sudo gem install fpm
             - run: make deb
@@ -119,7 +119,7 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - uses: ilammy/msvc-dev-cmd@v1
               with:
                   arch: x64
