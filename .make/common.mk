@@ -1,9 +1,25 @@
-FIND_QPMAD_SOURCES=find ./matlab_octave ./test/ ./include/ -iname "*.h" -or -iname "*.cpp" | grep -v "cpput_"
+ROOT_DIR=../../
+BUILD_ROOT?=./build
+BUILD_DIR?=${BUILD_ROOT}/${OPTIONS}
+
+APT_INSTALL=sudo apt install -y --no-install-recommends
+PIP_INSTALL=sudo python3 -m pip install
+GEM_INSTALL=sudo gem install
+
+CLANG_FORMAT?=clang-format13
+SCANBUILD?=scan-build-13
+
 
 help:
 	-@grep --color -Ev "(^	)|(^$$)" Makefile
 	-@grep --color -Ev "(^	)|(^$$)" GNUmakefile
-	-@grep --color -Ev "(^	)|(^$$)" make/Makefile*
+	-@grep --color -Ev "(^	)|(^$$)" .make/*.mk
+
+
+install_deps_common:
+	${APT_INSTALL} cmake
+	${APT_INSTALL} cppcheck
+	${PIP_INSTALL} scspell3k
 
 
 # release
@@ -13,6 +29,9 @@ update_version_cmake:
 	sed -i -e "s=\(project([ a-zA-Z0-9_-]* VERSION\) [0-9]*\.[0-9]*\.[0-9]*)=\1 ${VERSION})=" CMakeLists.txt
 
 
+# static checks
+#----------------------------------------------
+
 cppcheck:
 	# --inconclusive
 	cppcheck \
@@ -20,7 +39,7 @@ cppcheck:
 	    --relative-paths \
 	    --quiet --verbose --force \
 	    --template='[{file}:{line}]  {severity}  {id}  {message}' \
-	    --language=c++ --std=c++03 \
+	    --language=c++ --std=c++11 \
 	    --enable=warning \
 	    --enable=style \
 	    --enable=performance \
@@ -30,27 +49,26 @@ cppcheck:
 	    --suppress=useInitializationList \
 	    --suppress=functionStatic \
 	    --suppress=constStatement \
-	    -i ./build \
+	    --suppress=virtualCallInConstructor \
+	    -i ${BUILD_ROOT} \
 	3>&1 1>&2 2>&3 | tee cppcheck.err
 	test 0 -eq `cat cppcheck.err | wc -l && rm cppcheck.err`
+
 
 spell_interactive:
 	${MAKE} spell SPELL_XARGS_ARG=-o
 
 # https://github.com/myint/scspell
 spell:
-	${FIND_QPMAD_SOURCES} \
+	${FIND_SOURCES} \
 	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./qa/scspell.dict
-
-format:
-	${FIND_QPMAD_SOURCES} | grep -v "cpput" | grep -v "eigenut" | xargs clang-format13 -verbose -i
 
 
 clangcheck:
 	${SCANBUILD} \
         -o ./scanbuild_results \
         --status-bugs \
-        --exclude ./build \
+        --exclude ${BUILD_ROOT} \
         --exclude /usr/include/ \
         --exclude /usr/local/include/ \
         --exclude /usr/src/ \
@@ -101,5 +119,57 @@ clangcheck:
         -enable-checker valist.CopyToSelf \
         -enable-checker valist.Uninitialized \
         -enable-checker valist.Unterminated \
-		${MAKE} cmake OPTIONS=debug
+		${MAKE} cmake OPTIONS=test
 
+
+# build targets
+#----------------------------------------------
+
+unit_tests:
+	${MAKE}	cmake OPTIONS=${OPTIONS}
+	${MAKE}	ctest OPTIONS=${OPTIONS}
+
+cmake:
+	mkdir -p ${BUILD_DIR};
+	cd ${BUILD_DIR}; cmake -C ${ROOT_DIR}/cmake/options_${OPTIONS}.cmake ${ROOT_DIR}
+	cd ${BUILD_DIR}; ${MAKE} ${MAKE_FLAGS}
+
+ctest:
+	cd ${BUILD_DIR}; ctest --schedule-random --output-on-failure
+
+install:
+	cd ${BUILD_DIR}; ${MAKE} install
+
+clean_common:
+	rm -Rf ${BUILD_ROOT}
+
+
+# deb
+#----------------------------------------------
+deb:
+	${MAKE} cmake OPTIONS=deb
+	${MAKE} install OPTIONS=deb
+	grep "project.*VERSION" CMakeLists.txt | grep -o "[0-9]*\.[0-9]*\.[0-9]*" > ${BUILD_ROOT}/version
+	grep "project" CMakeLists.txt | sed 's/project(\([[:graph:]]*\).*/\1/' > ${BUILD_ROOT}/project
+	fpm \
+		-t deb \
+		--depends "${DEBIAN_SYSTEM_DEPENDENCIES}" \
+		--version `cat ${BUILD_ROOT}/version` \
+		--package ${BUILD_ROOT}/`cat ${BUILD_ROOT}/project`-`cat ${BUILD_ROOT}/version`-any.deb
+
+deb_install_deps:
+	${APT_INSTALL} ruby
+	${GEM_INSTALL} fpm
+
+deb_install_deps_cloudsmith: install_deb_deps
+	${PIP_INSTALL} --upgrade cloudsmith-cli
+
+
+# documentation
+#----------------------------------------------
+doxclean:
+	cd doc/gh-pages; git fetch --all; git checkout gh-pages; git pull
+	find ./doc/gh-pages/ -mindepth 1 -not -name "\.git" | xargs rm -Rf
+
+
+.PHONY: build cmake test

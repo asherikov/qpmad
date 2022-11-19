@@ -8,8 +8,6 @@ CATKIN_TARGETS=all
 CATKIN_WORKING_DIR=./build/catkin_workspace
 CATKIN_PKGS_PATH=${CATKIN_WORKING_DIR}/src/
 
-APT_INSTALL=apt install -y --no-install-recommends
-
 # release
 #----------------------------------------------
 
@@ -130,7 +128,7 @@ catkin_test_new: ros_install_deps
 
 ros_prerelease_deps:
 	sudo ${MAKE} ros_add_repos UBUNTU_DISTRO=${UBUNTU_DISTRO}
-	pip3 install ros_buildfarm
+	${PIP_INSTALL} ros_buildfarm
 
 ros_prerelease: ros_prerelease_deps
 	# sudo apt install docker.io
@@ -168,3 +166,4 @@ clean_deb:
 clean_rosdep:
 	rm -Rf /tmp/rosdep.yaml /etc/ros/rosdep/sources.list.d/50-qpmad.list
 	rosdep update
+

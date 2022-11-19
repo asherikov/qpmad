@@ -13,9 +13,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: sudo apt update
-            - run: $APT cppcheck
-            - run: $APT python3-pip python3-setuptools
-            - run: sudo pip3 install scspell3k
+            - run: make install_deps_common
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
             - run: $APT clang-tidy-10
             - run: make test
@@ -28,9 +26,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: sudo apt update
-            - run: $APT cppcheck
-            - run: $APT python3-pip python3-setuptools
-            - run: sudo pip3 install scspell3k
+            - run: make install_deps_common
             - run: $APT libboost-all-dev octave liboctave-dev
             - run: $APT clang-tidy-13
             - run: make install_latest_eigen
@@ -87,16 +83,15 @@ jobs:
                   CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
 
 
-    bionic_scanbuild:
-        runs-on: ubuntu-20.04
+    jammy_scanbuild:
+        runs-on: ubuntu-22.04
 
-        # Install system dependencies, namely a very barebones ROS setup.
         steps:
             - uses: actions/checkout@v3
             - run: sudo apt update
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
-            - run: $APT clang-tidy-10
-            - run: make clangcheck SCANBUILD=scan-build-10
+            - run: $APT clang-tidy-13
+            - run: make clangcheck SCANBUILD=scan-build-13
 
     deb:
         runs-on: ubuntu-20.04
@@ -106,9 +101,9 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: $APT libeigen3-dev
-            - run: sudo gem install fpm
+            - run: make deb_install_deps
             - run: make deb
-            - run: sudo dpkg -i qpmad-*-any.deb
+            - run: sudo dpkg -i build/qpmad-*-any.deb
             - run: make test_dependency
             - uses: actions/upload-artifact@v2
               with:
