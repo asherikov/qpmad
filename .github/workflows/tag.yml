@@ -7,12 +7,10 @@ env:
     APT: sudo apt install -y --no-install-recommends
 
 jobs:
-    bionic_deb_cloudsmith:
+    deb_cloudsmith:
         runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v3
             - run: $APT libeigen3-dev
-            - run: sudo gem install fpm
-            - run: make deb
-            - run: pip install --upgrade cloudsmith-cli
-            - run: env CLOUDSMITH_API_KEY=${{ secrets.CLOUDSMITH_API_KEY }} make deb-cloudsmith DEB_TARGET=bionic
+            - run: make deb_install_deps_cloudsmith
+            - run: env CLOUDSMITH_API_KEY=${{ secrets.CLOUDSMITH_API_KEY }} make deb_cloudsmith_any

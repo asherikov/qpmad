@@ -63,7 +63,6 @@ spell:
 	${FIND_SOURCES} \
 	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./qa/scspell.dict
 
-
 clangcheck:
 	${SCANBUILD} \
         -o ./scanbuild_results \
@@ -146,7 +145,7 @@ clean_common:
 
 # deb
 #----------------------------------------------
-deb:
+deb_any:
 	${MAKE} cmake OPTIONS=deb
 	${MAKE} install OPTIONS=deb
 	grep "project.*VERSION" CMakeLists.txt | grep -o "[0-9]*\.[0-9]*\.[0-9]*" > ${BUILD_ROOT}/version
@@ -161,8 +160,11 @@ deb_install_deps:
 	${APT_INSTALL} ruby
 	${GEM_INSTALL} fpm
 
-deb_install_deps_cloudsmith: install_deb_deps
+deb_install_deps_cloudsmith: deb_install_deps
 	${PIP_INSTALL} --upgrade cloudsmith-cli
+
+deb_cloudsmith_any: deb_any
+	ls ${BUILD_ROOT}/*-any.deb | xargs --no-run-if-empty -I {} cloudsmith push deb asherikov-aV7/all/any-distro/any-version {}
 
 
 # documentation

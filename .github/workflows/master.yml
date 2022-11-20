@@ -102,13 +102,13 @@ jobs:
             - uses: actions/checkout@v3
             - run: $APT libeigen3-dev
             - run: make deb_install_deps
-            - run: make deb
+            - run: make deb_any
             - run: sudo dpkg -i build/qpmad-*-any.deb
             - run: make test_dependency
             - uses: actions/upload-artifact@v2
               with:
                   name: deb
-                  path: qpmad-*-any.deb
+                  path: build/qpmad-*-any.deb
 
     msvc:
         runs-on: windows-latest
