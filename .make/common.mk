@@ -49,7 +49,7 @@ cppcheck:
 	    --suppress=useInitializationList \
 	    --suppress=functionStatic \
 	    --suppress=constStatement \
-	    --suppress=virtualCallInConstructor \
+	    --inline-suppr \
 	    -i ${BUILD_ROOT} \
 	3>&1 1>&2 2>&3 | tee cppcheck.err
 	test 0 -eq `cat cppcheck.err | wc -l && rm cppcheck.err`

@@ -2,6 +2,12 @@
 Changelog for package ariles_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+next
+----
+
+* Small API fix to enable integration in https://github.com/isri-aist/QpSolverCollection
+
+
 1.2.0 (2022-11-20)
 ------------------
 
