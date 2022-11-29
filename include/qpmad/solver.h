@@ -894,8 +894,15 @@ namespace qpmad
         }
 
 
-        template <int t_rows, int t_cols, int... t_Other>
-        static void factorizeCholeskyInPlace(Eigen::Matrix<t_Scalar, t_rows, t_cols, t_Other...> &H)
+        template <int... t_Other>
+        static void factorizeCholeskyInPlace(Eigen::Matrix<t_Scalar, t_Other...> &H)
+        {
+            const Eigen::LLT<Eigen::Ref<typename std::decay<decltype(H)>::type>, Eigen::Lower> llt(H);
+            QPMAD_UTILS_PERSISTENT_ASSERT(
+                    Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian (dense).");
+        }
+
+        static void factorizeCholeskyInPlace(Eigen::Ref<Eigen::MatrixXd> &H)
         {
             const Eigen::LLT<Eigen::Ref<typename std::decay<decltype(H)>::type>, Eigen::Lower> llt(H);
             QPMAD_UTILS_PERSISTENT_ASSERT(
