@@ -54,32 +54,3 @@ struct GlobalFixtureConfig
 BOOST_GLOBAL_FIXTURE(GlobalFixtureConfig);
 #pragma GCC diagnostic pop
 
-namespace qpmad_utils
-{
-    template <class t_Solver>
-    class HessianSolution
-    {
-    public:
-        Eigen::VectorXd x;
-        Eigen::MatrixXd H;
-        typename t_Solver::ReturnStatus status = t_Solver::UNDEFINED;
-
-    public:
-        template <typename t_Index>
-        void initRandomHessian(const t_Index size)
-        {
-            qpmad_utils::getRandomPositiveDefiniteMatrix(H, size);
-        }
-
-        template <typename t_Index>
-        void initIdentityHessian(const t_Index size)
-        {
-            H.setIdentity(size, size);
-        }
-
-        void resizeSolution()
-        {
-            x.resize(H.rows());
-        }
-    };
-}  // namespace qpmad_utils

@@ -12,7 +12,7 @@
 
 #include <boost/mpl/vector.hpp>
 
-#include <qpmad/solver.h>
+#include "hessian_solution.h"
 #include <qpmad/testing.h>
 
 
@@ -82,8 +82,7 @@ public:
         if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, lb, ub, A_sparse, Alb, Aub, param);
-            BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
-            BOOST_CHECK(xH.x.isApprox(xH_sparse.x, g_default_tolerance));
+            xH_sparse.compare(xH);
         }
 
 #ifdef EIGEN_RUNTIME_NO_MALLOC
@@ -91,8 +90,7 @@ public:
         xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, lb, ub, A, Alb, Aub, param);
         Eigen::internal::set_is_malloc_allowed(true);
 
-        BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
-        BOOST_CHECK(xH.x.isApprox(xH_prealloc.x, g_default_tolerance));
+        xH_prealloc.compare(xH);
 #endif
     }
 };
@@ -195,8 +193,7 @@ public:
         xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, lb, ub, param);
         Eigen::internal::set_is_malloc_allowed(true);
 
-        BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
-        BOOST_CHECK(xH.x.isApprox(xH_prealloc.x, g_default_tolerance));
+        xH_prealloc.compare(xH);
 #endif
     }
 };

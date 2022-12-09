@@ -5,6 +5,7 @@ Changelog for package ariles_ros
 next
 ----
 
+* API refactoring: modernize and generalize
 * Small API fix to enable integration in https://github.com/isri-aist/QpSolverCollection
 
 

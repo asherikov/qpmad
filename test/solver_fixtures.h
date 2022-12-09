@@ -14,7 +14,7 @@
 
 #include <boost/mpl/vector.hpp>
 
-#include <qpmad/solver.h>
+#include "hessian_solution.h"
 #include <qpmad/testing.h>
 
 
@@ -27,6 +27,7 @@
     using Parent::xH;                                                                                                  \
     using Parent::xH_sparse;                                                                                           \
     using Parent::xH_prealloc;                                                                                         \
+    using Parent::xH_eigen_ref;                                                                                        \
     using Parent::H_copy;                                                                                              \
     using Parent::h;                                                                                                   \
     using Parent::A;                                                                                                   \
@@ -49,6 +50,7 @@ public:
     qpmad_utils::HessianSolution<t_Solver> xH;
     qpmad_utils::HessianSolution<t_Solver> xH_sparse;
     qpmad_utils::HessianSolution<t_Solver> xH_prealloc;
+    qpmad_utils::HessianSolution<t_Solver> xH_eigen_ref;
 
     Eigen::MatrixXd H_copy;
     Eigen::VectorXd h;
@@ -80,6 +82,18 @@ public:
 
         BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
         BOOST_CHECK(tmp.norm() < g_default_tolerance);
+
+
+        const qpmad::MatrixIndex size = xH_eigen_ref.size();
+        xH_eigen_ref.resizeSolution();
+        xH_eigen_ref.status = solver.solve(
+                xH_eigen_ref.x.head(size),
+                xH_eigen_ref.H.topLeftCorner(size, size),
+                h.size() > 0 ? h.head(size) : h,
+                A,
+                Alb,
+                Aub);
+        xH_eigen_ref.compare(xH);
     }
 
     void initRandomHessian(const qpmad::MatrixIndex size)
@@ -93,6 +107,7 @@ public:
         H_copy = xH.H;
         xH_sparse = xH;
         xH_prealloc = xH;
+        xH_eigen_ref = xH;
         xH_prealloc.resizeSolution();
     }
 };
@@ -124,15 +139,19 @@ public:
             tmp = Hi * A.transpose() * (A * Hi * A.transpose()).inverse() * Alb;
         }
 
-        BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
-        BOOST_CHECK(xH.x.isApprox(tmp, g_default_tolerance));
+        xH.check(tmp);
 
         if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, A_sparse, Alb);
-            BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
-            BOOST_CHECK(xH.x.isApprox(xH_sparse.x, g_default_tolerance));
+            xH_sparse.compare(xH);
         }
+
+
+        const qpmad::MatrixIndex size = A.rows();
+        xH_eigen_ref.status = solver.solve(xH_eigen_ref.x, xH_eigen_ref.H, h, A.topRows(size), Alb.tail(size));
+        xH_eigen_ref.compare(xH);
+
 
 #ifdef EIGEN_RUNTIME_NO_MALLOC
         solver_prealloc.reserve(xH_prealloc.H.rows(), 0, A.rows());
@@ -141,8 +160,7 @@ public:
         xH_prealloc.status = solver_prealloc.solve(xH_prealloc.x, xH_prealloc.H, h, A, Alb);
         Eigen::internal::set_is_malloc_allowed(true);
 
-        BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
-        BOOST_CHECK(xH.x.isApprox(xH_prealloc.x, g_default_tolerance));
+        xH_prealloc.compare(xH);
 #endif
     }
 };
@@ -168,15 +186,20 @@ public:
 
         xH.status = solver.solve(xH.x, xH.H, h, A, Alb, Aub);
 
-        BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
-        BOOST_CHECK(xH.x.isApprox(x_ref, g_default_tolerance));
+        xH.check(x_ref);
 
         if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, A_sparse, Alb, Aub);
-            BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
-            BOOST_CHECK(xH.x.isApprox(xH_sparse.x, g_default_tolerance));
+            xH_sparse.compare(xH);
         }
+
+
+        const qpmad::MatrixIndex size = A.rows();
+        xH_eigen_ref.status =
+                solver.solve(xH_eigen_ref.x, xH_eigen_ref.H, h, A.bottomRows(size), Alb.head(size), Aub.tail(size));
+        xH_eigen_ref.compare(xH);
+
 
 #ifdef EIGEN_RUNTIME_NO_MALLOC
         solver_prealloc.reserve(xH_prealloc.H.rows(), 0, A.rows());
@@ -185,8 +208,7 @@ public:
         xH_prealloc.status = solver.solve(xH_prealloc.x, xH_prealloc.H, h, A, Alb, Aub);
         Eigen::internal::set_is_malloc_allowed(true);
 
-        BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
-        BOOST_CHECK(xH.x.isApprox(xH_prealloc.x, g_default_tolerance));
+        xH_prealloc.compare(xH);
 #endif
     }
 };
@@ -219,15 +241,20 @@ public:
             xH.status = solver.solve(xH.x, xH.H, h, lb, ub);
         }
 
-        BOOST_CHECK_EQUAL(xH.status, qpmad::Solver::OK);
-        BOOST_CHECK(xH.x.isApprox(x_ref, g_default_tolerance));
+        xH.check(x_ref);
 
         if (0 != this->A_sparse.rows() && 0 != this->A_sparse.cols())
         {
             xH_sparse.status = solver.solve(xH_sparse.x, xH_sparse.H, h, lb, ub, A_sparse, Alb, Aub);
-            BOOST_CHECK_EQUAL(xH.status, xH_sparse.status);
-            BOOST_CHECK(xH.x.isApprox(xH_sparse.x, g_default_tolerance));
+            xH_sparse.compare(xH);
         }
+
+
+        const qpmad::MatrixIndex size = xH_eigen_ref.size();
+        xH_eigen_ref.status =
+                solver.solve(xH_eigen_ref.x, xH_eigen_ref.H, h.tail(size), lb.head(size), ub.tail(size), A, Alb, Aub);
+        xH_eigen_ref.compare(xH);
+
 
 #ifdef EIGEN_RUNTIME_NO_MALLOC
         solver_prealloc.reserve(xH_prealloc.H.rows(), lb.rows(), A.rows());
@@ -243,8 +270,7 @@ public:
         }
         Eigen::internal::set_is_malloc_allowed(true);
 
-        BOOST_CHECK_EQUAL(xH.status, xH_prealloc.status);
-        BOOST_CHECK(xH.x.isApprox(xH_prealloc.x, g_default_tolerance));
+        xH_prealloc.compare(xH);
 #endif
     }
 };

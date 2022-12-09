@@ -17,6 +17,7 @@ lagrange
 michalczyk
 noalias
 nolint
+nullptr
 preallocation
 ptrdiff
 qpmad
@@ -29,6 +30,6 @@ tparam
 typelb
 typeub
 ubuntu
-wpedantic
 ubuntu
+wpedantic
 

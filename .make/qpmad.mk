@@ -69,7 +69,9 @@ updateutils:
 # doxygen
 #----------------------------------------------
 
-dox: doxclean clean
+dox:
+	git submodule update --init
+	${MAKE} doxclean clean
 	${MAKE} build
 	cd doc; doxygen
 
