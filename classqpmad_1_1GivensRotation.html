@@ -92,7 +92,7 @@ class qpmad::GivensRotation&lt; t_Scalar &gt;</div><p >Represents Givens rotatio
 <p >sin^2 + cos^2 = 1</p>
 <p >Special cases: COPY b == 0: cos = 1, sin = 0 SWAP (b != 0) &amp;&amp; (a == 0): cos = 0, sin = 1 </p>
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00038">38</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00041">41</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="givens_8h_source.html">givens.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -110,12 +110,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a99d248fbba7c52db069db25c1d8c22d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee6053ebec2d7b7f9c57b3865cfbc763"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classqpmad_1_1GivensRotation.html#aee6053ebec2d7b7f9c57b3865cfbc763">apply</a> (t_Scalar &amp;a, t_Scalar &amp;b) const</td></tr>
 <tr class="separator:aee6053ebec2d7b7f9c57b3865cfbc763"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a389d05bd4dbc9a678d31971f6ff28422"><td class="memTemplParams" colspan="2">template&lt;class t_MatrixType &gt; </td></tr>
-<tr class="memitem:a389d05bd4dbc9a678d31971f6ff28422"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classqpmad_1_1GivensRotation.html#a389d05bd4dbc9a678d31971f6ff28422">applyColumnWise</a> (t_MatrixType &amp;M, const int start, const int end, const int column_1, const int column_2) const</td></tr>
-<tr class="separator:a389d05bd4dbc9a678d31971f6ff28422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71430f9f6f7de6564755b8e82cb3bfff"><td class="memTemplParams" colspan="2">template&lt;class t_MatrixType &gt; </td></tr>
-<tr class="memitem:a71430f9f6f7de6564755b8e82cb3bfff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classqpmad_1_1GivensRotation.html#a71430f9f6f7de6564755b8e82cb3bfff">applyRowWise</a> (t_MatrixType &amp;M, const int start, const int end, const int row_1, const int row_2) const</td></tr>
-<tr class="separator:a71430f9f6f7de6564755b8e82cb3bfff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9e94b7899aaaa960f0e273f6b0ce8c4"><td class="memTemplParams" colspan="2">template&lt;class t_MatrixType &gt; </td></tr>
+<tr class="memitem:ac9e94b7899aaaa960f0e273f6b0ce8c4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classqpmad_1_1GivensRotation.html#ac9e94b7899aaaa960f0e273f6b0ce8c4">applyColumnWise</a> (t_MatrixType &amp;M, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> start, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> end, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> column_1, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> column_2) const</td></tr>
+<tr class="separator:ac9e94b7899aaaa960f0e273f6b0ce8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ceb2f5b8ff2e1ace6395b4cf6f43d1b"><td class="memTemplParams" colspan="2">template&lt;class t_MatrixType &gt; </td></tr>
+<tr class="memitem:a2ceb2f5b8ff2e1ace6395b4cf6f43d1b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classqpmad_1_1GivensRotation.html#a2ceb2f5b8ff2e1ace6395b4cf6f43d1b">applyRowWise</a> (t_MatrixType &amp;M, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> start, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> end, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> row_1, <a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> row_2) const</td></tr>
+<tr class="separator:a2ceb2f5b8ff2e1ace6395b4cf6f43d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -153,7 +153,7 @@ template&lt;typename t_Scalar &gt; </div>
 <tr><td class="fieldname"><a id="afdf1e3be00b06eb8abb30ac003dfa5abab94d73e96ab51d1158fadbd5f87dbcda" name="afdf1e3be00b06eb8abb30ac003dfa5abab94d73e96ab51d1158fadbd5f87dbcda"></a>SWAP&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00041">41</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00044">44</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -194,12 +194,12 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00100">100</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00103">103</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
-<a id="a389d05bd4dbc9a678d31971f6ff28422" name="a389d05bd4dbc9a678d31971f6ff28422"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a389d05bd4dbc9a678d31971f6ff28422">&#9670;&#160;</a></span>applyColumnWise()</h2>
+<a id="ac9e94b7899aaaa960f0e273f6b0ce8c4" name="ac9e94b7899aaaa960f0e273f6b0ce8c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9e94b7899aaaa960f0e273f6b0ce8c4">&#9670;&#160;</a></span>applyColumnWise()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,25 +220,25 @@ template&lt;class t_MatrixType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>end</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>column_1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>column_2</em>&#160;</td>
         </tr>
         <tr>
@@ -254,7 +254,7 @@ template&lt;class t_MatrixType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00116">116</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00119">119</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -294,12 +294,12 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00164">164</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00172">172</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
-<a id="a71430f9f6f7de6564755b8e82cb3bfff" name="a71430f9f6f7de6564755b8e82cb3bfff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71430f9f6f7de6564755b8e82cb3bfff">&#9670;&#160;</a></span>applyRowWise()</h2>
+<a id="a2ceb2f5b8ff2e1ace6395b4cf6f43d1b" name="a2ceb2f5b8ff2e1ace6395b4cf6f43d1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ceb2f5b8ff2e1ace6395b4cf6f43d1b">&#9670;&#160;</a></span>applyRowWise()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -320,25 +320,25 @@ template&lt;class t_MatrixType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>end</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>row_1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a>&#160;</td>
           <td class="paramname"><em>row_2</em>&#160;</td>
         </tr>
         <tr>
@@ -354,7 +354,7 @@ template&lt;class t_MatrixType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00136">136</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00143">143</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -400,7 +400,7 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00050">50</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00053">53</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +440,7 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00159">159</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00167">167</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -467,7 +467,7 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00154">154</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00162">162</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -493,7 +493,7 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00155">155</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00163">163</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
@@ -519,12 +519,12 @@ template&lt;typename t_Scalar &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00153">153</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="givens_8h_source.html#l00161">161</a> of file <a class="el" href="givens_8h_source.html">givens.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/usr/home/aleks/git/asherikov/qpmad/include/qpmad/<a class="el" href="givens_8h_source.html">givens.h</a></li>
+<li>/mnt/data/_me/git/asherikov/qpmad/include/qpmad/<a class="el" href="givens_8h_source.html">givens.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

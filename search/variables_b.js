@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['primal_5fsize_5f_0',['primal_size_',['../classqpmad_1_1FactorizationData.html#a89fe93b8854dd39a74b69305e093a8fa',1,'qpmad::FactorizationData::primal_size_()'],['../classqpmad_1_1InputParser.html#afadcb8980111b8323e5f7b1644ed4f38',1,'qpmad::InputParser::primal_size_()']]],
-  ['primal_5fstep_5fdirection_5f_1',['primal_step_direction_',['../classqpmad_1_1SolverTemplate.html#ad12a15e959ad28e58e85a565d69f7393',1,'qpmad::SolverTemplate']]]
+  ['primal_5fsize_5f_0',['primal_size_',['../classqpmad_1_1FactorizationData.html#a89fe93b8854dd39a74b69305e093a8fa',1,'qpmad::FactorizationData::primal_size_()'],['../classqpmad_1_1SolverBase.html#ab0b0bae69985c338d5e4f6ebfab834d1',1,'qpmad::SolverBase::primal_size_()']]],
+  ['primal_5fstep_5fdirection_5f_1',['primal_step_direction_',['../classqpmad_1_1SolverBase.html#a85c0eb26c1df351190ce390ba4e0de48',1,'qpmad::SolverBase']]]
 ];

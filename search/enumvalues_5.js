@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['maximal_5fnumber_5fof_5fiterations_0',['MAXIMAL_NUMBER_OF_ITERATIONS',['../classqpmad_1_1SolverTemplate.html#a698a535ba2b627cee28ad46027ab3f4ba1fe3ab47ac309595ae7746962157dd51',1,'qpmad::SolverTemplate']]]
+  ['maximal_5fnumber_5fof_5fiterations_0',['MAXIMAL_NUMBER_OF_ITERATIONS',['../classqpmad_1_1SolverBase.html#a11ee66c59e1a88058cd9aa918452c064a584afce6749fa9c194182f17b4586c45',1,'qpmad::SolverBase']]]
 ];

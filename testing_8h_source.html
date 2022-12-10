@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>qpmad: /usr/home/aleks/git/asherikov/qpmad/include/qpmad/testing.h Source File</title>
+<title>qpmad: /mnt/data/_me/git/asherikov/qpmad/include/qpmad/testing.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -173,7 +173,7 @@ $(function() {
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>                    }</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                }</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            }</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <span class="keywordflow">if</span> (M.cols() &gt; 0 and active_set.num_equalities_ &lt; active_set.size_)</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <span class="keywordflow">if</span> (M.cols() &gt; 0 &amp;&amp; active_set.num_equalities_ &lt; active_set.size_)</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            {</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                Eigen::HouseholderQR&lt;Eigen::MatrixXd&gt; dec(M);</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                Eigen::VectorXd dual_check = dec.solve(-v);</div>
@@ -266,7 +266,7 @@ $(function() {
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;================================[Dual variables]================================&quot;</span></div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                      &lt;&lt; std::endl;</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            <a class="code hl_define" href="cpput__exception_8h.html#a12d58b765bea690a5e36568a87f50619">QPMAD_UTILS_PERSISTENT_ASSERT</a>(</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                    dual.size() == indices.size() and dual.size() == is_lower.size(), <span class="stringliteral">&quot;Inconsistent vector length&quot;</span>);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                    dual.size() == indices.size() &amp;&amp; dual.size() == is_lower.size(), <span class="stringliteral">&quot;Inconsistent vector length&quot;</span>);</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespaceqpmad.html#ac13eeffee08cff0506e8b7dd17aa4e67">MatrixIndex</a> i = 0; i &lt; dual.size(); ++i)</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            {</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                std::cout &lt;&lt; <span class="stringliteral">&quot; ## &quot;</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; ## | Index = &quot;</span> &lt;&lt; indices(i) &lt;&lt; <span class="stringliteral">&quot; | Lower = &quot;</span> &lt;&lt; is_lower(i)</div>

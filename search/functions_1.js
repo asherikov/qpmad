@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['checkconstraintviolation_0',['checkConstraintViolation',['../classqpmad_1_1SolverTemplate.html#a3c05f511d44abaef429c3214354fb5f9',1,'qpmad::SolverTemplate']]],
+  ['checkconstraintviolation_0',['checkConstraintViolation',['../classqpmad_1_1SolverBase.html#a1d7403d49d9dd762dba6b90f2a62c049',1,'qpmad::SolverBase']]],
   ['checklagrangemultipliers_1',['checkLagrangeMultipliers',['../namespaceqpmad_1_1testing.html#a8987ba9cbf159c940c4e2898552a32fc',1,'qpmad::testing']]],
-  ['chooseconstraint_2',['chooseConstraint',['../classqpmad_1_1SolverTemplate.html#a71677e243e0df0e6600c575c5b6a4942',1,'qpmad::SolverTemplate']]],
+  ['chooseconstraint_2',['chooseConstraint',['../classqpmad_1_1SolverBase.html#ad4f6a95cd5c8215793d9cf0c8c39bcd0',1,'qpmad::SolverBase']]],
   ['compute_3',['compute',['../classqpmad_1_1TriangularInversion.html#abb04d574c7c0d980f606d439889d33f8',1,'qpmad::TriangularInversion']]],
   ['computeandapply_4',['computeAndApply',['../classqpmad_1_1GivensRotation.html#a99d248fbba7c52db069db25c1d8c22d1',1,'qpmad::GivensRotation']]],
   ['computedualstepdirection_5',['computeDualStepDirection',['../classqpmad_1_1FactorizationData.html#acfa285739c9ebe300a770c486f798d55',1,'qpmad::FactorizationData']]],

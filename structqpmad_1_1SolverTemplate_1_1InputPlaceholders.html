@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>qpmad: qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders Struct Reference</title>
+<title>qpmad: qpmad::SolverTemplate&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -77,82 +77,82 @@ $(function() {
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders Struct Reference</div></div>
+  <div class="headertitle"><div class="title">qpmad::SolverTemplate&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename t_Scalar, int t_primal_size, int t_has_bounds, int t_general_ctr_number&gt;<br />
-struct qpmad::SolverTemplate&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders</div>
-<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00055">55</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename t_Scalar, int... t_Parameters&gt;<br />
+struct qpmad::SolverTemplate&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders</div>
+<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00040">40</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="solver_8h_source.html">solver.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7292390c0f92f5b93680ea8fd1f31a4b"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; t_Scalar, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#a7292390c0f92f5b93680ea8fd1f31a4b">empty_vector_</a></td></tr>
-<tr class="separator:a7292390c0f92f5b93680ea8fd1f31a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac28524fb432a1d3197b646e11a673268"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; t_Scalar, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#ac28524fb432a1d3197b646e11a673268">empty_matrix_</a></td></tr>
-<tr class="separator:ac28524fb432a1d3197b646e11a673268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a980aec60d8540b652fa8feba7f182d4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classqpmad_1_1SolverParameters.html">SolverParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#a980aec60d8540b652fa8feba7f182d4e">solver_parameters_</a></td></tr>
-<tr class="separator:a980aec60d8540b652fa8feba7f182d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73916c4ec705cf482d6591b7f4e55caa"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; t_Scalar, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#a73916c4ec705cf482d6591b7f4e55caa">empty_vector_</a></td></tr>
+<tr class="separator:a73916c4ec705cf482d6591b7f4e55caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35e0e384ea8842669fccef9cbbcbfde"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; t_Scalar, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#ab35e0e384ea8842669fccef9cbbcbfde">empty_matrix_</a></td></tr>
+<tr class="separator:ab35e0e384ea8842669fccef9cbbcbfde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43f5a01628e266bab649b2293264ac8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classqpmad_1_1SolverParameters.html">SolverParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqpmad_1_1SolverTemplate_1_1InputPlaceholders.html#a43f5a01628e266bab649b2293264ac8b">solver_parameters_</a></td></tr>
+<tr class="separator:a43f5a01628e266bab649b2293264ac8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac28524fb432a1d3197b646e11a673268" name="ac28524fb432a1d3197b646e11a673268"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac28524fb432a1d3197b646e11a673268">&#9670;&#160;</a></span>empty_matrix_</h2>
+<a id="ab35e0e384ea8842669fccef9cbbcbfde" name="ab35e0e384ea8842669fccef9cbbcbfde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab35e0e384ea8842669fccef9cbbcbfde">&#9670;&#160;</a></span>empty_matrix_</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename t_Scalar , int t_primal_size, int t_has_bounds, int t_general_ctr_number&gt; </div>
+template&lt;typename t_Scalar , int... t_Parameters&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::Matrix&lt;t_Scalar, Eigen::Dynamic, Eigen::Dynamic&gt; <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders::empty_matrix_</td>
+          <td class="memname">Eigen::Matrix&lt;t_Scalar, Eigen::Dynamic, Eigen::Dynamic&gt; <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders::empty_matrix_</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00058">58</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00043">43</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
 
 </div>
 </div>
-<a id="a7292390c0f92f5b93680ea8fd1f31a4b" name="a7292390c0f92f5b93680ea8fd1f31a4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7292390c0f92f5b93680ea8fd1f31a4b">&#9670;&#160;</a></span>empty_vector_</h2>
+<a id="a73916c4ec705cf482d6591b7f4e55caa" name="a73916c4ec705cf482d6591b7f4e55caa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73916c4ec705cf482d6591b7f4e55caa">&#9670;&#160;</a></span>empty_vector_</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename t_Scalar , int t_primal_size, int t_has_bounds, int t_general_ctr_number&gt; </div>
+template&lt;typename t_Scalar , int... t_Parameters&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::Matrix&lt;t_Scalar, Eigen::Dynamic, 1&gt; <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders::empty_vector_</td>
+          <td class="memname">Eigen::Matrix&lt;t_Scalar, Eigen::Dynamic, 1&gt; <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders::empty_vector_</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00057">57</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00042">42</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
 
 </div>
 </div>
-<a id="a980aec60d8540b652fa8feba7f182d4e" name="a980aec60d8540b652fa8feba7f182d4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a980aec60d8540b652fa8feba7f182d4e">&#9670;&#160;</a></span>solver_parameters_</h2>
+<a id="a43f5a01628e266bab649b2293264ac8b" name="a43f5a01628e266bab649b2293264ac8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43f5a01628e266bab649b2293264ac8b">&#9670;&#160;</a></span>solver_parameters_</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename t_Scalar , int t_primal_size, int t_has_bounds, int t_general_ctr_number&gt; </div>
+template&lt;typename t_Scalar , int... t_Parameters&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classqpmad_1_1SolverParameters.html">SolverParameters</a> <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_primal_size, t_has_bounds, t_general_ctr_number &gt;::InputPlaceholders::solver_parameters_</td>
+          <td class="memname"><a class="el" href="classqpmad_1_1SolverParameters.html">SolverParameters</a> <a class="el" href="classqpmad_1_1SolverTemplate.html">qpmad::SolverTemplate</a>&lt; t_Scalar, t_Parameters &gt;::InputPlaceholders::solver_parameters_</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00059">59</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8h_source.html#l00044">44</a> of file <a class="el" href="solver_8h_source.html">solver.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/usr/home/aleks/git/asherikov/qpmad/include/qpmad/<a class="el" href="solver_8h_source.html">solver.h</a></li>
+<li>/mnt/data/_me/git/asherikov/qpmad/include/qpmad/<a class="el" href="solver_8h_source.html">solver.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
