@@ -2,3 +2,4 @@
 
 #cmakedefine QPMAD_ENABLE_TRACING
 #cmakedefine QPMAD_USE_HOUSEHOLDER
+#cmakedefine QPMAD_PEDANTIC_LICENSE

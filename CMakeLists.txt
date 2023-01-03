@@ -7,12 +7,13 @@ project(qpmad VERSION 1.3.0)
 # --------------
 set(CMAKE_VERBOSE_MAKEFILE          ON)
 
-option(QPMAD_BUILD_TESTS        "Build tests"                                           OFF)
-option(QPMAD_ENABLE_TRACING     "Enable tracing"                                        OFF)
-option(QPMAD_CPP_SANITIZERS     "Enable sanitizers"                                     OFF)
-option(QPMAD_CLANG_TIDY         "Enable clang tidy"                                     OFF)
+option(QPMAD_BUILD_TESTS        "Build tests"                                                       OFF)
+option(QPMAD_ENABLE_TRACING     "Enable tracing"                                                    OFF)
+option(QPMAD_CPP_SANITIZERS     "Enable sanitizers"                                                 OFF)
+option(QPMAD_CLANG_TIDY         "Enable clang tidy"                                                 OFF)
+option(QPMAD_PEDANTIC_LICENSE   "Be pedantic regarding licensing, some features may be disabled"    OFF)
 
-option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"   OFF)
+option(QPMAD_USE_HOUSEHOLDER    "Use Housholder matrices for updating factorizations"               OFF)
 # --------------
 
 

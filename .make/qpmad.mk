@@ -26,6 +26,7 @@ build:
 test: clean
 	${MAKE} cppcheck
 	${MAKE} spell
+	${MAKE}	cmake OPTIONS=license
 	${MAKE}	unit_tests OPTIONS=householder
 	${MAKE}	unit_tests OPTIONS=testdefault
 	${MAKE} unit_tests OPTIONS=debug

@@ -10,12 +10,17 @@
 
 #pragma once
 
+#include "config.h"
+
+#ifdef QPMAD_PEDANTIC_LICENSE
+#    define EIGEN_MPL2_ONLY
+#endif
+
 #include <stdexcept>
 #include <cmath>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include "config.h"
 
 #include "cpput_config.h"
 #include "cpput_exception.h"

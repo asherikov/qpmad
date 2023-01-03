@@ -740,6 +740,7 @@ namespace qpmad
                     Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian (dense).");
         }
 
+#if !defined(EIGEN_MPL2_ONLY) || (EIGEN_WORLD_VERSION > 3) || (EIGEN_MAJOR_VERSION > 3)
         template <int t_Options, typename t_StorageIndex>
         static void factorizeCholeskyInPlace(Eigen::SparseMatrix<t_Scalar, t_Options, t_StorageIndex> &H)
         {
@@ -748,6 +749,7 @@ namespace qpmad
                     Eigen::Success == llt.info(), "Could not perform Cholesky decomposition of the Hessian (sparse).");
             H = llt.matrixL();
         }
+#endif
 
 
         template <class t_primal>

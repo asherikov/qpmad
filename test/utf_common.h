@@ -53,4 +53,3 @@ struct GlobalFixtureConfig
 // at the same time, compilation may fail on some systems if ';' is omitted.
 BOOST_GLOBAL_FIXTURE(GlobalFixtureConfig);
 #pragma GCC diagnostic pop
-
