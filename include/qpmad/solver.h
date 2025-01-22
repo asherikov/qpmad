@@ -33,8 +33,8 @@ namespace qpmad
 
         using typename SolverBase<t_Scalar, t_Parameters...>::MatrixRef;
         using typename SolverBase<t_Scalar, t_Parameters...>::VectorRef;
-        using MatrixConstRef = const Eigen::Ref<const Eigen::Matrix<t_Scalar, Eigen::Dynamic, Eigen::Dynamic> >;
-        using VectorConstRef = const Eigen::Ref<const Eigen::Matrix<t_Scalar, Eigen::Dynamic, 1> >;
+        using MatrixConstRef = const Eigen::Ref<const Eigen::Matrix<t_Scalar, Eigen::Dynamic, Eigen::Dynamic>>;
+        using VectorConstRef = const Eigen::Ref<const Eigen::Matrix<t_Scalar, Eigen::Dynamic, 1>>;
 
 
         const struct InputPlaceholders

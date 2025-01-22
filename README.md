@@ -80,7 +80,7 @@ Features:
 <a name="dependencies"></a>
 Dependencies:
 =============
-- C++11 compatible compiler
+- C++14 compatible compiler
 - cmake >= 3.0
 - Eigen >= 3.3.0
 - Boost (for C++ tests)

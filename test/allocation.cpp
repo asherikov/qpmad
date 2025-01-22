@@ -48,7 +48,7 @@ public:
     }
 };
 
-using TypeListSolverSimpleInequalities01 = boost::mpl::vector<AllocationFixture<20, 1> >;
+using TypeListSolverSimpleInequalities01 = boost::mpl::vector<AllocationFixture<20, 1>>;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(simple_inequalities21, t_Fixture, TypeListSolverSimpleInequalities01, t_Fixture)
 {

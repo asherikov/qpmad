@@ -11,16 +11,16 @@ env:
 
 jobs:
     cpp_octave:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: sudo apt update
             - run: make install_deps_common
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
-            - run: $APT clang-tidy-10
+            - run: $APT clang-tidy-13
             - run: make test
 
     latest_eigen:
@@ -29,7 +29,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: sudo apt update
             - run: make install_deps_common
             - run: $APT libboost-all-dev octave liboctave-dev
@@ -39,12 +39,12 @@ jobs:
             - run: make unit_tests OPTIONS=test
 
     dependency:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: $APT libeigen3-dev
             - run: make build
             - run: sudo make install
@@ -57,7 +57,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_old ROS_DISTRO=noetic UBUNTU_DISTRO=focal
@@ -69,48 +69,49 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_new ROS_DISTRO=noetic UBUNTU_DISTRO=focal
 
-    prerelease:
-        runs-on: ubuntu-20.04
-        defaults:
-            run:
-                shell: bash
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                  fetch-depth: 0
-            - run: make ros_prerelease ROS_DISTRO=noetic UBUNTU_DISTRO=focal BRANCH=`git branch --show-current`
-              env:
-                  CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
+    # empy compatibility issue
+    #prerelease:
+    #    runs-on: ubuntu-20.04
+    #    defaults:
+    #        run:
+    #            shell: bash
+    #    steps:
+    #        - uses: actions/checkout@v4
+    #          with:
+    #              fetch-depth: 0
+    #        - run: make ros_prerelease ROS_DISTRO=noetic UBUNTU_DISTRO=focal BRANCH=`git branch --show-current`
+    #          env:
+    #              CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
 
 
     jammy_scanbuild:
         runs-on: ubuntu-22.04
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: sudo apt update
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
             - run: $APT clang-tidy-13
             - run: make clangcheck SCANBUILD=scan-build-13
 
     deb:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - run: $APT libeigen3-dev
             - run: make deb_install_deps
             - run: make deb_any
             - run: sudo dpkg -i build/qpmad-*-any.deb
             - run: make test_dependency
-            - uses: actions/upload-artifact@v2
+            - uses: actions/upload-artifact@v4
               with:
                   name: deb
                   path: build/qpmad-*-any.deb
@@ -119,7 +120,7 @@ jobs:
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: ilammy/msvc-dev-cmd@v1
               with:
                   arch: x64

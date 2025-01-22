@@ -9,7 +9,9 @@ problems:
 
 fetch_qpoases:
 	#svn export https://projects.coin-or.org/svn/qpOASES/misc/testingdata/cpp . --force
-	svn export https://github.com/coin-or/qpOASES/branches/misc/testingdata/cpp . --force
+	#svn export https://github.com/coin-or/qpOASES/branches/misc/testingdata/cpp . --force
+	git clone --depth 1 https://github.com/coin-or/qpOASES -b misc
+	mv qpOASES/testingdata/cpp/* ./
 
 clean:
 

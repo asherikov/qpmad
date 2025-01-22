@@ -47,8 +47,8 @@ namespace qpmad
 
 
     protected:
-        using MatrixRef = Eigen::Ref<Eigen::Matrix<t_Scalar, Eigen::Dynamic, Eigen::Dynamic> >;
-        using VectorRef = Eigen::Ref<Eigen::Matrix<t_Scalar, Eigen::Dynamic, 1> >;
+        using MatrixRef = Eigen::Ref<Eigen::Matrix<t_Scalar, Eigen::Dynamic, Eigen::Dynamic>>;
+        using VectorRef = Eigen::Ref<Eigen::Matrix<t_Scalar, Eigen::Dynamic, 1>>;
 
 
     protected:

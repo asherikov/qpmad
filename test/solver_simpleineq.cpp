@@ -17,7 +17,7 @@
 
 template <int t_primal_size>
 using TypeListSolverSimpleInequalities00 =
-        boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 1, 0> >;
+        boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 1, 0>>;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         simple_inequalities00,
@@ -68,7 +68,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 }
 
 
-using TypeListSolverSimpleInequalities01 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 1> >;
+using TypeListSolverSimpleInequalities01 = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 1>>;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         simple_inequalities21,

@@ -61,66 +61,49 @@ function(cmakeut_compiler_flags STANDARD)
 
 
     if (CMAKEUT_CLANG_TIDY)
-        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy13 clang-tidy11 clang-tidy-10 clang-tidy-9 clang-tidy-8 REQUIRED)
+        find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy18 clang-tidy15 clang-tidy-14 clang-tidy-12 REQUIRED)
 
         set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-warnings-as-errors=*;-checks=*")
 
-        # too annoying
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvm-include-order,-google-readability-todo,-readability-static-accessed-through-instance")
-        # do not enforce auto
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-trailing-return-type,-hicpp-use-auto,-modernize-use-auto")
-        # do not enforce capitalization of literal suffix, e.g., x = 1u -> x = 1U.
+        # see ccws scan_build profile
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvm-include-order,-google-readability-todo,-readability-static-accessed-through-instance,-google-default-arguments,-readability-identifier-length")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-trailing-return-type,-hicpp-use-auto,-modernize-use-auto,-modernize-use-trailing-return-type")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-readability-uppercase-literal-suffix,-hicpp-uppercase-literal-suffix")
-        # allow function arguments with default values
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-fuchsia-default-arguments,-fuchsia-default-arguments-calls,-fuchsia-default-arguments-declarations")
-        # member variables can be public/protected
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-non-private-member-variables-in-classes,-misc-non-private-member-variables-in-classes")
-        # member initialization in constructors -- false positives
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-type-member-init,-hicpp-member-init")
-        # default member initialization scatters initializations -- initialization must be done via constructors
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-default-member-init,-cppcoreguidelines-prefer-member-initializer")
-        # calling virtual functions from desctructors is well defined and generally safe
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-type-member-init,-hicpp-member-init,-cppcoreguidelines-prefer-member-initializer")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-use-default-member-init")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-clang-analyzer-optin.cplusplus.VirtualCall")
-        # these checks require values to be assigned to const variables, which is inconvenient
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers")
-        # I use access specifiers (public/protected/private) to group members
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-readability-redundant-access-specifiers")
-        # issues on many macro
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-type-vararg,-hicpp-vararg")
-        # there is no from_string
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-boost-use-to-string")
-        # too common
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay")
-        # long functions are ok
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-google-readability-function-size,-readability-function-size,-hicpp-function-size")
-
-
-        # overly restrictive fuchsia stuff
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-google-runtime-references,-readability-convert-member-functions-to-static")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-fuchsia-overloaded-operator,-fuchsia-multiple-inheritance,-fuchsia-statically-constructed-objects")
-        # overly restrictive cppcoreguidelines stuff
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-macro-usage")
-        # llvmlibc stuff
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvmlibc-*")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-hicpp-special-member-functions,-cppcoreguidelines-special-member-functions,-bugprone-suspicious-include")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-owning-memory")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cert-err58-cpp")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-readability-function-cognitive-complexity")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-misc-no-recursion")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-llvm-header-guard")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-readability-avoid-const-params-in-decls")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-altera-unroll-loops,-altera-struct-pack-align,-altera-id-dependent-backward-branch")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-avoid-bind")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-explicit-virtual-functions,-hicpp-use-override,-modernize-use-override")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-bugprone-reserved-identifier,-bugprone-infinite-loop,-cert-dcl51-cpp,-cert-dcl37-c,-readability-identifier-naming")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-abseil-*")
 
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES}")
-
-        #altera-	Checks related to OpenCL programming for FPGAs.
-        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-altera-*")
-
-        # might be useful too
-        #,-cert-env33-c
-        #,-modernize-avoid-c-arrays
-        #,-cppcoreguidelines-pro-type-union-access
-        #,-readability-simplify-boolean-expr
 
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}" PARENT_SCOPE)
     endif()
 
 
-    if (NOT "${STANDARD}" STREQUAL "")
-    else()
-        set (CMAKE_CXX_STANDARD "${STANDARD}" PARENT_SCOPE)
-    endif()
+    set(CXX_GENERIC "-std=${STANDARD} ${CXX_WARNINGS} ${CXX_OTHER} ${CXX_SANITIZERS}")
 
-    set (CMAKEUT_CXX_FLAGS "${CXX_WARNINGS} ${CXX_OTHER} ${CXX_SANITIZERS}" PARENT_SCOPE)
+
+    set (CMAKEUT_CXX_FLAGS "${CXX_GENERIC}" PARENT_SCOPE)
 endfunction()

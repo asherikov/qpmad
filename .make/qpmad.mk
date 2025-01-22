@@ -1,4 +1,4 @@
-FIND_SOURCES=find ./matlab_octave ./test/ ./include/ -iname "*.h" -or -iname "*.cpp" | grep -v "cpput_"
+FIND_SOURCES=find ./matlab_octave ./test/ ./include/ -iname "*.h" -or -iname "*.cpp"
 
 OPTIONS?=default
 ROOT_DIR=../../
@@ -48,7 +48,7 @@ install_latest_eigen:
 
 
 format:
-	${FIND_SOURCES} | grep -v "cpput" | grep -v "eigenut" | xargs ${CLANG_FORMAT} -verbose -i
+	${FIND_SOURCES} | xargs ${CLANG_FORMAT} -verbose -i
 
 
 # utils
@@ -56,12 +56,9 @@ format:
 
 addutils:
 	-git remote add cmakeut https://github.com/asherikov/cmakeut --no-tags
-	-git remote add cpput https://github.com/asherikov/cpput --no-tags
 
 updateutils:
 	git fetch --all
-	git rm --ignore-unmatch -rf cpput
-	git read-tree --prefix=cpput -u cpput/master
 	git show remotes/cmakeut/master:cmake/FindEigen3.cmake                  > cmake/FindEigen3.cmake
 	git show remotes/cmakeut/master:cmake/cmakeut_compiler_flags.cmake      > cmake/cmakeut_compiler_flags.cmake
 	git show remotes/cmakeut/master:cmake/cmakeut_detect_func_macro.cmake   > cmake/cmakeut_detect_func_macro.cmake
@@ -89,10 +86,8 @@ deb-cloudsmith: deb
 
 clean: clean_common
 	rm -Rf include/qpmad/config.h
-	rm -Rf include/qpmad/cpput*.h
 	rm -Rf debian/ obj-*/
 	cd matlab_octave; ${MAKE} clean
-	cd cpput; ${MAKE} clean
 
 forceclean: clean
 	cd matlab_octave; ${MAKE} forceclean

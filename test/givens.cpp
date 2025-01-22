@@ -28,6 +28,8 @@ namespace
         GivensFixture()
         {
             tolerance = 1e-12;
+            a = std::numeric_limits<double>::signaling_NaN();
+            b = std::numeric_limits<double>::signaling_NaN();
         }
     };
 }  // namespace

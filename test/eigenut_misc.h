@@ -22,7 +22,7 @@ namespace qpmad_utils
     inline void getRandomPositiveDefiniteMatrix(Eigen::MatrixXd &M, const std::size_t size)
     {
         M.setRandom(size, size);
-        M = M.transpose()*M + Eigen::MatrixXd::Identity(size, size);
+        M = M.transpose() * M + Eigen::MatrixXd::Identity(size, size);
     }
-}
+}  // namespace qpmad_utils
 #endif

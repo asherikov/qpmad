@@ -22,8 +22,7 @@
 #include <Eigen/Sparse>
 
 
-#include "cpput_config.h"
-#include "cpput_exception.h"
+#include "exception.h"
 
 
 #ifdef QPMAD_ENABLE_TRACING

@@ -1,7 +1,6 @@
 build
 scanbuild_results
 include/qpmad/config.h
-include/qpmad/cpput*.h
 matlab_octave/make.m
 *.mex*
 *.o

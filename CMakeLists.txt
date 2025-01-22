@@ -56,11 +56,7 @@ set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
 # Eigen issues
 set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
-if ("${EIGEN3_VERSION}" VERSION_GREATER "3.4.0")
-    cmakeut_compiler_flags("c++14")
-else()
-    cmakeut_compiler_flags("c++11")
-endif()
+cmakeut_compiler_flags("c++14")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
 # --------------
 
@@ -82,18 +78,6 @@ write_basic_package_version_file(
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
     COMPATIBILITY SameMajorVersion)
-# --------------
-
-
-# --------------
-# Dependencies
-# --------------
-# cpput
-set(CPPUT_EMBEDDED      ON              CACHE BOOL "" FORCE)
-set(CPPUT_EMBEDDED_ID   "QPMAD_UTILS"   CACHE STRING "" FORCE)
-set(CPPUT_EMBEDDED_COPY_TO_DIR "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}"  CACHE STRING "" FORCE)
-set(CPPUT_SELECT_HEADERS "config.h;exception.h"  CACHE STRING "" FORCE)
-add_subdirectory(cpput)
 # --------------
 
 

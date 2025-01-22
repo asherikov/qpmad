@@ -16,11 +16,11 @@
 //===========================================================================
 
 template <int t_primal_size>
-using TypeListObjective = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 0, 0> >;
+using TypeListObjective = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, t_primal_size, 0, 0>>;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective00, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -31,7 +31,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective00, t_Solver, TypeListObjective<50>, S
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective01, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->h.setZero(size);
@@ -42,7 +42,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective01, t_Solver, TypeListObjective<50>, S
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(objective02, t_Solver, TypeListObjective<50>, SolverObjectiveFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
 
@@ -57,7 +57,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         boost::mpl::vector<qpmad::Solver>,
         SolverObjectiveFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 1;
+    const qpmad::MatrixIndex size = 1;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -72,7 +72,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListObjective<50>,
         SolverObjectiveFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex size = 50;
 
     this->initRandomHessian(size);
     this->xH.H(5, 5) = 0.0;  // break positive definiteness

@@ -16,7 +16,7 @@
 //===========================================================================
 
 template <int t_num_ctr>
-using TypeListGeneralEqualities = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 50, 0, t_num_ctr> >;
+using TypeListGeneralEqualities = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 50, 0, t_num_ctr>>;
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         general_equalities00,

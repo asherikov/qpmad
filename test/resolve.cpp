@@ -96,7 +96,7 @@ public:
 };
 
 
-using TypeListResolve = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 1> >;
+using TypeListResolve = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 1>>;
 
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(resolve_with_cholesky, t_Solver, TypeListResolve, ResolveFixture<t_Solver>)
@@ -199,7 +199,7 @@ public:
 };
 
 
-using TypeListResolveUnconstrained = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 0> >;
+using TypeListResolveUnconstrained = boost::mpl::vector<qpmad::Solver, qpmad::SolverTemplate<double, 20, 1, 0>>;
 
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE(

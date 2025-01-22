@@ -6,8 +6,8 @@ APT_INSTALL=sudo apt install -y --no-install-recommends
 PIP_INSTALL=sudo python3 -m pip install
 GEM_INSTALL=sudo gem install
 
-CLANG_FORMAT?=clang-format13
-SCANBUILD?=scan-build-13
+CLANG_FORMAT?=clang-format18
+SCANBUILD?=scan-build18
 
 
 help:
@@ -61,7 +61,7 @@ spell_interactive:
 # https://github.com/myint/scspell
 spell:
 	${FIND_SOURCES} \
-	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./qa/scspell.dict
+	    | xargs ${SPELL_XARGS_ARG} scspell --use-builtin-base-dict --override-dictionary ./.make/qa/scspell.dict
 
 clangcheck:
 	${SCANBUILD} \

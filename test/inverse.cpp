@@ -26,7 +26,7 @@ public:
     InverseFixture()
     {
         qpmad_utils::getRandomPositiveDefiniteMatrix(M, t_size);
-        Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(M);
+        const Eigen::LLT<Eigen::Ref<Eigen::MatrixXd>, Eigen::Lower> llt(M);
         (void)llt;
     }
 
@@ -37,8 +37,8 @@ public:
         M_inv.resize(t_size, t_size);
         qpmad::TriangularInversion::compute(M_inv, M);
 
-        Eigen::MatrixXd tmp1 = M.transpose().template triangularView<Eigen::Upper>();
-        Eigen::MatrixXd tmp2 = M_inv.triangularView<Eigen::Upper>();
+        const Eigen::MatrixXd tmp1 = M.transpose().template triangularView<Eigen::Upper>();
+        const Eigen::MatrixXd tmp2 = M_inv.triangularView<Eigen::Upper>();
 
         BOOST_CHECK((tmp1 * tmp2).isApprox(Eigen::MatrixXd::Identity(t_size, t_size), g_default_tolerance));
     }
