@@ -11,8 +11,8 @@ qpmad
   </tr>
   <tr>
     <td align="center">
-        <a href="https://github.com/asherikov/qpmad/actions?query=workflow%3A.github%2Fworkflows%2Fmaster.yml+branch%3Amaster">
-        <img src="https://github.com/asherikov/qpmad/workflows/.github/workflows/master.yml/badge.svg?branch=master" alt="Build Status">
+        <a href="https://github.com/asherikov/qpmad/actions/workflows/master.yml">
+        <img src="https://github.com/asherikov/qpmad/actions/workflows/master.yml/badge.svg" alt="Build Status">
         </a>
     </td>
     <td align="center">
