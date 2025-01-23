@@ -49,15 +49,23 @@ set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 # --------------
 # C++ flags
 # --------------
-include(cmakeut_compiler_flags)
-set (CMAKEUT_CPP_SANITIZERS ${QPMAD_CPP_SANITIZERS})
-set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
-# boost test issues
-set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
-# Eigen issues
-set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
-cmakeut_compiler_flags("c++14")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
+if(CCWS_CLANG_TIDY)
+    set(CMAKE_CXX_CLANG_TIDY "${CCWS_CLANG_TIDY}" CACHE STRING "" FORCE)
+endif()
+if(CCWS_CXX_FLAGS)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CCWS_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CCWS_LINKER_FLAGS}")
+else()
+    include(cmakeut_compiler_flags)
+    set (CMAKEUT_CPP_SANITIZERS ${QPMAD_CPP_SANITIZERS})
+    set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
+    # boost test issues
+    set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
+    # Eigen issues
+    set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
+    cmakeut_compiler_flags("c++14")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
+endif()
 # --------------
 
 

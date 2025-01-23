@@ -24,8 +24,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<20>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 20;
+    const qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex num_ctr = 20;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -44,8 +44,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<20>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 20;
+    const qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex num_ctr = 20;
 
     this->initRandomHessian(size);
 
@@ -63,8 +63,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<50>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 50;
+    const qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex num_ctr = 50;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -83,8 +83,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<51>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 51;
+    const qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex num_ctr = 51;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);
@@ -106,8 +106,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralEqualities<51>,
         SolverGeneralEqualitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 50;
-    qpmad::MatrixIndex num_ctr = 51;
+    const qpmad::MatrixIndex size = 50;
+    const qpmad::MatrixIndex num_ctr = 51;
 
     this->initRandomHessian(size);
     this->h.setRandom(size);

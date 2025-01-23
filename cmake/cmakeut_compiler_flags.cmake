@@ -94,6 +94,7 @@ function(cmakeut_compiler_flags STANDARD)
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-modernize-avoid-bind")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-cppcoreguidelines-explicit-virtual-functions,-hicpp-use-override,-modernize-use-override")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-bugprone-reserved-identifier,-bugprone-infinite-loop,-cert-dcl51-cpp,-cert-dcl37-c,-readability-identifier-naming")
+        set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-misc-include-cleaner")
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},-abseil-*")
 
         set(CMAKE_CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY},${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES}")

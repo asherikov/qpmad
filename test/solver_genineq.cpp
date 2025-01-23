@@ -25,8 +25,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<1>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 1;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 1;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
@@ -51,8 +51,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
 
@@ -76,8 +76,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
 
@@ -101,8 +101,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
 
@@ -126,8 +126,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
 
@@ -151,8 +151,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
     this->h.resize(size);
@@ -183,8 +183,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<3>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 3;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 3;
 
     this->xH.initIdentityHessian(size);
     this->h.resize(size);
@@ -215,8 +215,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities00<2>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
-    qpmad::MatrixIndex num_ctr = 2;
+    const qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex num_ctr = 2;
 
     this->xH.initIdentityHessian(size);
     this->h.resize(size);
@@ -247,8 +247,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities01<20>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_ctr = size;
+    const qpmad::MatrixIndex size = 20;
+    const qpmad::MatrixIndex num_ctr = size;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
@@ -275,8 +275,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListGeneralInequalities01<21>,
         SolverGeneralInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_ctr = size + 1;
+    const qpmad::MatrixIndex size = 20;
+    const qpmad::MatrixIndex num_ctr = size + 1;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);

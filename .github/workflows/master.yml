@@ -74,21 +74,6 @@ jobs:
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_new ROS_DISTRO=noetic UBUNTU_DISTRO=focal
 
-    # empy compatibility issue
-    #prerelease:
-    #    runs-on: ubuntu-20.04
-    #    defaults:
-    #        run:
-    #            shell: bash
-    #    steps:
-    #        - uses: actions/checkout@v4
-    #          with:
-    #              fetch-depth: 0
-    #        - run: make ros_prerelease ROS_DISTRO=noetic UBUNTU_DISTRO=focal BRANCH=`git branch --show-current`
-    #          env:
-    #              CCACHE_DIR: ${GITHUB_WORKSPACE}/.ccache
-
-
     jammy_scanbuild:
         runs-on: ubuntu-22.04
 
@@ -128,3 +113,60 @@ jobs:
                   cmake -D VCPKG_INSTALL_OPTIONS="--x-feature=test" -D CMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D QPMAD_BUILD_TESTS=ON -G "NMake Makefiles" .
                   nmake
             - run: ctest --schedule-random --output-on-failure
+
+    jammy_ccws_static:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                repository: asherikov/ccws
+            - uses: actions/checkout@v4
+              with:
+                path: src/qpmad
+            - run: make bp_install_build BUILD_PROFILE=scan_build
+            - run: make bp_install_build BUILD_PROFILE=static_checks
+            - run: make BUILD_PROFILE=static_checks
+            - run: make dep_install PKG=qpmad
+            - run: make qpmad BUILD_PROFILE=scan_build
+
+    jammy_ccws_plain:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                repository: asherikov/ccws
+            - uses: actions/checkout@v4
+              with:
+                path: src/qpmad
+            - run: make bp_install_build BUILD_PROFILE=reldebug
+            - run: make dep_install PKG=qpmad
+            - run: make qpmad
+            - run: make test PKG=qpmad
+
+    jammy_ccws_threadsan:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                repository: asherikov/ccws
+            - uses: actions/checkout@v4
+              with:
+                path: src/qpmad
+            - run: make bp_install_build BUILD_PROFILE=thread_sanitizer
+            - run: make dep_install PKG=qpmad
+            - run: make qpmad BUILD_PROFILE=thread_sanitizer
+            - run: make test PKG=qpmad BUILD_PROFILE=thread_sanitizer
+
+    jammy_ccws_asan:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                repository: asherikov/ccws
+            - uses: actions/checkout@v4
+              with:
+                path: src/qpmad
+            - run: make bp_install_build BUILD_PROFILE=addr_undef_sanitizers
+            - run: make dep_install PKG=qpmad
+            - run: make qpmad BUILD_PROFILE=addr_undef_sanitizers
+            - run: make test PKG=qpmad BUILD_PROFILE=addr_undef_sanitizers

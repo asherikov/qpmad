@@ -50,6 +50,8 @@ namespace qpmad
 
 
     public:
+        GivensRotation() = default;
+
         Type computeAndApply(t_Scalar &a, t_Scalar &b, const t_Scalar eps)
         {
             t_Scalar abs_b = std::fabs(b);

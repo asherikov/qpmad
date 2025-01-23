@@ -46,8 +46,8 @@ public:
 public:
     ResolveFixture()
     {
-        qpmad::MatrixIndex size = 20;
-        qpmad::MatrixIndex num_general_ctr = 1;
+        const qpmad::MatrixIndex size = 20;
+        const qpmad::MatrixIndex num_general_ctr = 1;
 
         xH.initRandomHessian(size);
         H_copy = xH.H;
@@ -107,7 +107,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(resolve_with_cholesky, t_Solver, TypeListResolv
 
     // next iteration
     this->H_copy = this->xH.H;
-    Eigen::VectorXd x_copy = this->xH.x;
+    const Eigen::VectorXd x_copy = this->xH.x;
     this->param.hessian_type_ = this->solver.getHessianType();
     BOOST_CHECK_EQUAL(this->param.hessian_type_, qpmad::SolverParameters::HESSIAN_CHOLESKY_FACTOR);
 
@@ -128,7 +128,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(resolve_with_inverted_cholesky, t_Solver, TypeL
 
     // next iteration
     this->H_copy = this->xH.H;
-    Eigen::VectorXd x_copy = this->xH.x;
+    const Eigen::VectorXd x_copy = this->xH.x;
     this->param.hessian_type_ = this->solver.getHessianType();
     BOOST_CHECK_EQUAL(this->param.hessian_type_, qpmad::SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR);
 
@@ -164,7 +164,7 @@ public:
 public:
     ResolveUnconstrainedFixture()
     {
-        qpmad::MatrixIndex size = 20;
+        const qpmad::MatrixIndex size = 20;
 
         qpmad_utils::getRandomPositiveDefiniteMatrix(xH.H, size);
         H_copy = xH.H;
@@ -214,7 +214,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 
     // next iteration
     this->H_copy = this->xH.H;
-    Eigen::VectorXd x_copy = this->xH.x;
+    const Eigen::VectorXd x_copy = this->xH.x;
     this->param.hessian_type_ = this->solver.getHessianType();
     BOOST_CHECK_EQUAL(this->param.hessian_type_, qpmad::SolverParameters::HESSIAN_CHOLESKY_FACTOR);
 
@@ -239,7 +239,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
 
     // next iteration
     this->H_copy = this->xH.H;
-    Eigen::VectorXd x_copy = this->xH.x;
+    const Eigen::VectorXd x_copy = this->xH.x;
     this->param.hessian_type_ = this->solver.getHessianType();
     BOOST_CHECK_EQUAL(this->param.hessian_type_, qpmad::SolverParameters::HESSIAN_INVERTED_CHOLESKY_FACTOR);
 

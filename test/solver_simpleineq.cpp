@@ -25,7 +25,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities00<2>,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 2;
+    const qpmad::MatrixIndex size = 2;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities00<20>,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 20;
+    const qpmad::MatrixIndex size = 20;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
@@ -76,8 +76,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE(
         TypeListSolverSimpleInequalities01,
         SolverSimpleInequalitiesFixture<t_Solver>)
 {
-    qpmad::MatrixIndex size = 20;
-    qpmad::MatrixIndex num_eq_ctr = 1;
+    const qpmad::MatrixIndex size = 20;
+    const qpmad::MatrixIndex num_eq_ctr = 1;
 
     this->xH.initIdentityHessian(size);
     this->h.setOnes(size);
