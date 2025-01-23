@@ -5,6 +5,9 @@ Changelog for package ariles_ros
 next
 ----
 
+1.4.0 (2025-01-23)
+------------------
+
 * Added QPMAD_PEDANTIC_LICENSE cmake option to address
   https://github.com/asherikov/qpmad/issues/9
 * Require C++14.
