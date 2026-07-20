@@ -1,5 +1,5 @@
 # General parameters
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 project(qpmad VERSION 1.4.0)
 
 # --------------
