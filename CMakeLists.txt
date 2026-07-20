@@ -1,5 +1,5 @@
 # General parameters
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10.0)
 project(qpmad VERSION 1.4.0)
 
 # --------------
@@ -40,29 +40,22 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 # Dependencies
 # --------------
 # Eigen
-find_package(Eigen3 REQUIRED)
-include_directories (SYSTEM "${EIGEN3_INCLUDE_DIR}")
-set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
+find_package(Eigen3 REQUIRED NO_MODULE)
 # --------------
 
 
 # --------------
 # C++ flags
 # --------------
-if(CCWS_CLANG_TIDY)
-    set(CMAKE_CXX_CLANG_TIDY "${CCWS_CLANG_TIDY}" CACHE STRING "" FORCE)
-endif()
-if(CCWS_CXX_FLAGS)
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CCWS_CXX_FLAGS}")
-    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CCWS_LINKER_FLAGS}")
-else()
+include(ccws_set_cmake_flags OPTIONAL RESULT_VARIABLE CCWS_ON)
+if(NOT CCWS_ON)
     include(cmakeut_compiler_flags)
     set (CMAKEUT_CPP_SANITIZERS ${QPMAD_CPP_SANITIZERS})
     set (CMAKEUT_CLANG_TIDY ${QPMAD_CLANG_TIDY})
     # boost test issues
     set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "-cert-err58-cpp,-cppcoreguidelines-avoid-non-const-global-variables")
     # Eigen issues
-    set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign")
+    set (CMAKEUT_CLANG_TIDY_EXTRA_IGNORES "${CMAKEUT_CLANG_TIDY_EXTRA_IGNORES},-clang-analyzer-core.uninitialized.Assign,-clang-analyzer-security.ArrayBound")
     cmakeut_compiler_flags("c++14")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKEUT_CXX_FLAGS}")
 endif()
@@ -70,41 +63,10 @@ endif()
 
 
 # --------------
-# Packaging
-# --------------
-set(QPMAD_INCLUDE_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME})
-set(QPMAD_CMAKE_INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/cmake/")
-
-include(CMakePackageConfigHelpers)
-configure_package_config_file(  "cmake/${PROJECT_NAME}Config.cmake.in"
-                                "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-                                INSTALL_DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}"
-                                NO_SET_AND_CHECK_MACRO
-                                NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-
-write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-    VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
-    COMPATIBILITY SameMajorVersion)
-# --------------
-
-
-# --------------
 # Configure headers
 # --------------
-include_directories("${QPMAD_SOURCE_DIR}")
-
 configure_file( "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/config.h.in"
                 "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/config.h")
-
-
-get_property(QPMAD_OCTAVE_INCLUDES DIRECTORY "${PROJECT_SOURCE_DIR}" PROPERTY INCLUDE_DIRECTORIES)
-list(REMOVE_DUPLICATES QPMAD_OCTAVE_INCLUDES)
-string(REPLACE ";" " -I" QPMAD_OCTAVE_INCLUDES "${QPMAD_OCTAVE_INCLUDES}")
-set(QPMAD_OCTAVE_INCLUDES "-I${QPMAD_OCTAVE_INCLUDES}")
-
-configure_file( "${PROJECT_SOURCE_DIR}/matlab_octave/make.m.in"
-                "${PROJECT_SOURCE_DIR}/matlab_octave/make.m")
 # --------------
 
 
@@ -114,9 +76,33 @@ configure_file( "${PROJECT_SOURCE_DIR}/matlab_octave/make.m.in"
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE
     "$<BUILD_INTERFACE:${QPMAD_SOURCE_DIR}>"
-    "$<INSTALL_INTERFACE:${QPMAD_INCLUDE_INSTALL_DESTINATION}/..>"
+    "$<INSTALL_INTERFACE:include>"
 )
-target_include_directories(${PROJECT_NAME} INTERFACE "${Eigen_INCLUDE_DIRS}")
+target_link_libraries(${PROJECT_NAME} INTERFACE Eigen3::Eigen)
+set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION ${PROJECT_VERSION_MAJOR})
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_VERSION_MAJOR})
+
+install(
+    TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}
+    INCLUDES DESTINATION include
+)
+install (
+    DIRECTORY "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/"
+    DESTINATION "include/${PROJECT_NAME}"
+    FILES_MATCHING PATTERN "*.h"
+)
+# --------------
+
+# --------------
+# MATLAB/Octave interface
+# --------------
+get_target_property(QPMAD_OCTAVE_INCLUDES Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_DUPLICATES QPMAD_OCTAVE_INCLUDES)
+string(REPLACE ";" " -I" QPMAD_OCTAVE_INCLUDES "${QPMAD_OCTAVE_INCLUDES}")
+set(QPMAD_OCTAVE_INCLUDES "-I${QPMAD_SOURCE_DIR} -I${QPMAD_OCTAVE_INCLUDES}")
+
+configure_file( "${PROJECT_SOURCE_DIR}/matlab_octave/make.m.in"
+                "${PROJECT_SOURCE_DIR}/matlab_octave/make.m")
 # --------------
 
 
@@ -131,15 +117,39 @@ endif(QPMAD_BUILD_TESTS)
 
 
 # --------------
-# Install
+# Packaging
 # --------------
-install (FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-         DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}/")
+export(EXPORT ${PROJECT_NAME}
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+    NAMESPACE ${PROJECT_NAME}::
+)
 
-install (FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-         DESTINATION "${QPMAD_CMAKE_INSTALL_DESTINATION}/")
+install(EXPORT ${PROJECT_NAME}
+    FILE ${PROJECT_NAME}Targets.cmake
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION share/${PROJECT_NAME}/cmake
+)
 
-install (DIRECTORY "${QPMAD_SOURCE_DIR}/${PROJECT_NAME}/"
-         DESTINATION "${QPMAD_INCLUDE_INSTALL_DESTINATION}"
-         FILES_MATCHING PATTERN "*.h")
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    "cmake/${PROJECT_NAME}Config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "share/${PROJECT_NAME}/cmake"
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION share/${PROJECT_NAME}/cmake
+)
 # --------------

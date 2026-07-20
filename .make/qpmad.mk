@@ -9,11 +9,9 @@ TYPE?=Debug
 
 PKG=qpmad
 REPO=https://github.com/asherikov/${PKG}.git
-DEPENDENCY_PATH=test/dependency/
 DEBIAN_SYSTEM_DEPENDENCIES=libeigen3-dev
 
 CATKIN_PKG=${PKG}
-CATKIN_DEPENDENCY_PATH=${DEPENDENCY_PATH}
 CATKIN_DEPENDENCY_TEST_PKG=${PKG}_catkin_dependency_test
 CATKIN_ARGS=
 CATKIN_TARGETS=all
@@ -36,15 +34,23 @@ test_octave:
 	cd matlab_octave; ${MAKE} octave octave_test
 
 test_dependency: clean
-	mkdir -p build/dependency_test
-	cd build/dependency_test; cmake ../../${DEPENDENCY_PATH}
-	cd build/dependency_test; ${MAKE} ${MAKE_FLAGS}
+	mkdir -p build/dependency/old
+	cd build/dependency/old; cmake ../../../test/dependency/old
+	cd build/dependency/old; ${MAKE} ${MAKE_FLAGS} VERBOSE=1
+	mkdir -p build/dependency/new
+	cd build/dependency/new; cmake ../../../test/dependency/new
+	cd build/dependency/new; ${MAKE} ${MAKE_FLAGS} VERBOSE=1
 
 install_latest_eigen:
 	mkdir -p ${BUILD_DIR};
 	cd ${BUILD_DIR}; git clone https://gitlab.com/libeigen/eigen.git
 	mkdir -p ${BUILD_DIR}/eigen/build
-	cd ${BUILD_DIR}/eigen/build; cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..; sudo make install
+	cd ${BUILD_DIR}/eigen/build; \
+		cmake -DEIGEN_BUILD_BTL=OFF -DEIGEN_BUILD_DOC=OFF  \
+        	-DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF \
+            -DEIGEN_BUILD_PKGCONFIG=ON -DEIGEN_BUILD_DOC=OFF \
+            -DEIGEN_BUILD_TESTING=OFF \
+			-DCMAKE_INSTALL_PREFIX:PATH=/usr ..; sudo make install
 
 
 format:

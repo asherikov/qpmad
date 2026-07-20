@@ -63,14 +63,14 @@ catkin_test_deb: clean
 	echo ${CATKIN_PKGS} | tr " " "\n" | xargs -I {} ${MAKE} catkin_test_deb_pkg PKG="{}" ROS_DISTRO=${ROS_DISTRO}
 	bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash; \
 		cd build/dependency_test; \
-		cmake ../../${DEPENDENCY_PATH}/; \
+		cmake ../../test/dependency/old/; \
 		${MAKE} ${MAKE_FLAGS}'
 
 
 catkin_prepare_workspace: clean
 	mkdir -p ${CATKIN_PKGS_PATH}/${PROJECT}
 	ls -1A | grep -v build | xargs cp -R -t ${CATKIN_PKGS_PATH}/${PROJECT}
-	cp -R ${CATKIN_DEPENDENCY_PATH} ${CATKIN_WORKING_DIR}/src/${CATKIN_DEPENDENCY_TEST_PKG}
+	cp -R test/dependency/catkin ${CATKIN_WORKING_DIR}/src/${CATKIN_DEPENDENCY_TEST_PKG}
 
 catkin_fake_rosdep:
 	# https://answers.ros.org/question/280213/generate-deb-from-dependent-res-package-locally/#280235

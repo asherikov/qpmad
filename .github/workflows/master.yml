@@ -10,45 +10,92 @@ env:
     APT: sudo apt install -y --no-install-recommends
 
 jobs:
-    cpp_octave:
+    jammy_cpp_octave:
         runs-on: ubuntu-22.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - run: sudo apt update
             - run: make install_deps_common
             - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
-            - run: $APT clang-tidy-13
+            - run: $APT clang-tidy-15
             - run: make test
 
-    latest_eigen:
-        runs-on: ubuntu-22.04
+    noble_cpp_octave:
+        runs-on: ubuntu-24.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - run: sudo apt update
             - run: make install_deps_common
-            - run: $APT libboost-all-dev octave liboctave-dev
-            - run: $APT clang-tidy-13
+            - run: $APT libboost-all-dev libeigen3-dev octave octave-dev
+            - run: $APT clang-tidy-20
+            - run: make test
+
+    resolute_cpp_octave:
+        runs-on: ubuntu-26.04
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - uses: actions/checkout@v5
+            - run: sudo apt update
+            - run: make install_deps_common
+            - run: $APT libboost-all-dev libeigen3-dev octave octave-dev
+            - run: $APT clang-tidy-22
+            - run: make test
+
+# special builds
+
+    latest_eigen:
+        runs-on: ubuntu-26.04
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - uses: actions/checkout@v5
+            - run: sudo apt update
+            - run: make install_deps_common
+            - run: $APT libboost-all-dev octave octave-dev
+            - run: $APT clang-tidy-22
             - run: make install_latest_eigen
             # suppressions needed for sanitizers
             - run: make unit_tests OPTIONS=test
 
     dependency:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-26.04
         defaults:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - run: $APT libeigen3-dev
             - run: make build
             - run: sudo make install
             - run: make test_dependency
+
+    resolute_deb:
+        runs-on: ubuntu-26.04
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - uses: actions/checkout@v5
+            - run: $APT libeigen3-dev
+            - run: make deb_install_deps
+            - run: make deb_any
+            - run: sudo dpkg -i build/qpmad-*-any.deb
+            - run: make test_dependency
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: deb
+                  path: build/qpmad-*-any.deb
+
+# catkin
 
     focal_noetic_catkin_old:
         container: ros:noetic-ros-base-focal
@@ -57,7 +104,7 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_old ROS_DISTRO=noetic UBUNTU_DISTRO=focal
@@ -69,43 +116,18 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - run: |
                 source /opt/ros/noetic/setup.bash
                 make catkin_test_new ROS_DISTRO=noetic UBUNTU_DISTRO=focal
 
-    jammy_scanbuild:
-        runs-on: ubuntu-22.04
-
-        steps:
-            - uses: actions/checkout@v4
-            - run: sudo apt update
-            - run: $APT libboost-all-dev libeigen3-dev octave liboctave-dev
-            - run: $APT clang-tidy-13
-            - run: make clangcheck SCANBUILD=scan-build-13
-
-    deb:
-        runs-on: ubuntu-22.04
-        defaults:
-            run:
-                shell: bash
-        steps:
-            - uses: actions/checkout@v4
-            - run: $APT libeigen3-dev
-            - run: make deb_install_deps
-            - run: make deb_any
-            - run: sudo dpkg -i build/qpmad-*-any.deb
-            - run: make test_dependency
-            - uses: actions/upload-artifact@v4
-              with:
-                  name: deb
-                  path: build/qpmad-*-any.deb
+# windows
 
     msvc:
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: ilammy/msvc-dev-cmd@v1
               with:
                   arch: x64
@@ -114,13 +136,15 @@ jobs:
                   nmake
             - run: ctest --schedule-random --output-on-failure
 
-    jammy_ccws_static:
-        runs-on: ubuntu-22.04
+# ccws
+
+    resolute_ccws_static:
+        runs-on: ubuntu-26.04
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 repository: asherikov/ccws
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 path: src/qpmad
             - run: make bp_install_build BUILD_PROFILE=scan_build
@@ -129,13 +153,13 @@ jobs:
             - run: make dep_install PKG=qpmad
             - run: make qpmad BUILD_PROFILE=scan_build
 
-    jammy_ccws_plain:
-        runs-on: ubuntu-22.04
+    resolute_ccws_plain:
+        runs-on: ubuntu-26.04
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 repository: asherikov/ccws
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 path: src/qpmad
             - run: make bp_install_build BUILD_PROFILE=reldebug
@@ -143,13 +167,13 @@ jobs:
             - run: make qpmad
             - run: make test PKG=qpmad
 
-    jammy_ccws_threadsan:
-        runs-on: ubuntu-22.04
+    resolute_ccws_threadsan:
+        runs-on: ubuntu-26.04
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 repository: asherikov/ccws
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 path: src/qpmad
             - run: make bp_install_build BUILD_PROFILE=thread_sanitizer
@@ -157,13 +181,13 @@ jobs:
             - run: make qpmad BUILD_PROFILE=thread_sanitizer
             - run: make test PKG=qpmad BUILD_PROFILE=thread_sanitizer
 
-    jammy_ccws_asan:
-        runs-on: ubuntu-22.04
+    resolute_ccws_asan:
+        runs-on: ubuntu-26.04
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 repository: asherikov/ccws
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                 path: src/qpmad
             - run: make bp_install_build BUILD_PROFILE=addr_undef_sanitizers

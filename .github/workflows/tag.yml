@@ -8,7 +8,7 @@ env:
 
 jobs:
     deb_cloudsmith:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@v4
             - run: $APT libeigen3-dev
@@ -17,7 +17,7 @@ jobs:
 
 
     gh_pages:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-26.04
 
         permissions:
             contents: write

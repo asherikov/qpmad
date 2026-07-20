@@ -1,6 +1,6 @@
 include(qpmad_add_test)
 
-find_package(Boost REQUIRED unit_test_framework timer system)
+find_package(Boost REQUIRED unit_test_framework timer headers)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 get_cmake_property(VARNAMES VARIABLES)

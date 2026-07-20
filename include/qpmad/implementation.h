@@ -758,7 +758,7 @@ namespace qpmad
             primal.setZero(primal_size_);
         }
 
-        void setZero(VectorRef primal)
+        static void setZero(VectorRef primal)
         {
             primal.setZero();
         }
