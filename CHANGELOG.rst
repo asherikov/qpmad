@@ -5,6 +5,17 @@ Changelog for package ariles_ros
 next
 ----
 
+1.5.0 (2026-07-22)
+------------------
+
+- Update required cmake version to enable compilation on modern systems.
+- Add qpmad::qpmad cmake target -- use in new projects instead of legacy
+  qpmad_INCLUDE_DIRS (still supported).
+- Eigen 5 support, drop FindEigen.cmake
+- Drop dependency on deprecated boost system component.
+- Update CI pipeline.
+
+
 1.4.0 (2025-01-23)
 ------------------
 
