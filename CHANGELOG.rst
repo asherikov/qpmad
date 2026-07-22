@@ -5,6 +5,11 @@ Changelog for package ariles_ros
 next
 ----
 
+1.5.1 (2026-07-22)
+------------------
+
+- Doxygen fixes.
+
 1.5.0 (2026-07-22)
 ------------------
 

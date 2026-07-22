@@ -1,6 +1,6 @@
 {
     "name": "qpmad",
-    "version-string": "1.5.0",
+    "version-string": "1.5.1",
     "description": "Eigen-based, header-only C++ implementation of Goldfarb-Idnani dual active set algorithm for quadratic programming.",
     "homepage": "https://github.com/asherikov/qpmad",
     "documentation": "https://asherikov.github.io/qpmad/",
