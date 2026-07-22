@@ -27,7 +27,7 @@ jobs:
               with:
                 submodules: true
                 fetch-depth: 0
-            - run: $APT doxygen libboost-all-dev libeigen3-dev octave liboctave-dev
+            - run: $APT doxygen libboost-all-dev libeigen3-dev octave octave-dev
             - run: make dox
             - run: |
                 cd doc/gh-pages

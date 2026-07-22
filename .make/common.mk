@@ -3,7 +3,7 @@ BUILD_ROOT?=./build
 BUILD_DIR?=${BUILD_ROOT}/${OPTIONS}
 
 APT_INSTALL=sudo apt install -y --no-install-recommends
-PIP_INSTALL=sudo python3 -m pip install
+PIP_INSTALL=python3 -m pipx install
 GEM_INSTALL=sudo gem install
 
 CLANG_FORMAT?=clang-format18
@@ -161,7 +161,7 @@ deb_install_deps:
 	${GEM_INSTALL} fpm
 
 deb_install_deps_cloudsmith: deb_install_deps
-	${PIP_INSTALL} --upgrade cloudsmith-cli
+	${PIP_INSTALL} cloudsmith-cli
 
 deb_cloudsmith_any: deb_any
 	ls ${BUILD_ROOT}/*-any.deb | xargs --no-run-if-empty -I {} cloudsmith push deb asherikov-aV7/all/any-distro/any-version {}
